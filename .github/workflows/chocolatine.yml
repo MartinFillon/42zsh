@@ -1,0 +1,87 @@
+name: Chocolatine
+run-name: ${{ github.actor }}
+on:
+  push:
+    branches:
+      - '**'
+      - 'ga-ignore-*'
+  pull_request:
+    branches:
+      - '**'
+      - 'ga-ignore-*'
+
+env:
+  MIRROR_URL: "git@github.com:EpitechPromo2027/B-PSU-200-PAR-2-1-42sh-martin.saldinger.git"
+  EXECUTABLES: "42sh"
+  REPORT_FILE: "coding-style-reports.log"
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          /usr/local/bin/check.sh $(pwd) $(pwd)
+      - run: |
+          cat $REPORT_FILE | while read LINE; do
+            TYPE=$(echo $LINE | cut -d ':' -f 3 | tr -d ' ')
+            FILE=$(echo $LINE | cut -d ':' -f 1)
+            AT=$(echo $LINE | cut -d ':' -f 2)
+            ERROR=$(echo $LINE | cut -d ':' -f 4)
+            echo "::error file=$FILE,line=$AT,title=$TYPE coding style error::$ERROR"
+          done
+          if [[ "$(cat $REPORT_FILE)" != "" ]]; then
+            exit 1
+          fi
+
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    needs: [check_coding_style]
+    container:
+      image: epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          timeout 120 make && make clean
+      - run: |
+          for EXECUTABLE in $(echo $EXECUTABLES | tr "," "\n"); do
+            if [[ ! -f $EXECUTABLE ]]; then
+              echo "::error file=Makefile,title=Makefile error::Missing executable $EXECUTABLE"
+              exit 1
+            fi
+          done
+
+  run_tests:
+    runs-on: ubuntu-latest
+    needs: [check_coding_style, check_program_compilation]
+    container:
+      image: epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          timeout 120 make tests_run
+          if [[ $? -ne 0 ]]; then
+            echo "::error file=Makefile,title=Makefile error::Tests failed"
+            exit 1
+          fi
+
+  push_to_mirror:
+    runs-on: ubuntu-latest
+    needs: [check_coding_style, check_program_compilation, run_tests]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.KEY }}
