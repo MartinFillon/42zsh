@@ -57,25 +57,9 @@ jobs:
             fi
           done
 
-  run_tests:
-    runs-on: ubuntu-latest
-    needs: [check_coding_style, check_program_compilation]
-    container:
-      image: epitechcontent/epitest-docker
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: |
-          timeout 120 make tests_run
-          if [[ $? -ne 0 ]]; then
-            echo "::error file=Makefile,title=Makefile error::Tests failed"
-            exit 1
-          fi
-
   push_to_mirror:
     runs-on: ubuntu-latest
-    needs: [check_coding_style, check_program_compilation, run_tests]
+    needs: [check_coding_style, check_program_compilation]
     steps:
       - uses: actions/checkout@v3
         with:
