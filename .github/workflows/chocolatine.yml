@@ -3,12 +3,7 @@ run-name: ${{ github.actor }}
 on:
   push:
     branches:
-      - '**'
-      - 'ga-ignore-*'
-  pull_request:
-    branches:
-      - '**'
-      - 'ga-ignore-*'
+      - main
 
 env:
   MIRROR_URL: "git@github.com:EpitechPromo2027/B-PSU-200-PAR-2-1-42sh-martin.saldinger.git"
