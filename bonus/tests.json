@@ -1,0 +1,321 @@
+{
+  "tests": [
+    {
+      "name": "Simple echo",
+      "run": ["echo Hello"]
+    },
+    {
+      "name": "Print pwd",
+      "run": ["pwd"]
+    },
+    {
+      "name": "Print modified pwd",
+      "run": ["cd ..", "pwd"]
+    },
+    {
+      "name": "Run simple commands",
+      "run": ["cat /etc/resolv.conf", "ls -l /etc", "pwd"]
+    },
+    {
+      "name": "Env manipulation",
+      "run": [
+        "unsetenv HOSTTYPE",
+        "unsetenv VENDOR",
+        "unsetenv OSTYPE",
+        "unsetenv MACHTYPE",
+        "unsetenv SHLVL",
+        "unsetenv PWD",
+        "unsetenv LOGNAME",
+        "unsetenv USER",
+        "unsetenv GROUP",
+        "unsetenv HOST",
+        "unsetenv REMOTEHOST",
+        "unsetenv _",
+        "unsetenv LS_COLORS",
+        "unsetenv NOTE",
+        "setenv titi",
+        "setenv tata coucou",
+        "setenv var1 val1",
+        "setenv var2 val2"
+      ]
+    },
+    {
+      "name": "builtin cd",
+      "run": ["cd ..", "ls -l", "cd /usr", "ls -l"]
+    },
+    {
+      "name": "Many tab and space",
+      "run": ["\t\t    ls\t     \t-l    \t\t  \t -a /usr   \t\t"]
+    },
+    {
+      "name": "Chain mutlitple pipes",
+      "run": ["ls -la | cat -e | grep lib | wc -l"]
+    },
+    {
+      "name": "Functionnal ls",
+      "run": ["ls"]
+    },
+    {
+      "name": "Multiple commands",
+      "run": ["ls", "ls"]
+    },
+    {
+      "name": "Bad ls",
+      "run": ["ls nofile"]
+    },
+    {
+      "name": "Empty string",
+      "run": [""]
+    },
+    {
+      "name": "Exit",
+      "run": ["exit"]
+    },
+    {
+      "name": "Exit 2",
+      "run": ["exit", "ls"]
+    },
+    {
+      "name": "Setenv 1 value",
+      "run": ["setenv foo"]
+    },
+    {
+      "name": "Setenv 2 values",
+      "run": ["setenv foo bar"]
+    },
+    {
+      "name": "Unset 1 value",
+      "run": ["setenv foo && unsetenv foo"]
+    },
+    {
+      "name": "Unset 2 values",
+      "run": ["setenv foo bar && unsetenv foo"]
+    },
+    {
+      "name": "Unset Path",
+      "run": ["pwd", "unsetenv PATH", "pwd"]
+    },
+    {
+      "name": "Empty cd",
+      "run": ["cd"]
+    },
+    {
+      "name": "Root cd",
+      "run": ["cd /"]
+    },
+    {
+      "name": "Back cd",
+      "run": ["cd .."]
+    },
+    {
+      "name": "Empty cd",
+      "run": ["ls", "cd", "ls"]
+    },
+    {
+      "name": "Normal cd",
+      "run": ["ls", "cd ./lib", "ls"]
+    },
+    {
+      "name": "Root cd",
+      "run": ["ls", "cd /", "ls"]
+    },
+    {
+      "name": "Back cd",
+      "run": ["ls", "cd ..", "ls"]
+    },
+    {
+      "name": "Vague cd",
+      "run": ["ls", "cd ~", "ls"]
+    },
+    {
+      "name": "Minus cd",
+      "run": ["cd /", "ls", "cd -", "ls"]
+    },
+    {
+      "name": "Bad command",
+      "run": ["notcommand"]
+    },
+    {
+      "name": "Mispell exit",
+      "run": ["exitt"]
+    },
+    {
+      "name": "Cd nofile",
+      "run": ["cd nofile"]
+    },
+    {
+      "name": "Cd file",
+      "run": ["cd ./mysh"]
+    },
+    {
+      "name": "Setenv too many args",
+      "run": ["setenv a a a"]
+    },
+    {
+      "name": "Setenv incorrect variable",
+      "run": ["setenv -"]
+    },
+    {
+      "name": "Setenv incorrect variable (numbers)",
+      "run": ["setenv 1231"]
+    },
+    {
+      "name": "Unsetenv too few args",
+      "run": ["unsetenv"]
+    },
+    {
+      "name": "Semicolon",
+      "run": ["ls;        ls; pwd;   ls"]
+    },
+    {
+      "name": "Semicolon trap",
+      "run": ["pwd;; ; pwd"]
+    },
+    {
+      "name": "Pipe",
+      "run": ["pwd | cat -e | wc"]
+    },
+    {
+      "name": "Pipe trap",
+      "run": ["pwd | | cat -e"]
+    },
+    {
+      "name": "Pipe + Semicolon",
+      "run": ["pwd | cat -e |    wc; pwd"]
+    },
+
+    {
+      "name": "Pipe + Semicolon trap",
+      "run": ["pwd | ; cat -e ; |    wc; pwd"]
+    },
+    {
+      "name": "Simple pipe command",
+      "run": ["ls | cat -e"]
+    },
+    {
+      "name": "Chained pipe commands",
+      "run": ["ls | cat -e | grep execs | wc -c"]
+    },
+    {
+      "name": "Many chained pipe commands",
+      "run": [
+        "ls | echo salut | cat -e | cat -e | cat -e  | cat -e  | cat -e  | cat -e  | cat -e  | cat -e  | cat -e  | cat -e  | cat -e"
+      ]
+    },
+    {
+      "name": "Without surrouding whitespaces",
+      "run": ["ls|echo salut"]
+    },
+    {
+      "name": "Mixed (exit or not exit)",
+      "run": ["exit | echo salut"]
+    },
+    {
+      "name": "Mixed (cd or not cd)",
+      "run": ["cd | pwd"]
+    },
+    {
+      "name": "Mixed (unsetenv or not unsetenv)",
+      "run": ["setenv axel", "unsetenv axel | env | grep axel"]
+    },
+    {
+      "name": "Mixed (setenv or not setenv)",
+      "run": ["setenv axel | env | grep axel"]
+    },
+    {
+      "name": "Simple redirection to file",
+      "run": ["ls -la | cat -e > stdout && rm stdout"]
+    },
+    {
+      "name": "Verification of last test",
+      "run": ["cat output"]
+    },
+    {
+      "name": "Create file if not exists",
+      "run": ["ls > axel ; cat axel ; rm axel"]
+    },
+    {
+      "name": "Truncate file if exists",
+      "run": ["echo salut > axel ; cat axel; rm axel"]
+    },
+    {
+      "name": "No whitespace between redirection delimiter",
+      "run": ["echo maama>axel ; cat axel ; rm axel"]
+    },
+    {
+      "name": "Append file if exists",
+      "run": ["ls > tmp ; echo salut >> tmp ; cat tmp; rm tmp"]
+    },
+    {
+      "name": "Simple redirection from file",
+      "run": ["cat < stdout"]
+    },
+    {
+      "name": "No whitespace between redirection delimiter",
+      "run": ["cat<stdout"]
+    },
+    {
+      "name": "Two classic commands",
+      "run": ["ls ; ls"]
+    },
+    {
+      "name": "Multiple commands",
+      "run": [
+        "echo a",
+        "echo b",
+        "ls",
+        "cat -e",
+        "echo eal",
+        "sed s/a/t/g",
+        "echo ammamya"
+      ]
+    },
+    {
+      "name": "Empty inline command",
+      "run": ["ls ; ; echo salut"]
+    },
+    {
+      "name": "Empty command",
+      "run": [";"]
+    },
+    {
+      "name": "Multiple pipes + redirection to file",
+      "run": [
+        "cd ..",
+        "cd -",
+        "ls",
+        "ls -la | cat -e | grep execs | sed s/execs/temp/g > stdout",
+        "rm stdout"
+      ]
+    },
+    {
+      "name": "Multiple pipes + redirection to file",
+      "run": [
+        "cd ..",
+        "cd -",
+        "ls",
+        "ls -la | cat -e | grep execs | | sed s/execs/temp/g > stdout ; rm stdout"
+      ]
+    },
+    {
+      "name": "Pipe with builtin 2",
+      "run": ["cd .. | ls", "pwd"]
+    },
+    {
+      "name": "Pipe with builtin 3",
+      "run": ["ls | cd .. 2> /dev/null ; ls"]
+    },
+    {
+      "name": "Ambiguous output redirection",
+      "run": ["ls > stdout > stdout", "rm stdout"]
+    },
+    {
+      "name": "Ambiguous input redirection",
+      "run": ["echo yes | my_program < input_file"]
+    },
+    {
+      "name": "Ambiguous input redirection 2",
+      "run": ["echo yes | my_program < input_file < input_file"]
+    }
+  ]
+}
