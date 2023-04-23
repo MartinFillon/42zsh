@@ -1,0 +1,30 @@
+name: Check compilation
+run-name: Compilation for "${{ github.event.head_commit.message }}"
+
+on:
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
+
+env:
+  EXECUTABLE: "my_rpg"
+
+jobs:
+    check_compilation:
+      runs-on: ubuntu-latest
+      container:
+        image: epitechcontent/epitest-docker
+
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: |
+          timeout 120 make && make clean
+      - run: |
+          for EXECUTABLE in $(echo $EXECUTABLES | tr "," "\n"); do
+            if [[ ! -f $EXECUTABLE ]]; then
+              echo "::error file=Makefile,title=Makefile error::Missing executable $EXECUTABLE"
+              exit 1
+            fi
+          done

@@ -1,0 +1,39 @@
+name: Check coding-style
+run-name: Coding style for "${{ github.event.head_commit.message }}"
+
+on:
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
+
+env:
+  REPORT_FILE: "coding-style-reports.log"
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: run coding style checker
+        run: |
+          check.sh $(pwd) $(pwd)
+
+      - name: report errors
+        run: |
+          cat $REPORT_FILE | while read LINE; do
+            TYPE=$(echo $LINE | cut -d ':' -f 3 | tr -d ' ')
+            FILE=$(echo $LINE | cut -d ':' -f 1)
+            AT=$(echo $LINE | cut -d ':' -f 2)
+            ERROR=$(echo $LINE | cut -d ':' -f 4)
+            echo "::error file=$FILE,line=$AT,title=$TYPE coding style error::$ERROR"
+          done
+          if [[ "$(cat $REPORT_FILE)" != "" ]]; then
+            exit 1
+          fi
