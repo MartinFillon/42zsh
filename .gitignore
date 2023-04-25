@@ -20,6 +20,8 @@
 .clangd
 .clang-tidy
 /src/parser/utils.txt
+compile_commands.json
+*.log
 
 # project bin
-/mysh
+/42sh

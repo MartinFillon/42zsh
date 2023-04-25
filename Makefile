@@ -35,7 +35,8 @@ SRC	=	./src/main.c						\
 		./src/middleware/utils.c			\
 		./src/middleware/pipe.c				\
 		./src/parser/symbol.c				\
-		./src/parser/gen.c
+		./src/parser/gen.c 					\
+		./src/globbins/question_mark_handler.c
 
 
 CFLAGS		+=	-Werror -Wextra -Wall
