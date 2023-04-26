@@ -12,13 +12,15 @@
 #include <termios.h>
 #include <unistd.h>
 
+static const int DELETE = 127;
+
 static void manage_input(char c, bool *state, str_t *input)
 {
     if (c == '\n') {
         *state = false;
         return;
     }
-    if (c == 127) {
+    if (c == DELETE) {
         printf("\b \b");
         input->data[--input->length] = '\0';
         fflush(stdout);
@@ -36,6 +38,7 @@ str_t *stock_input(void)
     str_t *input = str_create("");
     char c;
     bool state = true;
+
     tcgetattr(STDIN_FILENO, &old_tio);
     new_tio = old_tio;
     new_tio.c_lflag &= ~(ICANON | ECHO);
