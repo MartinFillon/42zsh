@@ -24,7 +24,7 @@ static int is_matching(char *word, char *entry)
         if (word[i] == '?')
             continue;
         if (word[i] != entry[i])
-            return (0);
+            return 0;
     }
     return 1;
 }
@@ -96,10 +96,6 @@ vec_str_t *question_mark_handler(str_t *word)
     DIR *dir = NULL;
     str_t *pattern = NULL;
 
-    if (!str_contains(word, '?')) {
-        dprintf(2, "No match\n");
-        return NULL;
-    }
     dir = open_directory(str_dup(word));
     pattern = get_pattern(str_dup(word));
     if (!dir) {
