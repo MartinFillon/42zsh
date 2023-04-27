@@ -178,7 +178,7 @@ str_t *str_ncreate(char const *init, size_t n);
  * @param start     start string
  * @return 1 if the string starts with start or 0 if it doesn't
  */
-int str_startswith(str_t *str, str_t *start);
+int str_startswith(str_t const *str, str_t const *start);
 
 /**
  * @brief checks if str ends with end
@@ -187,7 +187,7 @@ int str_startswith(str_t *str, str_t *start);
  * @param end   end string
  * @return 1 if the string ends with end or 0 if it doesn't
  */
-int str_endswith(str_t *str, str_t *end);
+int str_endswith(str_t const *str, str_t const *end);
 
 /**
  * @brief slices a string

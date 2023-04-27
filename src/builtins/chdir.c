@@ -15,31 +15,29 @@
 #include "my_map.h"
 #include "my_str.h"
 
-static char *get_homepath(map_t *env)
+static char const *get_homepath(map_t *env)
 {
     str_t *path = NULL;
 
-    if ((path = map_get(env, STR("HOME"))) != NULL) {
-        return (char *)str_tocstr(path);
-    }
+    if ((path = map_get(env, STR("HOME"))) != NULL)
+        return str_tocstr(path);
 
     dprintf(2, "cd: No home directory.\n");
     return NULL;
 }
 
-static char *get_dirpath(str_t *p_, map_t *env)
+static char const *get_dirpath(str_t *p_, map_t *env)
 {
     str_t *path = NULL;
 
     if (str_eq(p_, STR("-"))) {
-        if ((path = map_get(env, STR("OLDPWD"))) != NULL) {
-            return (char *)str_tocstr(path);
-        } else {
-            dprintf(2, ": No such file or directory.\n");
-            return NULL;
-        }
+        if ((path = map_get(env, STR("OLDPWD"))) != NULL)
+            return str_tocstr(path);
+
+        dprintf(2, ": No such file or directory.\n");
+        return NULL;
     }
-    return (char *)str_tocstr(p_);
+    return str_tocstr(p_);
 }
 
 void update_pwd(map_t *env)
@@ -61,7 +59,7 @@ void update_pwd(map_t *env)
     str_add(str_clear(&curr), getcwd(PATHNAME, MAXPATHLEN));
 }
 
-static void perror_wrapper(char *path)
+static void perror_wrapper(char const *path)
 {
     char *error = strerror(errno);
 
@@ -70,7 +68,7 @@ static void perror_wrapper(char *path)
 
 int builtin_chdir(vec_str_t *av, map_t *env)
 {
-    char *path = NULL;
+    char const *path = NULL;
     int success;
 
     if (av->size > 2) {

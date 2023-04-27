@@ -38,7 +38,7 @@ static DIR *open_directory(str_t const *word)
         return opendir(".");
     if (last_slash == 0)
         return opendir("/");
-    tmp = str_create(((word->data[0] == '/') ? "/" : "./"));
+    tmp = str_create(str_startswith(word, STR("/")) ? "/" : "./");
     str_nadd(&tmp, word->data, last_slash);
     dir = opendir(str_tocstr(tmp));
     free(tmp);

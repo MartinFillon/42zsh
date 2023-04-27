@@ -17,7 +17,7 @@ int str_contains(str_t const *str, char c)
     return 0;
 }
 
-int str_startswith(str_t *str, str_t *start)
+int str_startswith(str_t const *str, str_t const *start)
 {
     if (str->length < start->length)
         return 0;
@@ -25,7 +25,7 @@ int str_startswith(str_t *str, str_t *start)
     return (str_ncompare(str, start, start->length) == 0);
 }
 
-int str_endswith(str_t *str, str_t *end)
+int str_endswith(str_t const *str, str_t const *end)
 {
     size_t i = str->length - end->length;
     size_t j = 0;

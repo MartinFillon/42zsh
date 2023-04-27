@@ -16,7 +16,7 @@ char **arg_to_tabl(vec_str_t *path)
     ar[path->size] = NULL;
 
     for (size_t i = 0; i < path->size; ++i)
-        ar[i] = (char *)str_tocstr(path->data[i]);
+        ar[i] = path->data[i]->data;
 
     return ar;
 }
