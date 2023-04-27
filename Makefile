@@ -14,10 +14,12 @@ SRC	=	./src/main.c						\
 		./src/input/signal.c				\
 		./src/input/args.c					\
 		./src/input/variables.c				\
+		./src/input/history.c				\
 		./src/input/env.c					\
 		./src/builtins/builtins.c			\
 		./src/builtins/chdir.c				\
 		./src/builtins/env.c				\
+		./src/builtins/history.c			\
 		./src/exec/exec.c					\
 		./src/exec/tree.c					\
 		./src/exec/redirect.c				\

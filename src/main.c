@@ -16,6 +16,7 @@
 #include "mysh/exec.h"
 #include "mysh/middleware.h"
 #include "mysh/mysh.h"
+#include "mysh/history.h"
 #include "mysh/read.h"
 
 static void state_free(shell_t *state)
@@ -39,6 +40,7 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .env = env_create(envp),
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
+        .history = history_create(state.env),
     };
 
     catch_signals();

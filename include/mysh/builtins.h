@@ -21,5 +21,7 @@ int builtin_setenv(vec_str_t *av, map_t *env);
 
 int builtin_unsetenv(vec_str_t *av, map_t *env);
 
+int builtin_history(vec_str_t *av, map_t *env);
+
 
 #endif /* MYSH_BUILTINS_H */

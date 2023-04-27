@@ -47,6 +47,7 @@ typedef struct shell_s {
     map_t *env;
     map_t *builtins;
     map_t *middlewares;
+    map_t *history;
     int return_code;
     int stop;
     int is_atty;
