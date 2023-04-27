@@ -16,6 +16,7 @@
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
+#include "mysh/termios.h"
 
 const char PROMPT[] = "TamaShell $> ";
 

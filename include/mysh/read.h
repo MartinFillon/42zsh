@@ -14,7 +14,6 @@
 
 
 void read_input(shell_t *state);
-str_t *stock_input(void);
 
 void catch_signals(void);
 

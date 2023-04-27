@@ -5,29 +5,52 @@
 ** termios
 */
 
-#include "my_str.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
 
-static const int DELETE = 127;
+#include "my_str.h"
+#include "mysh/termios.h"
+
+static void arrow_builtins(char c)
+{
+    if (read(STDIN_FILENO, &c, 1) == 1) {
+        switch (c) {
+            case UP:
+                break;
+            case DOWN:
+                break;
+            case RIGHT:
+                break;
+            case LEFT:
+                break;
+        }
+    }
+}
 
 static void manage_input(char c, bool *state, str_t *input)
 {
-    if (c == '\n') {
-        *state = false;
-        return;
-    }
-    if (c == DELETE) {
-        printf("\b \b");
-        input->data[--input->length] = '\0';
-        fflush(stdout);
-    } else {
-        write(1, &c, 1);
-        str_cadd(&input, c);
-        fflush(stdout);
+    switch (c) {
+        case ENTER:
+            *state = false;
+            return;
+        case DELETE:
+            if (input->length <= 0)
+                return;
+            printf("\b \b");
+            input->data[--input->length] = '\0';
+            fflush(stdout);
+            break;
+        case ARROW:
+            arrow_builtins(c);
+            break;
+        default:
+            write(1, &c, 1);
+            str_cadd(&input, c);
+            fflush(stdout);
+            break;
     }
 }
 
