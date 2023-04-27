@@ -65,7 +65,7 @@ str_t *my_ftostr(double nb, int precision);
  * @param str the string to null terminate
  * @return the string data null terminated
  */
-char *str_tocstr(str_t *str);
+char const *str_tocstr(str_t const *str);
 
 /**
  * @brief splits a string into a vector of strings
@@ -85,7 +85,16 @@ vec_str_t *str_split(str_t *str, str_t *delims);
  * @param start  the index to start searching from
  * @return the index of the first occurence of find in str
  */
-long str_find(str_t *str, str_t *find, size_t start);
+long str_find(str_t const *str, str_t *find, size_t start);
+
+/**
+ * @brief finds the last occurence of a string in another string
+ *
+ * @param str  the string to search in
+ * @param find  the string to search for
+ * @return  the index of the last occurence of find in str
+ */
+long str_findlast(str_t const *str, str_t *find);
 
 /**
  * @brief replace all occurences of old with new in a string
@@ -169,7 +178,7 @@ str_t *str_ncreate(char const *init, size_t n);
  * @param start     start string
  * @return 1 if the string starts with start or 0 if it doesn't
  */
-int str_startswith(str_t *str, str_t *start);
+int str_startswith(str_t const *str, str_t const *start);
 
 /**
  * @brief checks if str ends with end
@@ -178,7 +187,7 @@ int str_startswith(str_t *str, str_t *start);
  * @param end   end string
  * @return 1 if the string ends with end or 0 if it doesn't
  */
-int str_endswith(str_t *str, str_t *end);
+int str_endswith(str_t const *str, str_t const *end);
 
 /**
  * @brief slices a string
@@ -215,7 +224,7 @@ int str_ncompare(str_t const *s1, str_t const *s2, size_t n);
  * @param c     character to check
  * @return 1 or 0 if the character is in the string or isn't
  */
-int str_contains(str_t *str, char c);
+int str_contains(str_t const *str, char c);
 
 /**
  * @brief duplicates a string (with malloc)
@@ -353,7 +362,7 @@ int str_eq(str_t const *s1, str_t const *s2);
  * @param str   the ADRESS of string to extract the integer from
  * @return the integer represented by the string
  */
-long int str_toint(str_t *str);
+long int str_toint(str_t const *str);
 
 /**
  * @brief converts a string to a double
@@ -361,7 +370,7 @@ long int str_toint(str_t *str);
  * @param str   the ADRESS of string to extract the double from
  * @return the double represented by the string
  */
-double str_tofloat(str_t *str);
+double str_tofloat(str_t const *str);
 
 /**
  * @brief reverses a string in memory

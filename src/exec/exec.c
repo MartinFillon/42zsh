@@ -58,7 +58,7 @@ static void try_exec_or_exit(
     vec_str_t *av, map_t *env, int (*builtin)(vec_str_t *av, map_t *env)
 )
 {
-    char *file = str_tocstr(av->data[0]);
+    char *file = (char *)str_tocstr(av->data[0]);
     char **argv = arg_to_tabl(av);
     char **envp = env_to_tabl(env);
     vec_str_t *path = path_to_vec(env);
