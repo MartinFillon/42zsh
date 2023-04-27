@@ -20,7 +20,7 @@ static char *get_homepath(map_t *env)
     str_t *path = NULL;
 
     if ((path = map_get(env, STR("HOME"))) != NULL) {
-        return str_tocstr(path);
+        return (char *)str_tocstr(path);
     }
 
     dprintf(2, "cd: No home directory.\n");
@@ -33,13 +33,13 @@ static char *get_dirpath(str_t *p_, map_t *env)
 
     if (str_eq(p_, STR("-"))) {
         if ((path = map_get(env, STR("OLDPWD"))) != NULL) {
-            return str_tocstr(path);
+            return (char *)str_tocstr(path);
         } else {
             dprintf(2, ": No such file or directory.\n");
             return NULL;
         }
     }
-    return str_tocstr(p_);
+    return (char *)str_tocstr(p_);
 }
 
 void update_pwd(map_t *env)
