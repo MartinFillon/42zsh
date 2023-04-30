@@ -18,7 +18,7 @@
 #include "mysh/read.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "TamaShell $> ";
+const char PROMPT[] = "CapyShell $> ";
 
 static void print_prompt(shell_t *state)
 {

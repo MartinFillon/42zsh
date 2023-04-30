@@ -10,7 +10,7 @@
     #include "my_str.h"
     #define DELETE  127
     #define ENTER  '\n'
-    #define ARROW   '['
+    #define  ARROW  '['
     #define UP      'A'
     #define DOWN    'B'
     #define RIGHT   'C'
