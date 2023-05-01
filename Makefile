@@ -15,6 +15,7 @@ SRC	=	./src/main.c								\
 		./src/input/args.c							\
 		./src/input/variables.c						\
 		./src/input/env.c							\
+		./src/input/termios.c 						\
 		./src/builtins/builtins.c					\
 		./src/builtins/chdir.c						\
 		./src/builtins/env.c						\
