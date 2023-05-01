@@ -32,12 +32,11 @@ vec_str_t *get_wildcard_matches(str_t *pattern)
 {
     vec_str_t *matches = vec_create(100, sizeof(str_t *));
     vec_str_t *pattern_parts = str_split(pattern, STR("*"));
-    DIR *dir = NULL;
-
-    dir = (str_startswith(pattern_parts->data[0], STR("/")) ||
+    DIR *dir = (str_startswith(pattern_parts->data[0], STR("/")) ||
         str_startswith(pattern_parts->data[0], STR("./")))
         ? opendir(str_tocstr(pattern_parts->data[0]))
         : opendir(".");
+
     get_entrys(matches, dir, pattern_parts->data[1], pattern_parts->data[0]);
     return matches;
 }
