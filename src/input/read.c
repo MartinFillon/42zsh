@@ -9,12 +9,14 @@
 #include <stdlib.h>
 
 #include "my_btree.h"
+#include "my_str.h"
 #include "my_vec.h"
 
 #include "mysh/exec.h"
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
+#include "mysh/termios.h"
 
 const char PROMPT[] = "TamaShell $> ";
 
@@ -40,17 +42,10 @@ static void parse_input(shell_t *state, char *input)
 
 void read_input(shell_t *state)
 {
-    char *input = NULL;
-    size_t l_cap = 0;
-    ssize_t l_size = 0;
-
+    str_t *temp;
     while (!state->stop) {
         print_prompt(state);
-        l_size = getline(&input, &l_cap, stdin);
-        if (l_size < 0)
-            break;
-        input[l_size - 1] = '\0';
-        parse_input(state, input);
+        temp = stock_input();
+        parse_input(state, temp->data);
     }
-    free(input);
 }

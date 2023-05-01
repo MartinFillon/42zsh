@@ -40,6 +40,7 @@ SRC	=	./src/main.c								\
 		./src/globbings/wildcard_handler.c 			\
 
 
+
 CFLAGS		+=	-Werror -Wextra -Wall
 CPPFLAGS	+=	-I./include
 LDFLAGS		+=	-L./lib
