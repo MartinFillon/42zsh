@@ -18,7 +18,7 @@ long str_find(str_t const *str, str_t *find, size_t start)
         return -1;
 
     for (size_t i = start; i < str->length - find->length; ++i)
-        if (strcmp(str->data + i, find->data) == 0)
+        if (strncmp(str->data + i, find->data, find->length) == 0)
             return i;
 
     return -1;
@@ -30,7 +30,7 @@ long str_findlast(str_t const *str, str_t *find)
         return -1;
 
     for (long i = str->length - find->length; i > 0; --i)
-        if (strcmp(str->data + i, find->data) == 0)
+        if (strncmp(str->data + i, find->data, find->length) == 0)
             return i;
 
     return -1;
