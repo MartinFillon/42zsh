@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "mysh/mysh.h"
 #include "my_map.h"
 #include "my_vec.h"
 
@@ -19,9 +20,9 @@ static const char *ERROR[] = {
     "history: Badly formed number.\n",
 };
 
-int builtin_history(vec_str_t *av, map_t *env)
+int builtin_history(vec_str_t *av, shell_t *state)
 {
-    (void)env;
+    (void)state;
 
     if (av->size > 3) {
         dprintf(2, "%s", ERROR[0]);

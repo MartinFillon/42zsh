@@ -17,6 +17,8 @@ map_t *builtins_create(void)
     map_set(cmd, STR("env"), &builtin_env);
     map_set(cmd, STR("setenv"), &builtin_setenv);
     map_set(cmd, STR("unsetenv"), &builtin_unsetenv);
+    map_set(cmd, STR("set"), &builtin_set);
+    map_set(cmd, STR("unset"), &builtin_unset);
     map_set(cmd, STR("history"), &builtin_history);
 
     return cmd;

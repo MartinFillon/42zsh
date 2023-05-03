@@ -5,6 +5,7 @@
 ** pipe middleware
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 
@@ -28,11 +29,34 @@ static void pipe_end(shell_t *state)
     pipe_reset(p);
 }
 
+static int is_invalid_pipe(char const *str)
+{
+    int error = 0;
+    str_t *temp;
+
+    if (str == NULL)
+        return 1;
+
+    temp = str_create(str);
+    str_trim(&temp, ' ');
+    str_trim(&temp, '\t');
+    error = temp->length == 0;
+    free(temp);
+    return error;
+}
+
 void pipe_middleware(shell_t *state, bnode_t *node)
 {
     pipe_t *p = state->pipe;
     int is_piped = p->is_active;
 
+    if (is_invalid_pipe(node->left->data) ||
+        is_invalid_pipe(node->right->data)) {
+        dprintf(2, "Invalid null command.\n");
+        if (!is_piped)
+            state->stop_command = 1;
+        return;
+    }
     if (is_piped)
         pipe_chain(p);
     if (pipe(p->fds) == -1)

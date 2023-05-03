@@ -9,17 +9,17 @@
 
 #include "my_str.h"
 
-long int str_toint(str_t *str)
+long int str_toint(str_t const *str)
 {
     return atol(str->data);
 }
 
-double str_tofloat(str_t *str)
+double str_tofloat(str_t const *str)
 {
     return atof(str->data);
 }
 
-char *str_tocstr(str_t *str)
+char const *str_tocstr(str_t const *str)
 {
     return str->data;
 }

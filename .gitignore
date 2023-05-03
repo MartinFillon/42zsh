@@ -7,6 +7,8 @@
 *.a
 
 # junk
+coding-style-reports.log
+42sh
 /main.c
 /a.out
 /libmy.a
@@ -20,6 +22,8 @@
 .clangd
 .clang-tidy
 /src/parser/utils.txt
+compile_commands.json
+*.log
 
 # project bin
-/mysh
+/42sh

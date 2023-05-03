@@ -10,17 +10,24 @@
 
     #include"my_map.h"
 
+    #include "mysh/mysh.h"
 
 map_t *builtins_create(void);
 
-int builtin_env(vec_str_t *av, map_t *env);
+map_t *vars_create(map_t *);
 
-int builtin_chdir(vec_str_t *av, map_t *env);
+int builtin_env(vec_str_t *, shell_t *);
 
-int builtin_setenv(vec_str_t *av, map_t *env);
+int builtin_chdir(vec_str_t *, shell_t *);
 
-int builtin_unsetenv(vec_str_t *av, map_t *env);
+int builtin_setenv(vec_str_t *, shell_t *);
 
-int builtin_history(vec_str_t *av, map_t *env);
+int builtin_unsetenv(vec_str_t *, shell_t *);
+
+void builtin_set(vec_str_t *, shell_t *);
+
+void builtin_unset(vec_str_t *, shell_t *);
+
+int builtin_history(vec_str_t *av, shell_t *);
 
 #endif /* MYSH_BUILTINS_H */

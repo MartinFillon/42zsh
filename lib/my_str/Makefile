@@ -16,6 +16,7 @@ SRC	=	./add.c 		\
 		./compare.c		\
 		./content.c 	\
 		./convert.c 	\
+		./find.c 		\
 		./from.c 		\
 		./create.c 		\
 		./join.c 		\

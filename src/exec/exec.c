@@ -40,31 +40,24 @@ static void exec_from_path(vec_str_t *path, char **argv, char **envp)
 static void perror_wrapper(str_t *file)
 {
     switch (errno) {
-    case ENOENT:
-        dprintf(2, ERROR[0], str_tocstr(file));
-        break;
-    case EACCES:
-        dprintf(2, ERROR[1], str_tocstr(file));
-        break;
-    case ENOEXEC:
-        dprintf(2, ERROR[2], str_tocstr(file));
-        break;
-    default:
-        dprintf(2, "%s: %s.\n", str_tocstr(file), strerror(errno));
+        case ENOENT: dprintf(2, ERROR[0], str_tocstr(file)); break;
+        case EACCES: dprintf(2, ERROR[1], str_tocstr(file)); break;
+        case ENOEXEC: dprintf(2, ERROR[2], str_tocstr(file)); break;
+        default: dprintf(2, "%s: %s.\n", str_tocstr(file), strerror(errno));
     }
 }
 
 static void try_exec_or_exit(
-    vec_str_t *av, map_t *env, int (*builtin)(vec_str_t *av, map_t *env)
+    vec_str_t *av, shell_t *state, int (*builtin)(vec_str_t *, shell_t *)
 )
 {
-    char *file = str_tocstr(av->data[0]);
+    char *file = (char *)str_tocstr(av->data[0]);
     char **argv = arg_to_tabl(av);
-    char **envp = env_to_tabl(env);
-    vec_str_t *path = path_to_vec(env);
+    char **envp = env_to_tabl(state->env);
+    vec_str_t *path = path_to_vec(state->env);
 
     if (builtin != NULL) {
-        builtin(av, env);
+        builtin(av, state);
         exit(1);
     }
     if (str_contains(av->data[0], '/')) {
@@ -77,7 +70,7 @@ static void try_exec_or_exit(
 }
 
 void exec_command(
-    shell_t *state, int (*builtin)(vec_str_t *av, map_t *env), vec_str_t *av
+    shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 )
 {
     int pid = fork();
@@ -88,7 +81,7 @@ void exec_command(
     if (pid == 0) {
         pipe_apply(state);
         redirect_apply(state);
-        try_exec_or_exit(av, state->env, builtin);
+        try_exec_or_exit(av, state, builtin);
     }
     if (state->redirect->is_active)
         redirect_reset(state->redirect);
