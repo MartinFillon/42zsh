@@ -60,14 +60,14 @@ void read_input(shell_t *state)
 {
     str_t *temp;
     while (!state->stop) {
-        if (!state->is_atty)
+        if (!state->is_atty) {
             temp = handle_tty();
-        if (temp == NULL)
-            break;
-        if (state->is_atty) {
+        } else {
             print_prompt(state);
             temp = stock_input();
         }
+        if (temp == NULL)
+            break;
         parse_input(state, temp->data);
     }
 }
