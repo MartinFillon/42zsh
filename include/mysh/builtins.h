@@ -14,7 +14,7 @@
 
 map_t *builtins_create(void);
 
-map_t *vars_create(void);
+map_t *vars_create(map_t *);
 
 int builtin_env(vec_str_t *, shell_t *);
 

@@ -40,9 +40,10 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .env = env_create(envp),
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
-        .vars = vars_create(),
+        .vars = vars_create(state.env),
     };
 
+    // state.vars = vars_create();
     catch_signals();
     read_input(&state);
     state_free(&state);

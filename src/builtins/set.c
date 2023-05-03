@@ -17,13 +17,15 @@
 #include "mysh/builtins.h"
 #include "mysh/mysh.h"
 
-map_t *vars_create(void)
+map_t *vars_create(map_t *env)
 {
     static char PATHNAME[MAXPATHLEN] = "";
     map_t *vars = map_create(100);
     char *cwd = getcwd(PATHNAME, MAXPATHLEN);
+    str_t *term = map_get(env, STR("TERM"));
 
     map_set(vars, STR("cwd"), str_create(cwd));
+    map_set(vars, STR("term"), str_dup(term));
     return vars;
 }
 
