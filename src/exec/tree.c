@@ -31,7 +31,7 @@ static void exec_wrapper(shell_t *state, char const *line)
 {
     int (*builtin)(vec_str_t *, shell_t *) = NULL;
     int is_out_pipe = !state->pipe->is_active || state->pipe->action == READ;
-    vec_str_t *av = parse_args(state->env, line);
+    vec_str_t *av = parse_args(state, line);
 
     if (av == NULL) {
         state->return_code = 1;
