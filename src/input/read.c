@@ -15,6 +15,7 @@
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
+#include "mysh/history.h"
 
 const char PROMPT[] = "TamaShell $> ";
 
@@ -50,6 +51,7 @@ void read_input(shell_t *state)
         if (l_size < 0)
             break;
         input[l_size - 1] = '\0';
+        create_history(input);
         parse_input(state, input);
     }
     free(input);

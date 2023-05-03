@@ -10,6 +10,15 @@
 
     #include "my_map.h"
 
-map_t *history_create(map_t *env);
+    #include <time.h>
+
+typedef struct history_s {
+    vec_int_t id;
+    time_t timestamp;
+    vec_str_t command;
+} history_t;
+
+
+void create_history(char *input);
 
 #endif /* MYSH_HISTORY_*/

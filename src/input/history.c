@@ -6,20 +6,23 @@
 */
 
 #include <stdlib.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "my_map.h"
+#include "mysh/history.h"
 
-map_t *history_create(map_t *env)
+void create_history(char *input)
 {
-    int size_history = 0;
-    str_t  *size_env = NULL;
+    time_t epoch_time;
+    struct tm timeinfo;
+    FILE *fp = fopen(".42zsh_history", "a+");
 
-    size_env = map_get(env, STR("HISTSIZE"));
-    if (size_env == NULL)
-        size_history = 100;
-    else
-        size_history = atoi(str_tocstr(size_env));
-    map_t *history = map_create(size_history);
-    return history;
+    if (fp == NULL)
+        return;
+
+    timeinfo = *localtime(&epoch_time);
+    epoch_time = mktime(&timeinfo);
+    fprintf(fp, "%s\n", input);
 }

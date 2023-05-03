@@ -27,8 +27,6 @@ int builtin_history(vec_str_t *av, map_t *env)
         dprintf(2, "%s", ERROR[0]);
         return 1;
     }
-    if (av->size == 1) {
-        printf("history\n");
-    }
+
     return 0;
 }
