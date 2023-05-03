@@ -34,19 +34,19 @@ map_t *vars_create(map_t *env)
 void builtin_set(vec_str_t *av, shell_t *state)
 {
     vec_str_t *tmp = NULL;
-    str_t *key = NULL;
+    str_t *value = NULL;
 
     for (size_t i = 0; i < av->size; i++) {
         tmp = str_split(av->data[i], STR("="));
-        if ((key = map_get(state->vars, tmp->data[0])) == NULL)
+        if ((value = map_get(state->vars, tmp->data[0])) == NULL)
             map_set(
                 state->vars, tmp->data[0],
                 (tmp->size == 2) ? str_dup(tmp->data[1]) : str_create("")
             );
         else
-            key = *str_sadd(
-                str_clear(&key),
-                (tmp->size == 2) ? str_dup(tmp->data[1]) : str_create("")
+            value = *str_add(
+                str_clear(&value),
+                (tmp->size == 2) ? str_tocstr(tmp->data[1]) : ""
             );
         vec_free(tmp);
     }
