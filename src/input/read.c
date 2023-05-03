@@ -31,11 +31,6 @@ static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
 
-    if (tree == NULL) {
-        dprintf(2, "Invalid null command.\n");
-        state->return_code = 1;
-        return;
-    }
     exec_tree(state, tree->root);
     btree_free(tree);
 }
