@@ -11,6 +11,8 @@
     #include <unistd.h>
 
     #include "my_map.h"
+#include "my_str.h"
+#include "my_vec.h"
 
 
 typedef int fd_set_t[2];
@@ -43,6 +45,7 @@ typedef struct {
     int action;
 } redirect_t;
 
+
 typedef struct shell_s {
     map_t *env;
     map_t *builtins;
@@ -53,6 +56,7 @@ typedef struct shell_s {
 
     redirect_t *redirect;
     pipe_t *pipe;
+    map_t *vars;
 } shell_t;
 
 #endif /* MYSH_MYSH_ */
