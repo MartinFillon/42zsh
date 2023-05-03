@@ -26,7 +26,7 @@ enum SYMBOL_TYPE {
 };
 
 static const char UNUSED *SYMBOLS[] = {
-    ";", "&&", "||", ">>",  ">", "|", "<<", "<", NULL,
+    ";", "&&", "||", ">>",  ">", "|", "<<", "<", "=", NULL,
 };
 
 int is_symbol(char *data);
