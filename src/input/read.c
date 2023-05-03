@@ -41,7 +41,7 @@ static void parse_input(shell_t *state, char *input)
     btree_free(tree);
 }
 
-static str_t *handle_tty(void)
+static str_t *handle_not_tty(void)
 {
     str_t *temp;
     size_t c;
@@ -61,7 +61,7 @@ void read_input(shell_t *state)
     str_t *temp;
     while (!state->stop) {
         if (!state->is_atty) {
-            temp = handle_tty();
+            temp = handle_not_tty();
         } else {
             print_prompt(state);
             temp = stock_input();
