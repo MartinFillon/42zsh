@@ -10,7 +10,7 @@ env:
   TEST_FILE: "./bonus/tests.json"
 
 jobs:
-  check_program_compilation:
+  functionnal-tests:
     runs-on: ubuntu-latest
 
     container:

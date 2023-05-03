@@ -39,11 +39,14 @@ void append_file_middleware(shell_t *state, bnode_t *node)
 
     if (!IS_END(node->right)) {
         dprintf(2, "Ambiguous output redirect.\n");
+        state->return_code = 1;
         return;
     }
     file = trim_string(node->right->data);
-    if (setup_redirect(r, file) != 0)
+    if (setup_redirect(r, file) != 0) {
+        state->return_code = 1;
         return;
+    }
     exec_tree(state, node->left);
     free(file);
 }

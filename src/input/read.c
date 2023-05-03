@@ -32,6 +32,7 @@ static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
 
+    state->stop_command = 0;
     exec_tree(state, tree->root);
     btree_free(tree);
 }
@@ -52,7 +53,7 @@ static str_t *handle_not_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp;
-    while (!state->stop) {
+    while (!state->stop_shell) {
         if (!state->is_atty) {
             temp = handle_not_tty();
         } else {

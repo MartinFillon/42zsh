@@ -18,7 +18,7 @@
 static int should_exit(shell_t *state, vec_str_t *av)
 {
     if (str_eq(av->data[0], STR("exit"))) {
-        state->stop = 1;
+        state->stop_shell = 1;
         if (av->size > 1) {
             state->return_code = str_toint(av->data[1]);
         }
@@ -47,6 +47,8 @@ void exec_tree(shell_t *state, bnode_t *node)
 {
     vec_str_t *av = NULL;
 
+    if (state->stop_command)
+        return;
     if (is_symbol(node->data)) {
         str_t *key = str_create(node->data);
         middleware_t cb = map_get(state->middlewares, key);

@@ -40,11 +40,14 @@ void read_file_middleware(shell_t *state, bnode_t *node)
 
     if (state->pipe->action == READ && state->pipe->is_active) {
         dprintf(2, "Ambiguous input redirect.\n");
+        state->return_code = 1;
         return;
     }
     file = trim_string(node->right->data);
-    if (setup_redirect(r, file) != 0)
+    if (setup_redirect(r, file) != 0) {
+        state->return_code = 1;
         return;
+    }
     exec_tree(state, node->left);
     free(file);
 }

@@ -40,11 +40,14 @@ void write_file_middleware(shell_t *state, bnode_t *node)
 
     if (!IS_END(node->right) || r->is_active) {
         dprintf(2, "Ambiguous output redirect.\n");
+        state->return_code = 1;
         return;
     }
     file = trim_string(node->right->data);
-    if (setup_redirect(r, file) != 0)
+    if (setup_redirect(r, file) != 0) {
+        state->return_code = 1;
         return;
+    }
     exec_tree(state, node->left);
     r->is_active = 0;
     free(file);

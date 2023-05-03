@@ -32,7 +32,8 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
 {
     shell_t state = {
         .return_code = 0,
-        .stop = 0,
+        .stop_shell = 0,
+        .stop_command = 0,
         .middlewares = middleware_create(),
         .redirect = redirect_create(),
         .builtins = builtins_create(),
