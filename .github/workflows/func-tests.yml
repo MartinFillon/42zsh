@@ -1,4 +1,4 @@
-name: Check compilation
+name: Functionnal tests
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  EXECUTABLES: "42sh"
+  TEST_FILE: "./bonus/tests.json"
 
 jobs:
   check_program_compilation:
@@ -27,10 +27,7 @@ jobs:
         run: |
           make && make clean
 
-      - run: |
-          for EXECUTABLE in $(echo $EXECUTABLES | tr "," "\n"); do
-            if [[ ! -f $EXECUTABLE ]]; then
-                echo "::error title=Executable not found $EXECUTABLE::"
-                exit 1
-            fi
-          done
+      - name: Run tests
+        timeout-minutes: 1
+        run: |
+          ./bonus/tester.py --file $TEST_FILE
