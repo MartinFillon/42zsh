@@ -31,6 +31,18 @@ map_t *vars_create(map_t *env)
     return vars;
 }
 
+void builtin_unset(vec_str_t *av, shell_t *state)
+{
+    str_t *value = NULL;
+
+    for (size_t i = 0; i < av->size; i++) {
+        if ((value = map_get(state->vars, av->data[i])) != NULL) {
+            map_del(state->vars, av->data[i]);
+            free(value);
+        }
+    }
+}
+
 void builtin_set(vec_str_t *av, shell_t *state)
 {
     vec_str_t *tmp = NULL;
