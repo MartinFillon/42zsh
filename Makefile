@@ -57,7 +57,7 @@ NAME	=	42sh
 all:	lib $(NAME)
 
 $(NAME):	$(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
+	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS) -lncurses
 
 tests_run: all
 	make -C ./tests/unit_tests

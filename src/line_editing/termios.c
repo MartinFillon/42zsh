@@ -11,6 +11,7 @@
 #include <termios.h>
 #include <curses.h>
 #include <unistd.h>
+#include <term.h>
 
 #include "my_str.h"
 #include "mysh/termios.h"
@@ -41,34 +42,37 @@ static void arrow_builtins(str_t *input, size_t *pos)
     fflush(stdout);
 }
 
-static void delete_manager(size_t *pos, str_t *input)
+static str_t *delete_manager(size_t *pos, str_t *input)
 {
     str_t *pre_input;
     str_t *post_input;
+
     if (*pos == input->length) {
         if (input->length <= 0)
-                return;
-            printf("\b \b");
+                return input;
             input->data[--input->length] = '\0';
-            (*pos)--;
+            printf("\b\b");
     } else {
-        pre_input = str_substr(input, 0, *pos);
-        post_input = str_substr(input, *pos + 1, input->length);
-        str_sadd(&post_input, pre_input);
-        printf("\n%s\n", pre_input->data);
-        printf("\n%s\n", post_input->data);
+        pre_input = str_substr(input, 0, *pos - 1);
+        post_input = str_substr(input, *pos, input->length - (*pos));
+        str_sadd(&pre_input, post_input);
+        input = pre_input;
+        printf("\b");
+        delch();
+
     }
+    (*pos)--;
+    return input;
 }
 
-static void manage_input(char c, bool *state, str_t *input, size_t *pos)
+static str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
 {
     switch (c) {
         case ENTER:
             *state = false;
-            return;
+            return input;
         case DELETE:
-            delete_manager(pos, input);
-            
+            input = delete_manager(pos, input);
             fflush(stdout);
             break;
         case ARROW:
@@ -76,13 +80,14 @@ static void manage_input(char c, bool *state, str_t *input, size_t *pos)
             break;
         default:
             if (c == 27)
-                return;
+                return input;
             (*pos)++;
             write(1, &c, 1);
             str_cadd(&input, c);
             fflush(stdout);
             break;
     }
+    return input;
 }
 
 str_t *stock_input(void)
@@ -91,9 +96,12 @@ str_t *stock_input(void)
     struct termios new_tio;
     str_t *input = str_create("");
     char c;
-    size_t position;
+    size_t position = 0;
     bool state = true;
 
+    //initscr();
+    //cbreak();
+    //noecho();
     tcgetattr(STDIN_FILENO, &old_tio);
     new_tio = old_tio;
     new_tio.c_lflag &= ~(ICANON | ECHO);
@@ -101,7 +109,7 @@ str_t *stock_input(void)
     fflush(stdout);
     while (state) {
         if (read(STDIN_FILENO, &c, 1) == 1)
-            manage_input(c, &state, input, &position);
+            input = manage_input(c, &state, input, &position);
     }
     printf("\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
