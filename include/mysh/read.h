@@ -17,8 +17,8 @@ void read_input(shell_t *state);
 
 void catch_signals(void);
 
-vec_str_t *parse_args(shell_t *state, char *line);
-str_t *parse_variables(char *line, shell_t *state);
+vec_str_t *parse_args(shell_t *state, char const *line);
+str_t *parse_variables(char const *line, shell_t *state);
 
 map_t *env_create(char **env);
 

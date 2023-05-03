@@ -58,7 +58,7 @@ class Tests:
     def _printAnnotation(self, message: str, test_name: str = "", file=sys.stdout):
         if self.ci_mode:
             print(
-                f"::error title={'{'+test_name+'}'}:: Test failed", end="", file=file)
+                f"::error title={test_name}:: Test failed", end="", file=file)
         print(message, file=file)
 
     def _runTest(self, shell: str, test_name: str, run: list[str]) -> tuple[str, str]:

@@ -26,7 +26,7 @@ static int keep_arg_or_free(void *ptr)
     }
 }
 
-vec_str_t *parse_args(shell_t *state, char *line)
+vec_str_t *parse_args(shell_t *state, char const *line)
 {
     str_t *line_ = parse_variables(line, state);
 

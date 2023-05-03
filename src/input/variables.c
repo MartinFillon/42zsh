@@ -26,7 +26,7 @@ static int add_home(str_t **new, map_t *env)
     return 1;
 }
 
-static int get_variable(str_t **new, char *line, size_t *i, shell_t *state)
+static int get_variable(str_t **new, char const *line, size_t *i, shell_t *state)
 {
     size_t start = ++*i;
     str_t *var_name = NULL;
@@ -50,7 +50,7 @@ static int get_variable(str_t **new, char *line, size_t *i, shell_t *state)
     return 1;
 }
 
-str_t *parse_variables(char *line, shell_t *state)
+str_t *parse_variables(char const *line, shell_t *state)
 {
     size_t len = strlen(line);
     str_t *new = str_screate(len);

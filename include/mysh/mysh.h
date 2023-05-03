@@ -49,7 +49,8 @@ typedef struct shell_s {
     map_t *builtins;
     map_t *middlewares;
     int return_code;
-    int stop;
+    int stop_shell;
+    int stop_command;
     int is_atty;
 
     redirect_t *redirect;
