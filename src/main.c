@@ -43,7 +43,6 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .vars = vars_create(state.env),
     };
 
-    // state.vars = vars_create();
     catch_signals();
     read_input(&state);
     state_free(&state);
