@@ -2,9 +2,9 @@ name: Check compilation
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
 
 env:
   EXECUTABLES: "42sh"

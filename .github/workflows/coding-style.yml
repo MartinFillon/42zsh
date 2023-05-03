@@ -2,9 +2,9 @@ name: Check coding-style
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
 
 env:
   REPORT_FILE: "coding-style-reports.log"

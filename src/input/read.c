@@ -43,17 +43,15 @@ static void parse_input(shell_t *state, char *input)
 
 static str_t *handle_not_tty(void)
 {
-    str_t *temp;
-    size_t c;
-    char *input;
+    char *input = NULL;
+    size_t l_cap = 0;
     ssize_t l_size = 0;
 
-    l_size = getline(&input, &c, stdin);
+    l_size = getline(&input, &l_cap, stdin);
     if (l_size == -1)
         return NULL;
     input[l_size - 1] = '\0';
-    temp = str_create(input);
-    return temp;
+    return str_create(input);
 }
 
 void read_input(shell_t *state)

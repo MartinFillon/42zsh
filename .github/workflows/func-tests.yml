@@ -2,9 +2,9 @@ name: Functionnal tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
 
 env:
   TEST_FILE: "./bonus/tests.json"
