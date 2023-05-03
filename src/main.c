@@ -22,10 +22,11 @@ static void state_free(shell_t *state)
 {
     map_free(state->middlewares, NULL);
     map_free(state->builtins,NULL);
-    map_free(state->env, NULL);
+    map_free(state->env, &free);
     pipe_close(state->pipe);
     free(state->pipe);
     free(state->redirect);
+    map_free(state->vars, &free);
 }
 
 int main(int UNUSED ac, char UNUSED **av, char **envp)
@@ -40,6 +41,7 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .env = env_create(envp),
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
+        .vars = vars_create(state.env),
     };
 
     catch_signals();

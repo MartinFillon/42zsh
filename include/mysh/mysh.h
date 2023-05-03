@@ -43,6 +43,7 @@ typedef struct {
     int action;
 } redirect_t;
 
+
 typedef struct shell_s {
     map_t *env;
     map_t *builtins;
@@ -54,6 +55,7 @@ typedef struct shell_s {
 
     redirect_t *redirect;
     pipe_t *pipe;
+    map_t *vars;
 } shell_t;
 
 #endif /* MYSH_MYSH_ */

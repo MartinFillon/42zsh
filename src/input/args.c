@@ -11,6 +11,7 @@
 #include "my_str.h"
 #include "my_vec.h"
 
+#include "mysh/mysh.h"
 #include "mysh/read.h"
 
 static int keep_arg_or_free(void *ptr)
@@ -25,9 +26,9 @@ static int keep_arg_or_free(void *ptr)
     }
 }
 
-vec_str_t *parse_args(map_t *env, char const *line)
+vec_str_t *parse_args(shell_t *state, char const *line)
 {
-    str_t *line_ = parse_variables(line, env);
+    str_t *line_ = parse_variables(line, state);
 
     if (line_ == NULL)
         return NULL;

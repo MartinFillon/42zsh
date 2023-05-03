@@ -19,7 +19,7 @@
 #include "mysh/read.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "TamaShell $> ";
+const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 static void print_prompt(shell_t *state)
 {
@@ -63,5 +63,6 @@ void read_input(shell_t *state)
         if (temp == NULL)
             break;
         parse_input(state, temp->data);
+        free(temp);
     }
 }

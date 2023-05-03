@@ -29,9 +29,9 @@ static int should_exit(shell_t *state, vec_str_t *av)
 
 static void exec_wrapper(shell_t *state, char const *line)
 {
-    int (*builtin)(vec_str_t *av, map_t *env) = NULL;
+    int (*builtin)(vec_str_t *, shell_t *) = NULL;
     int is_out_pipe = !state->pipe->is_active || state->pipe->action == READ;
-    vec_str_t *av = parse_args(state->env, line);
+    vec_str_t *av = parse_args(state, line);
 
     if (av == NULL) {
         state->return_code = 1;
@@ -41,7 +41,7 @@ static void exec_wrapper(shell_t *state, char const *line)
         return;
     if ((builtin = map_get(state->builtins, av->data[0])) != NULL &&
         is_out_pipe) {
-        state->return_code = builtin(av, state->env);
+        state->return_code = builtin(av, state);
     } else {
         exec_command(state, builtin, av);
     }

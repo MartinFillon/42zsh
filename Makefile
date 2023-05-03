@@ -19,6 +19,7 @@ SRC	=	./src/main.c								\
 		./src/builtins/builtins.c					\
 		./src/builtins/chdir.c						\
 		./src/builtins/env.c						\
+		./src/builtins/set.c						\
 		./src/exec/exec.c							\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\
@@ -48,6 +49,7 @@ LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
+	CC 		= 	clang
 	CFLAGS	+=	-g3 -fsanitize=address
 	LDFLAGS	+=	-fsanitize=address
 endif

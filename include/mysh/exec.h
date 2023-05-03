@@ -32,7 +32,7 @@ void redirect_reset(redirect_t *red);
 // EXEC
 void exec_tree(shell_t *state, bnode_t *node);
 void exec_command(
-    shell_t *state, int (*builtin)(vec_str_t *av, map_t *env), vec_str_t *av
+    shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 );
 void exec_error(int status);
 

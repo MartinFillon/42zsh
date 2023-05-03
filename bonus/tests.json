@@ -316,6 +316,42 @@
     {
       "name": "Ambiguous input redirection 2",
       "run": ["echo yes | my_program < input_file < input_file"]
+    },
+    {
+      "name": "Local variable",
+      "run": ["set a=1", "echo $a"]
+    },
+    {
+      "name": "Local variable 2",
+      "run": ["set a=1", "set a=2", "echo $a"]
+    },
+    {
+      "name": "Local variable error",
+      "run": ["echo $a"]
+    },
+    {
+      "name": "Local variable error 2",
+      "run": ["echo $pipitek"]
+    },
+    {
+      "name": "Empty var",
+      "run": ["set a", "echo $a"]
+    },
+    {
+      "name": "Empty var 2",
+      "run": ["set pipitek", "echo $pipitek"]
+    },
+    {
+      "name": "cwd var",
+      "run": ["echo $cwd", "cd ..", "echo $cwd"]
+    },
+    {
+      "name": "cwd var 2",
+      "run": ["echo $cwd", "cd ..", "echo $cwd", "cd -", "echo $cwd"]
+    },
+    {
+      "name": "term var",
+      "run": ["echo $term"]
     }
   ]
 }
