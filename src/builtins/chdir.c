@@ -77,7 +77,8 @@ int builtin_chdir(vec_str_t *av, shell_t *state)
         return 1;
     }
     if ((av->size == 1 && (path = get_homepath(state->env)) == NULL) ||
-        (av->size == 2 && (path = get_dirpath(av->data[1], state->env)) == NULL)) {
+        (av->size == 2 && (path = get_dirpath(av->data[1], state->env)) == NULL
+        )) {
         return 1;
     }
     success = chdir(path) != 0;
