@@ -49,6 +49,7 @@ LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
+	CC 		= 	clang
 	CFLAGS	+=	-g3 -fsanitize=address
 	LDFLAGS	+=	-fsanitize=address
 endif

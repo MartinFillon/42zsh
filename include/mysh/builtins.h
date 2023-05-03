@@ -14,6 +14,8 @@
 
 map_t *builtins_create(void);
 
+map_t *vars_create(void);
+
 int builtin_env(vec_str_t *, shell_t *);
 
 int builtin_chdir(vec_str_t *, shell_t *);

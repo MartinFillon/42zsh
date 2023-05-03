@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/param.h>
 
 #include "my_map.h"
 #include "my_str.h"
@@ -15,6 +16,16 @@
 
 #include "mysh/builtins.h"
 #include "mysh/mysh.h"
+
+map_t *vars_create(void)
+{
+    static char PATHNAME[MAXPATHLEN] = "";
+    map_t *vars = map_create(100);
+    char *cwd = getcwd(PATHNAME, MAXPATHLEN);
+
+    map_set(vars, STR("cwd"), str_create(cwd));
+    return vars;
+}
 
 void builtin_set(vec_str_t *av, shell_t *state)
 {
@@ -26,13 +37,13 @@ void builtin_set(vec_str_t *av, shell_t *state)
         if ((key = map_get(state->vars, tmp->data[0])) == NULL)
             map_set(
                 state->vars, tmp->data[0],
-                (tmp->size == 2) ? tmp->data[1] : str_create("\0")
+                (tmp->size == 2) ? str_dup(tmp->data[1]) : str_create("")
             );
         else
             key = *str_sadd(
                 str_clear(&key),
-                (tmp->size == 2) ? tmp->data[1] : str_create("\0")
+                (tmp->size == 2) ? str_dup(tmp->data[1]) : str_create("")
             );
-        free(tmp);
+        vec_free(tmp);
     }
 }

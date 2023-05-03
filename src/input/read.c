@@ -67,5 +67,6 @@ void read_input(shell_t *state)
         if (temp == NULL)
             break;
         parse_input(state, temp->data);
+        free(temp);
     }
 }

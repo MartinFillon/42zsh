@@ -7,6 +7,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "mysh/mysh.h"
 
 #include "my_map.h"
@@ -36,14 +37,16 @@ static int get_variable(str_t **new, char *line, size_t *i, shell_t *state)
     var_name = str_ncreate(line + start, *i - start);
     if ((value = map_get(state->env, var_name)) != NULL) {
         str_sadd(new, value);
+        free(var_name);
         return 0;
     }
     if ((value = map_get(state->vars, var_name)) != NULL) {
         str_sadd(new, value);
+        free(var_name);
         return 0;
     }
-
     dprintf(2, "%s: Undefined variable.\n", str_tocstr(var_name));
+    free(var_name);
     return 1;
 }
 

@@ -11,10 +11,11 @@
 #include <string.h>
 #include <sys/param.h>
 #include <unistd.h>
-#include "mysh/mysh.h"
 
 #include "my_map.h"
 #include "my_str.h"
+
+#include "mysh/mysh.h"
 
 static char const *get_homepath(map_t *env)
 {
@@ -41,23 +42,25 @@ static char const *get_dirpath(str_t *p_, map_t *env)
     return str_tocstr(p_);
 }
 
-void update_pwd(map_t *env)
+void update_pwd(shell_t *state)
 {
     static char PATHNAME[MAXPATHLEN] = "";
-    str_t *old = map_get(env, STR("OLDPWD"));
-    str_t *curr = map_get(env, STR("PWD"));
+    str_t *old = map_get(state->env, STR("OLDPWD"));
+    str_t *curr = map_get(state->env, STR("PWD"));
+    str_t *cwd = map_get(state->vars, STR("cwd"));
 
     if (old == NULL) {
         old = str_create("");
-        map_set(env, STR("OLDPWD"), old);
+        map_set(state->env, STR("OLDPWD"), old);
     }
     if (curr == NULL) {
         curr = str_create("");
-        map_set(env, STR("PWD"), curr);
+        map_set(state->env, STR("PWD"), curr);
     }
 
     str_sadd(str_clear(&old), curr);
     str_add(str_clear(&curr), getcwd(PATHNAME, MAXPATHLEN));
+    str_sadd(str_clear(&cwd), curr);
 }
 
 static void perror_wrapper(char const *path)
@@ -82,6 +85,6 @@ int builtin_chdir(vec_str_t *av, shell_t *state)
         return 1;
     }
     success = chdir(path) != 0;
-    (success) ? perror_wrapper(path) : update_pwd(state->env);
+    (success) ? perror_wrapper(path) : update_pwd(state);
     return success;
 }
