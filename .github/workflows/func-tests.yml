@@ -10,7 +10,7 @@ env:
   TEST_FILE: "./bonus/tests.json"
 
 jobs:
-  check_program_compilation:
+  functionnal_tests:
     runs-on: ubuntu-latest
 
     container:
@@ -30,4 +30,4 @@ jobs:
       - name: Run tests
         timeout-minutes: 1
         run: |
-          ./bonus/tester.py --file $TEST_FILE
+          ./bonus/tester.py --file $TEST_FILE -ci
