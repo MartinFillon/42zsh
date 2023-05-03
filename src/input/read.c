@@ -5,6 +5,7 @@
 ** read
 */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,12 +36,31 @@ static void parse_input(shell_t *state, char *input)
     btree_free(tree);
 }
 
+static str_t *handle_not_tty(void)
+{
+    char *input = NULL;
+    size_t l_cap = 0;
+    ssize_t l_size = 0;
+
+    l_size = getline(&input, &l_cap, stdin);
+    if (l_size == -1)
+        return NULL;
+    input[l_size - 1] = '\0';
+    return str_create(input);
+}
+
 void read_input(shell_t *state)
 {
     str_t *temp;
     while (!state->stop) {
-        print_prompt(state);
-        temp = stock_input();
+        if (!state->is_atty) {
+            temp = handle_not_tty();
+        } else {
+            print_prompt(state);
+            temp = stock_input();
+        }
+        if (temp == NULL)
+            break;
         parse_input(state, temp->data);
     }
 }
