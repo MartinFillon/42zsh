@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sys/param.h>
 #include <unistd.h>
+#include "mysh/mysh.h"
 
 #include "my_map.h"
 #include "my_str.h"
@@ -66,7 +67,7 @@ static void perror_wrapper(char const *path)
     dprintf(2, "%s: %s.\n", path, error);
 }
 
-int builtin_chdir(vec_str_t *av, map_t *env)
+int builtin_chdir(vec_str_t *av, shell_t *state)
 {
     char const *path = NULL;
     int success;
@@ -75,11 +76,11 @@ int builtin_chdir(vec_str_t *av, map_t *env)
         dprintf(2, "cd: Too many arguments.\n");
         return 1;
     }
-    if ((av->size == 1 && (path = get_homepath(env)) == NULL) ||
-        (av->size == 2 && (path = get_dirpath(av->data[1], env)) == NULL)) {
+    if ((av->size == 1 && (path = get_homepath(state->env)) == NULL) ||
+        (av->size == 2 && (path = get_dirpath(av->data[1], state->env)) == NULL)) {
         return 1;
     }
     success = chdir(path) != 0;
-    (success) ? perror_wrapper(path) : update_pwd(env);
+    (success) ? perror_wrapper(path) : update_pwd(state->env);
     return success;
 }

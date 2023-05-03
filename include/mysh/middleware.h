@@ -27,6 +27,5 @@ void append_file_middleware(shell_t *, bnode_t *);
 void write_file_middleware(shell_t *, bnode_t *);
 void read_file_middleware(shell_t *, bnode_t *);
 void heredoc_middleware(shell_t *, bnode_t *);
-void export_variable_middleware(shell_t *, bnode_t *);
 
 #endif /* MYSH_MIDDLEWARE_ */

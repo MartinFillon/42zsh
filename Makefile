@@ -19,6 +19,7 @@ SRC	=	./src/main.c								\
 		./src/builtins/builtins.c					\
 		./src/builtins/chdir.c						\
 		./src/builtins/env.c						\
+		./src/builtins/set.c						\
 		./src/exec/exec.c							\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\
@@ -35,7 +36,6 @@ SRC	=	./src/main.c								\
 		./src/middleware/heredoc.c					\
 		./src/middleware/utils.c					\
 		./src/middleware/pipe.c						\
-		./src/middleware/export_variable.c			\
 		./src/parser/symbol.c						\
 		./src/parser/gen.c 							\
 		./src/globbings/question_mark_handler.c 	\

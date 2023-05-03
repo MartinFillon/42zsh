@@ -15,6 +15,8 @@
 #include "my_utils.h"
 #include "my_vec.h"
 
+#include "mysh/mysh.h"
+
 static const char *ERROR[] = {
     "setenv: Variable name must contain alphanumeric characters.\n",
     "setenv: Too many arguments.\n",
@@ -22,14 +24,14 @@ static const char *ERROR[] = {
     "setenv: Variable name must begin with a letter.\n",
 };
 
-int builtin_env(vec_str_t UNUSED *av, map_t *env)
+int builtin_env(vec_str_t UNUSED *av, shell_t *state)
 {
-    vec_str_t *keys = map_get_keys(env);
+    vec_str_t *keys = map_get_keys(state->env);
 
     for (size_t i = 0; i < keys->size; ++i) {
         printf(
             "%s=%s\n", str_tocstr(keys->data[i]),
-            str_tocstr(map_get(env, keys->data[i]))
+            str_tocstr(map_get(state->env, keys->data[i]))
         );
     }
 
@@ -37,10 +39,10 @@ int builtin_env(vec_str_t UNUSED *av, map_t *env)
     return 0;
 }
 
-int builtin_setenv(vec_str_t *av, map_t *env)
+int builtin_setenv(vec_str_t *av, shell_t *state)
 {
     if (av->size == 1)
-        return builtin_env(av, env);
+        return builtin_env(av, state);
     if (av->size == 2 || av->size == 3) {
         if (!isalpha(av->data[1]->data[0])) {
             dprintf(2, "%s", ERROR[3]);
@@ -51,7 +53,7 @@ int builtin_setenv(vec_str_t *av, map_t *env)
             return 1;
         }
         map_set(
-            env, str_dup(av->data[1]),
+            state->env, str_dup(av->data[1]),
             (av->size == 2) ? str_create("") : str_dup(av->data[2])
         );
         return 0;
@@ -60,7 +62,7 @@ int builtin_setenv(vec_str_t *av, map_t *env)
     return 1;
 }
 
-int builtin_unsetenv(vec_str_t *av, map_t *env)
+int builtin_unsetenv(vec_str_t *av, shell_t *state)
 {
     if (av->size < 2) {
         dprintf(2, "%s", ERROR[2]);
@@ -68,7 +70,7 @@ int builtin_unsetenv(vec_str_t *av, map_t *env)
     }
 
     for (size_t i = 1; i < av->size; ++i)
-        map_del(env, av->data[i]);
+        map_del(state->env, av->data[i]);
 
     return 0;
 }

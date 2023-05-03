@@ -23,7 +23,6 @@ map_t *middleware_create(void)
     map_set(middleware, STR(">>"), &append_file_middleware);
     map_set(middleware, STR("<"), &read_file_middleware);
     map_set(middleware, STR("<<"), &heredoc_middleware);
-    map_set(middleware, STR("="), &export_variable_middleware);
 
     return middleware;
 }
