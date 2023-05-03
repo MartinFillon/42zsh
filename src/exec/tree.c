@@ -59,7 +59,7 @@ void exec_tree(shell_t *state, bnode_t *node)
         exec_tree(state, node->right);
         return;
     }
-    if ((av = parse_args(state->env, node->data)) == NULL) {
+    if ((av = parse_args(state, node->data)) == NULL) {
         state->return_code = 1;
         return;
     }

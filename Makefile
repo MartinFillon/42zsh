@@ -35,6 +35,7 @@ SRC	=	./src/main.c								\
 		./src/middleware/heredoc.c					\
 		./src/middleware/utils.c					\
 		./src/middleware/pipe.c						\
+		./src/middleware/export_variable.c			\
 		./src/parser/symbol.c						\
 		./src/parser/gen.c 							\
 		./src/globbings/question_mark_handler.c 	\

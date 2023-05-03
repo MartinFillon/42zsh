@@ -5,6 +5,7 @@
 ** export_variable
 */
 
+#include <stdio.h>
 #include "my_btree.h"
 #include "my_map.h"
 #include "my_str.h"
@@ -17,5 +18,5 @@ void export_variable_middleware(shell_t *state, bnode_t *node)
     char const *key = node->left->data;
     char *value = node->right->data;
 
-    map_set(state->vars, str_create(key), value);
+    map_set(state->vars, str_create(key), str_create(value));
 }

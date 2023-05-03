@@ -11,8 +11,6 @@
     #include <unistd.h>
 
     #include "my_map.h"
-#include "my_str.h"
-#include "my_vec.h"
 
 
 typedef int fd_set_t[2];
