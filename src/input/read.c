@@ -18,7 +18,7 @@
 #include "mysh/read.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "\e[1;31m42zsh $>\e[0m ";
+const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 static void print_prompt(shell_t *state)
 {
