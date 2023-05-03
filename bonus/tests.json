@@ -352,6 +352,14 @@
     {
       "name": "term var",
       "run": ["echo $term"]
+    },
+    {
+      "name": "unset var 1",
+      "run": ["set a=1", "unset a", "echo $a"]
+    },
+    {
+      "name": "unset var 2",
+      "run": ["set a=1", "unset a", "set a=2", "echo $a"]
     }
   ]
 }
