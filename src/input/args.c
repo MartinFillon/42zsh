@@ -34,9 +34,11 @@ vec_str_t *parse_args(shell_t *state, char const *line)
         return NULL;
 
     vec_str_t *args_ = str_split(line_, STR(" \t"));
-    vec_str_t *args = (vec_str_t *)vec_filter(args_, &keep_arg_or_free);
+    vec_str_t *args__ = get_globbings(args_);
+    vec_str_t *args = (vec_str_t *)vec_filter(args__, &keep_arg_or_free);
 
     free(line_);
     free(args_);
+    free(args__);
     return args;
 }

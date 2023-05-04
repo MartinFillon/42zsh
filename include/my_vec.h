@@ -170,4 +170,12 @@ vec_t *vec_filter(void *vec, int (*keep)(void *));
  */
 void *vec_find(void *vec, int (*find)(void *));
 
+/**
+ * @brief merges 2 vectors
+ *
+ * @param dest  the ADRESS of the vector to merge into
+ * @param src   the vector to merge from
+ */
+void vec_merge(void *dest, void *src);
+
 #endif /* INCLUDE_MY_VEC_ */
