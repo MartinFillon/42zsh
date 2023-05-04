@@ -5,6 +5,7 @@
 ** args
 */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -36,7 +37,7 @@ vec_str_t *parse_args(shell_t *state, char const *line)
 
     vec_str_t *args_ = str_split(line_, STR(" \t"));
     vec_str_t *args__ = get_globbings(args_);
-    if (args__ == NULL) {
+    if (args__ == NULL && errno == 1) {
         dprintf(2, "%s: No match.\n", args_->data[0]->data);
         free(line_);
         free(args_);

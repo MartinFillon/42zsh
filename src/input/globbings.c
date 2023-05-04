@@ -5,6 +5,7 @@
 ** globbings
 */
 
+#include <errno.h>
 #include <glob.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -42,8 +43,10 @@ vec_str_t *get_globbings(vec_str_t *args)
         } else {
             vec_pushback(&arg_cpy, &args->data[i]);
         }
-        if (!tmp || (tmp && tmp->size == 0))
+        if (tmp && tmp->size == 0) {
+            errno = 1;
             return NULL;
+        }
     }
     return arg_cpy;
 }
