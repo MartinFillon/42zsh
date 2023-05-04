@@ -360,6 +360,38 @@
     {
       "name": "unset var 2",
       "run": ["set a=1", "unset a", "set a=2", "echo $a"]
+    },
+    {
+      "name": "globbings * 1",
+      "run": ["ls -l ../*"]
+    },
+    {
+      "name": "globbings * 2",
+      "run": ["ls -l ../*/*/*.c"]
+    },
+    {
+      "name": "globbings ? 1",
+      "run": ["ls -l src/ma?n.c"]
+    },
+    {
+      "name": "globbings ? 2",
+      "run": ["ls -l s?c"]
+    },
+    {
+      "name": "globbings [] 1",
+      "run": ["ls -l src/ma[a-i]n.c"]
+    },
+    {
+      "name": "globbings [] 2",
+      "run": ["ls -l src/ma[a-i]n.c"]
+    },
+    {
+      "name": "all globbings 1",
+      "run": ["ls -l ../*/*/m[a-i]??.c"]
+    },
+    {
+      "name": "all globbings 2 error",
+      "run": ["ls -l ../*/*/m[a-i]?.c ../*/s?c/m[a-z].c"]
     }
   ]
 }
