@@ -23,6 +23,7 @@ static void state_free(shell_t *state)
     map_free(state->middlewares, NULL);
     map_free(state->builtins,NULL);
     map_free(state->env, &free);
+    map_free(state->alias, &free);
     pipe_close(state->pipe);
     free(state->pipe);
     free(state->redirect);
@@ -42,6 +43,7 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
         .vars = vars_create(state.env),
+        .alias = map_create(1000),
     };
 
     catch_signals();

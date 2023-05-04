@@ -32,6 +32,7 @@ static void exec_wrapper(shell_t *state, char const *line)
     int (*builtin)(vec_str_t *, shell_t *) = NULL;
     int is_out_pipe = !state->pipe->is_active || state->pipe->action == READ;
     vec_str_t *av = parse_args(state, line);
+    str_t *alias = NULL;
 
     if (av == NULL) {
         state->return_code = 1;
@@ -39,12 +40,17 @@ static void exec_wrapper(shell_t *state, char const *line)
     }
     if (av->size == 0 || should_exit(state, av))
         return;
-    if ((builtin = map_get(state->builtins, av->data[0])) != NULL &&
-        is_out_pipe) {
+    if ((builtin = map_get(state->builtins, av->data[0])) != NULL
+    && is_out_pipe) {
         state->return_code = builtin(av, state);
-    } else {
-        exec_command(state, builtin, av);
+        vec_free(av);
+        return;
     }
+    if ((alias = map_get(state->alias, av->data[0])) != NULL) {
+        vec_free(av);
+        av = parse_args(state, alias->data);
+    }
+    exec_command(state, builtin, av);
     vec_free(av);
 }
 

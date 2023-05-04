@@ -20,6 +20,8 @@ SRC	=	./src/main.c								\
 		./src/builtins/chdir.c						\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
+		./src/builtins/alias.c						\
+		./src/builtins/unalias.c					\
 		./src/exec/exec.c							\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\

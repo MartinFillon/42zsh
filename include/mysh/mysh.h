@@ -56,6 +56,7 @@ typedef struct shell_s {
     redirect_t *redirect;
     pipe_t *pipe;
     map_t *vars;
+    map_t *alias;
 } shell_t;
 
 #endif /* MYSH_MYSH_ */
