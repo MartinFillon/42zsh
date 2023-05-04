@@ -63,7 +63,7 @@ void read_input(shell_t *state)
         }
         if (temp == NULL)
             break;
-        start_history(state, temp->data);
+        create_history(temp->data);
         parse_input(state, temp->data);
         free(temp);
     }

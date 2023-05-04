@@ -12,17 +12,21 @@
 
 #include "my_map.h"
 #include "mysh/history.h"
+#include "mysh/mysh.h"
 
 void create_history(char *input)
 {
-    time_t epoch_time;
-    struct tm timeinfo;
+    time_t now;
+    time_t epoch;
+    struct tm ts;
     FILE *fp = fopen(".42zsh_history", "a+");
 
     if (fp == NULL)
         return;
 
-    timeinfo = *localtime(&epoch_time);
-    epoch_time = mktime(&timeinfo);
+    time(&now);
+    ts = *localtime(&now);
+    epoch = mktime(&ts);
+    fprintf(fp, "#+%ld\n", (long)epoch);
     fprintf(fp, "%s\n", input);
 }
