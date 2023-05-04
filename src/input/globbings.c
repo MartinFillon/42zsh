@@ -5,10 +5,10 @@
 ** globbings
 */
 
+#include <glob.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glob.h>
 
 #include "my_str.h"
 #include "my_vec.h"
@@ -36,12 +36,14 @@ vec_str_t *get_globbings(vec_str_t *args)
         if (str_contains(args->data[i], '*') ||
             str_contains(args->data[i], '?') ||
             (str_contains(args->data[i], '[') &&
-             str_contains(args->data[i], ']'))) {
+            str_contains(args->data[i], ']'))) {
             tmp = get_matches(args->data[i]);
             vec_merge(&arg_cpy, tmp);
         } else {
             vec_pushback(&arg_cpy, &args->data[i]);
         }
+        if (!tmp || (tmp && tmp->size == 0))
+            return NULL;
     }
     return arg_cpy;
 }
