@@ -43,7 +43,6 @@ typedef struct {
     int action;
 } redirect_t;
 
-
 typedef struct shell_s {
     map_t *env;
     map_t *builtins;
