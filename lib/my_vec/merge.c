@@ -7,7 +7,9 @@
 
 #include <stdio.h>
 #include <string.h>
+
 #include "my_vec.h"
+
 void vec_merge(void *dest, void *src)
 {
     vec_t **dest_ = (vec_t **)dest;

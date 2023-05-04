@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "my_str.h"
 #include "my_vec.h"
@@ -32,6 +33,7 @@ vec_str_t *get_globbings(vec_str_t *args)
 {
     vec_str_t *arg_cpy = vec_create(args->size, sizeof(str_t *));
     vec_str_t *tmp = NULL;
+    bool has_matched = false;
 
     for (size_t i = 0; i < args->size; i++) {
         if (str_contains(args->data[i], '*') ||
@@ -40,13 +42,10 @@ vec_str_t *get_globbings(vec_str_t *args)
             str_contains(args->data[i], ']'))) {
             tmp = get_matches(args->data[i]);
             vec_merge(&arg_cpy, tmp);
-        } else {
+            has_matched |= tmp->size > 0;
+            free(tmp);
+        } else
             vec_pushback(&arg_cpy, &args->data[i]);
-        }
-        if (tmp && tmp->size == 0) {
-            errno = 1;
-            return NULL;
-        }
     }
-    return arg_cpy;
+    return (has_matched) ? arg_cpy : NULL;
 }
