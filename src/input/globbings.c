@@ -47,5 +47,5 @@ vec_str_t *get_globbings(vec_str_t *args)
         } else
             vec_pushback(&arg_cpy, &args->data[i]);
     }
-    return (has_matched) ? arg_cpy : NULL;
+    return (has_matched || tmp == NULL) ? arg_cpy : NULL;
 }
