@@ -43,6 +43,7 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
         .vars = vars_create(state.env),
+        .history = history_create()
     };
 
     catch_signals();

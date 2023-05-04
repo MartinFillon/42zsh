@@ -11,6 +11,7 @@
     #include <unistd.h>
 
     #include "my_map.h"
+    #include "mysh/history.h"
 
 
 typedef int fd_set_t[2];
@@ -27,7 +28,7 @@ enum {
     RESTORE
 };
 
-typedef struct {
+typedef struct pipe_s {
     int is_active;
 
     int action;
@@ -36,12 +37,19 @@ typedef struct {
     int pids[2];
 } pipe_t;
 
-typedef struct {
+typedef struct redirect_s {
     int is_active;
 
     int fd;
     int action;
 } redirect_t;
+
+typedef struct hystory_s {
+    str_t *destination;
+    vec_history_entry_t *entries;
+} history_t;
+
+history_t *history_create(void);
 
 typedef struct shell_s {
     map_t *env;
@@ -55,6 +63,7 @@ typedef struct shell_s {
     redirect_t *redirect;
     pipe_t *pipe;
     map_t *vars;
+    history_t *history;
 } shell_t;
 
 #endif /* MYSH_MYSH_ */

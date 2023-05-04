@@ -12,13 +12,16 @@
 
     #include <time.h>
 
-typedef struct history_s {
-    vec_int_t id;
+typedef struct hystry_entry_s {
+    int id;
     time_t timestamp;
     vec_str_t command;
-} history_t;
+} history_entry_t;
 
+VEC_DEF(history_entry_t, history_entry);
 
-void create_history(char *input);
+typedef struct hystory_s history_t;
+
+void history_append(char *input, history_t *history);
 
 #endif /* MYSH_HISTORY_*/
