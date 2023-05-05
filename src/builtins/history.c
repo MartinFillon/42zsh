@@ -47,9 +47,8 @@ static int check_hist_cases(vec_str_t *av, shell_t *state)
 
     if (str_isnum(av->data[1]) == 1){
         if (size > 100){
-            (size > atof(av->data[1]->data)) ?
-            print_history(state->history, size - atof(av->data[1]->data)) :
-            print_history(state->history, size - 100);
+            print_history(state->history, size -
+            (size > atof(av->data[1]->data)) ? atof(av->data[1]->data) : 100);
         } else {
             print_history(state->history, 0);
         }
@@ -65,15 +64,16 @@ static int check_hist_cases(vec_str_t *av, shell_t *state)
 
 int builtin_history(vec_str_t *av, shell_t *state)
 {
+    size_t hist_size = state->history->entries->size;
+
     if (av->size > 3) {
         dprintf(2, "%s", ERROR[0]);
         return 1;
     }
     if (av->size == 1 || (av->size == 2 &&
         strcmp(av->data[1]->data, "-") == 0)){
-            (state->history->entries->size > 100) ?
-            print_history(state->history, state->history->entries->size - 100) :
-            print_history(state->history, 0);
+            print_history(state->history, (hist_size > 100) ?
+            hist_size - 100 : 0);
             return 0;
     }
     if (av->size > 1){

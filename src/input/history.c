@@ -26,6 +26,7 @@ void save_history(history_t *history)
         fprintf(fp, "%s\n", history->entries->data[i].command->data);
     }
     free(history->destination);
+    fclose(fp);
 }
 
 void history_append(char *input, history_t *history)
@@ -46,6 +47,6 @@ history_t *history_create(void)
 
     history->entries = vec_create(100, sizeof(history_entry_t));
     history->destination = str_create(cwd);
-    str_sadd(&history->destination, STR("/.42zsh_history"));
+    str_sadd(&history->destination, STR("/.42sh_history"));
     return history;
 }
