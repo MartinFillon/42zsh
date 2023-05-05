@@ -16,7 +16,7 @@
 
 void save_history(history_t *history)
 {
-    FILE *fp = fopen(history->destination->data, "a+");
+    FILE *fp = fopen(history->destination->data, "w+");
 
     if (fp == NULL)
         return;
@@ -25,7 +25,6 @@ void save_history(history_t *history)
         fprintf(fp, "#+%ld\n", history->entries->data[i].timestamp);
         fprintf(fp, "%s\n", history->entries->data[i].command->data);
     }
-    vec_free(&history->entries);
     free(history->destination);
 }
 

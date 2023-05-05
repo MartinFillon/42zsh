@@ -27,6 +27,7 @@ static void state_free(shell_t *state)
     pipe_close(state->pipe);
     free(state->pipe);
     free(state->redirect);
+    free(state->history);
     map_free(state->vars, &free);
 }
 

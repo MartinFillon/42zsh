@@ -49,8 +49,6 @@ typedef struct history_s {
     vec_history_entry_t *entries;
 } history_t;
 
-history_t *history_create(void);
-
 typedef struct shell_s {
     map_t *env;
     map_t *builtins;
