@@ -16,6 +16,7 @@ SRC	=	./src/main.c								\
 		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/input/termios.c 						\
+		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
 		./src/builtins/chdir.c						\
 		./src/builtins/history.c					\
@@ -39,8 +40,6 @@ SRC	=	./src/main.c								\
 		./src/middleware/pipe.c						\
 		./src/parser/symbol.c						\
 		./src/parser/gen.c 							\
-		./src/globbings/question_mark_handler.c 	\
-		./src/globbings/wildcard_handler.c 			\
 
 
 CFLAGS		+=	-Werror -Wextra -Wall
