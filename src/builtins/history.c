@@ -43,10 +43,16 @@ static int check_hist_flags(void)
 
 static int check_hist_cases(vec_str_t *av, shell_t *state)
 {
+    size_t size = state->history->entries->size;
+
     if (str_isnum(av->data[1]) == 1){
-        (state->history->entries->size > atof(av->data[1]->data)) ?
-        print_history(state->history, state->history->entries->size -
-        atof(av->data[1]->data)) : print_history(state->history, 0);
+        if (size > 100){
+            (size > atof(av->data[1]->data)) ?
+            print_history(state->history, size - atof(av->data[1]->data)) :
+            print_history(state->history, size - 100);
+        } else {
+            print_history(state->history, 0);
+        }
     } else if (str_startswith(av->data[1], STR("-")) &&
         strcmp(av->data[1]->data, "-") != 0) {
             return check_hist_flags();
