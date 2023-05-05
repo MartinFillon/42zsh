@@ -54,6 +54,7 @@ static str_t *handle_not_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp;
+
     while (!state->stop_shell) {
         if (!state->is_atty) {
             temp = handle_not_tty();
@@ -63,8 +64,10 @@ void read_input(shell_t *state)
         }
         if (temp == NULL)
             break;
+
         history_append(temp->data, state->history);
         parse_input(state, temp->data);
         free(temp);
     }
+    save_history(state->history);
 }

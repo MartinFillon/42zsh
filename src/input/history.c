@@ -14,23 +14,29 @@
 #include "my_map.h"
 #include "mysh/mysh.h"
 
-void history_append(char *input, history_t *history)
+void save_history(history_t *history)
 {
-    time_t now;
-    time_t epoch;
-    struct tm ts;
     FILE *fp = fopen(history->destination->data, "a+");
 
     if (fp == NULL)
         return;
 
-    time(&now);
-    history->entries->data->command = str_create(input);
-    history->entries->data->timestamp = now;
-    ts = *localtime(&now);
-    epoch = mktime(&ts);
-    fprintf(fp, "#+%ld\n", (long)epoch);
-    fprintf(fp, "%s\n", input);
+    for (size_t i = 0; i < history->entries->size; i++) {
+        fprintf(fp, "#+%ld\n", history->entries->data[i].timestamp);
+        fprintf(fp, "%s\n", history->entries->data[i].command->data);
+    }
+    vec_free(&history->entries);
+    free(history->destination);
+}
+
+void history_append(char *input, history_t *history)
+{
+    time_t now = time(NULL);
+    history_entry_t entry;
+
+    entry.command = str_create(input);
+    entry.timestamp = now;
+    vec_pushback(&history->entries, &entry);
 }
 
 history_t *history_create(void)
@@ -39,7 +45,7 @@ history_t *history_create(void)
     char *cwd = getcwd(PATHNAME, MAXPATHLEN);
     history_t *history = malloc(sizeof(history_t));
 
-    history->entries = vec_create(5000, sizeof(history_t));
+    history->entries = vec_create(100, sizeof(history_entry_t));
     history->destination = str_create(cwd);
     str_sadd(&history->destination, STR("/.42zsh_history"));
     return history;

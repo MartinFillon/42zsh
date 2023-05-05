@@ -29,5 +29,13 @@ int builtin_history(vec_str_t *av, shell_t *state)
         return 1;
     }
 
+    if (av->size == 1) {
+        for (size_t i = 0; i < state->history->entries->size; i++) {
+            printf("\t%ld\t", i);
+            printf("time\t");
+            printf("%s\n", state->history->entries->data[i].command->data);
+        }
+    }
+
     return 0;
 }
