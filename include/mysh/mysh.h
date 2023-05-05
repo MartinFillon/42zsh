@@ -44,7 +44,7 @@ typedef struct redirect_s {
     int action;
 } redirect_t;
 
-typedef struct hystory_s {
+typedef struct history_s {
     str_t *destination;
     vec_history_entry_t *entries;
 } history_t;
