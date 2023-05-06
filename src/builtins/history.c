@@ -29,7 +29,7 @@ static void print_history(history_t *history, size_t start)
     for (size_t i = start; i < history->entries->size; i++) {
         time = localtime(&history->entries->data[i].timestamp);
         printf(
-            "%5ld  %01d:%02d   %s\n", i, time->tm_hour, time->tm_min,
+            "%5ld  %01d:%02d   %s\n", i + 1, time->tm_hour, time->tm_min,
             history->entries->data[i].command->data
         );
     }
