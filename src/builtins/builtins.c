@@ -20,6 +20,8 @@ map_t *builtins_create(void)
     map_set(cmd, STR("set"), &builtin_set);
     map_set(cmd, STR("alias"), &builtin_alias);
     map_set(cmd, STR("unalias"), &builtin_unalias);
+    map_set(cmd, STR("unset"), &builtin_unset);
+    map_set(cmd, STR("history"), &builtin_history);
 
     return cmd;
 }
