@@ -27,4 +27,7 @@ int builtin_unsetenv(vec_str_t *, shell_t *);
 void builtin_set(vec_str_t *, shell_t *);
 
 void builtin_unset(vec_str_t *, shell_t *);
+
+int builtin_history(vec_str_t *, shell_t *);
+
 #endif /* MYSH_BUILTINS_H */
