@@ -38,7 +38,7 @@ static void read_and_send_input(int fd, char *stop)
 void heredoc_middleware(shell_t *state, bnode_t *node)
 {
     int fds[2];
-    redirect_t *r = state->redirect;
+    redirect_t *r = &state->redirect;
     char *end = trim_string(node->right->data);
 
     if (pipe(fds) == -1)

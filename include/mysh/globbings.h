@@ -11,4 +11,5 @@
 
 vec_str_t *question_mark_handler(str_t *word);
 vec_str_t *get_wildcard_matches(str_t *pattern);
+
 #endif /* !GLOBBINS_H_ */

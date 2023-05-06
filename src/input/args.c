@@ -36,6 +36,11 @@ vec_str_t *parse_args(shell_t *state, char const *line)
     vec_str_t *args_ = str_split(line_, STR(" \t"));
     vec_str_t *args = (vec_str_t *)vec_filter(args_, &keep_arg_or_free);
 
+    if (args->size > 1 && str_eq(VEC_LAST(args), STR("&"))) {
+        state->exec_cmd_in_bg = 1;
+        free(VEC_LAST(args));
+        vec_popback(args);
+    }
     free(line_);
     free(args_);
     return args;

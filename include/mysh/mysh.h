@@ -17,6 +17,8 @@ typedef int fd_set_t[2];
 
 VEC_DEF(fd_set_t, fd)
 
+VEC_DEF(pid_t, pid)
+
 enum {
     READ,
     WRITE,
@@ -30,10 +32,11 @@ enum {
 typedef struct {
     int is_active;
 
+    pid_t pgid;
     int action;
     int fds[2];
     int pipe_fd;
-    int pids[2];
+    int first_pid;
 } pipe_t;
 
 typedef struct {
@@ -43,19 +46,22 @@ typedef struct {
     int action;
 } redirect_t;
 
-
 typedef struct shell_s {
     map_t *env;
     map_t *builtins;
     map_t *middlewares;
     int return_code;
     int stop_shell;
-    int stop_command;
+    int stop_cmd;
     int is_atty;
+    pid_t shell_pgid;
+    pid_t cmd_pgid;
+    int exec_cmd_in_bg;
 
-    redirect_t *redirect;
-    pipe_t *pipe;
+    redirect_t redirect;
+    pipe_t pipe;
     map_t *vars;
+    vec_pid_t *jobs;
 } shell_t;
 
 #endif /* MYSH_MYSH_ */

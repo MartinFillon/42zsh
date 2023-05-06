@@ -32,7 +32,10 @@ static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
 
-    state->stop_command = 0;
+    state->stop_cmd = 0;
+    state->cmd_pgid = -1;
+    state->exec_cmd_in_bg = 0;
+    remove_zombies(state);
     exec_tree(state, tree->root);
     btree_free(tree);
 }

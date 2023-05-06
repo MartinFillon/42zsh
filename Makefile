@@ -17,10 +17,13 @@ SRC	=	./src/main.c								\
 		./src/input/env.c							\
 		./src/input/termios.c 						\
 		./src/builtins/builtins.c					\
+		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
+		./src/builtins/fg.c							\
 		./src/exec/exec.c							\
+		./src/exec/process.c						\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\
 		./src/exec/pipe.c							\
