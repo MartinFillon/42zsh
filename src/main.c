@@ -16,6 +16,7 @@
 #include "mysh/exec.h"
 #include "mysh/middleware.h"
 #include "mysh/mysh.h"
+#include "mysh/history.h"
 #include "mysh/read.h"
 
 static void state_free(shell_t *state)
@@ -26,6 +27,7 @@ static void state_free(shell_t *state)
     pipe_close(state->pipe);
     free(state->pipe);
     free(state->redirect);
+    free(state->history);
     map_free(state->vars, &free);
 }
 
@@ -42,6 +44,7 @@ int main(int UNUSED ac, char UNUSED **av, char **envp)
         .is_atty = isatty(STDIN_FILENO),
         .pipe = pipe_create(),
         .vars = vars_create(state.env),
+        .history = history_create()
     };
 
     catch_signals();
