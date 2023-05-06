@@ -37,20 +37,17 @@ static void exec_wrapper(shell_t *state, char const *line)
     if (av == NULL) {
         state->return_code = 1;
         return;
-    }
-    if (av->size == 0 || should_exit(state, av))
+    } if (av->size == 0 || should_exit(state, av))
         return;
     if ((builtin = map_get(state->builtins, av->data[0])) != NULL
     && is_out_pipe) {
         state->return_code = builtin(av, state);
         vec_free(av);
         return;
-    }
-    if ((alias = map_get(state->alias, av->data[0])) != NULL) {
+    } if ((alias = map_get(state->alias, av->data[0])) != NULL) {
         vec_free(av);
         av = parse_args(state, alias->data);
-    }
-    exec_command(state, builtin, av);
+    } exec_command(state, builtin, av);
     vec_free(av);
 }
 
