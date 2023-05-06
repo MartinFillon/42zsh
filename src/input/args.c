@@ -5,6 +5,8 @@
 ** args
 */
 
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "my_map.h"
@@ -34,7 +36,14 @@ vec_str_t *parse_args(shell_t *state, char const *line)
         return NULL;
 
     vec_str_t *args_ = str_split(line_, STR(" \t"));
-    vec_str_t *args = (vec_str_t *)vec_filter(args_, &keep_arg_or_free);
+    vec_str_t *args__ = get_globbings(args_);
+    if (args__ == NULL) {
+        dprintf(2, "%s: No match.\n", args_->data[0]->data);
+        free(line_);
+        free(args_);
+        return NULL;
+    }
+    vec_str_t *args = (vec_str_t *)vec_filter(args__, &keep_arg_or_free);
 
     if (args->size > 1 && str_eq(VEC_LAST(args), STR("&"))) {
         state->exec_cmd_in_bg = 1;
@@ -43,5 +52,6 @@ vec_str_t *parse_args(shell_t *state, char const *line)
     }
     free(line_);
     free(args_);
+    free(args__);
     return args;
 }

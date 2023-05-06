@@ -19,7 +19,8 @@ SRC	=	./add.c			\
 		./iterate.c		\
 		./remove.c		\
 		./sort.c		\
-		./utils.c
+		./utils.c 		\
+		./merge.c
 
 CFLAGS += -Werror -Wextra -Wall
 CPPFLAGS += $(INCLUDE)
