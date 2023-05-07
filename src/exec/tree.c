@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "my_str.h"
+#include "my_vec.h"
 
 #include "mysh/exec.h"
 #include "mysh/middleware.h"
@@ -38,8 +39,10 @@ static void exec_wrapper(shell_t *state, char const *line)
         state->return_code = 1;
         return;
     }
-    if (av->size == 0 || should_exit(state, av))
+    if (av->size == 0 || should_exit(state, av)) {
+        vec_free(av);
         return;
+    }
     if ((builtin = map_get(state->builtins, av->data[0])) != NULL &&
         is_out_pipe) {
         state->return_code = builtin(av, state);

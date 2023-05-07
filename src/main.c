@@ -25,9 +25,9 @@ static void state_free(shell_t *state)
     map_free(state->middlewares, NULL);
     map_free(state->builtins, NULL);
     map_free(state->env, &free);
+    map_free(state->vars, &free);
     pipe_close(&state->pipe);
     free(state->jobs);
-    map_free(state->vars, &free);
 }
 
 static void init_shell(shell_t *state, char const *const *envp)

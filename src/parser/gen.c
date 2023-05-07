@@ -18,18 +18,16 @@ static void parse_line(bnode_t **node, char *line);
 static int find_line(bnode_t **node, char const *symbol, char *line)
 {
     char *symb = NULL;
-    char *left = NULL;
-    char *right = NULL;
 
     for (long i = strlen(line) - 1; i >= 0; --i) {
-        if ((symb = find_symbol(symbol, line + i)) != NULL) {
+        symb = find_symbol(symbol, line + i);
+        if (i > 0 && line[i - 1] == '\\')
+            continue;
+        if (symb != NULL) {
             line[i] = '\0';
             (*node)->data = symb;
-            left = strdup(line);
-            right = strdup(line + i + strlen(symb));
-
-            parse_line(&(*node)->left, left);
-            parse_line(&(*node)->right, right);
+            parse_line(&(*node)->left, strdup(line));
+            parse_line(&(*node)->right, strdup(line + i + strlen(symb)));
             free(line);
             return 1;
         }
