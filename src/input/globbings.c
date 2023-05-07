@@ -28,7 +28,8 @@ vec_str_t *get_matches(str_t *pattern)
         vec_pushback(&get_matches, &(str_t *){str_create(res.gl_pathv[i])});
     }
     globfree(&res);
-    free(pattern);
+    if (get_matches->size > 0)
+        free(pattern);
     return get_matches;
 }
 

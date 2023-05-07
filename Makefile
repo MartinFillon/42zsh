@@ -17,6 +17,7 @@ SRC	=	./src/main.c								\
 		./src/input/env.c							\
 		./src/input/split_args.c					\
 		./src/input/termios.c 						\
+		./src/input/sub_cmds.c 						\
 		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\

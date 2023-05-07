@@ -49,7 +49,7 @@ static void exec_wrapper_inner(shell_t *state, vec_str_t *av)
     vec_free(av);
 }
 
-static void exec_wrapper(shell_t *state, char const *line)
+void exec_wrapper(shell_t *state, char const *line)
 {
     vec_str_t *av = parse_args(state, line);
 
@@ -58,6 +58,7 @@ static void exec_wrapper(shell_t *state, char const *line)
         return;
     }
     if (av->size == 0 || should_exit(state, av)) {
+        vec_free(av);
         return;
     }
     exec_wrapper_inner(state, av);

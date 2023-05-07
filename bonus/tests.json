@@ -408,6 +408,14 @@
     {
       "name": "escape shell symbols",
       "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
+    },
+    {
+      "name": "backticks 1",
+      "run": ["echo `echo Hello world`"]
+    },
+    {
+      "name": "backticks 2",
+      "run": ["echo `ls`"]
     }
   ]
 }

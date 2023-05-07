@@ -38,6 +38,7 @@ void redirect_reset(redirect_t *red);
 
 // EXEC
 void exec_tree(shell_t *state, bnode_t *node);
+void exec_wrapper(shell_t *state, char const *line);
 void exec_command(
     shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 );

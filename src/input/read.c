@@ -14,10 +14,10 @@
 #include "my_vec.h"
 
 #include "mysh/exec.h"
+#include "mysh/history.h"
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
-#include "mysh/history.h"
 #include "mysh/termios.h"
 
 const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
