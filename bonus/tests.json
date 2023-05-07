@@ -416,6 +416,38 @@
     {
       "name": "backticks 2",
       "run": ["echo `ls`"]
+    },
+    {
+      "name": "postcmd 1",
+      "run": ["alias postcmd \"echo postcmd\"", "ls"]
+    },
+    {
+      "name": "postcmd 2",
+      "run": [
+        "alias postcmd \"echo postcmd\"",
+        "alias postcmd \"echo postcmd2\"",
+        "ls"
+      ]
+    },
+    {
+      "name": "cwdcmd 1",
+      "run": ["alias cwdcmd \"echo cwdcmd\"", "cd .."]
+    },
+    {
+      "name": "cwdcmd 2",
+      "run": [
+        "alias cwdcmd \"echo cwdcmd\"",
+        "alias cwdcmd \"echo cwdcmd2\"",
+        "cd .."
+      ]
+    },
+    {
+      "name": "all at once",
+      "run": [
+        "alias postcmd \"echo postcmd\"",
+        "alias cwdcmd \"echo cwdcmd\"",
+        "ls ; cd .. ; ls"
+      ]
     }
   ]
 }

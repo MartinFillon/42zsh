@@ -50,11 +50,12 @@ str_t *exec_sub_cmds(shell_t *state, str_t *line)
             str_cadd(&line_, line->data[i]);
             continue;
         }
-        if (_btick == -1 && line->data[i] == '`')
+        if (_btick == -1 && line->data[i] == '`') {
             _btick = i + 1;
-        if (_btick == -1)
-            str_cadd(&line_, line->data[i]);
-        if (_btick != -1 && line->data[i] == '`') {
+            continue;
+        }
+        if (_btick == -1) str_cadd(&line_, line->data[i]);
+        if (line->data[i] == '`') {
             exec_sub_cmd(state, str_substr(line, _btick, i - _btick), &line_);
             _btick = -1;
         }
