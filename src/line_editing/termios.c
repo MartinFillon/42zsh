@@ -6,6 +6,7 @@
 */
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
@@ -15,7 +16,7 @@
 #include "my_str.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
+static const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 void print_prompt(str_t *input, size_t *pos)
 {
@@ -72,7 +73,7 @@ str_t *add_to_input(size_t *pos, str_t *input, char c)
     return input;
 }
 
-static str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
+str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
 {
     switch (c) {
         case ENTER:
@@ -87,7 +88,7 @@ static str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
             break;
         case KILL:
             *state = false;
-            return NULL;
+            return (str_t *) -1;
         default:
             input = add_to_input(pos, input, c);
             break;
@@ -96,24 +97,19 @@ static str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
     return input;
 }
 
-str_t *stock_input(void)
+str_t *stock_input(int ignore)
 {
     struct termios old_tio;
     struct termios new_tio;
     str_t *input = str_create("");
-    char c;
-    size_t position = 0;
     bool state = true;
+    int ignored = 0;
 
     printf("%s", PROMPT);
-    tcgetattr(STDIN_FILENO, &old_tio);
-    new_tio = old_tio;
-    new_tio.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
-    fflush(stdout);
-    while (state)
-        if (read(STDIN_FILENO, &c, 1) == 1)
-            input = manage_input(c, &state, input, &position);
+    setup_termios(&old_tio, &new_tio);
+    while (state) {
+        input = read_termios(input, ignore, &ignored, &state);
+    }
     printf("\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
     return input;

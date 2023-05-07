@@ -29,6 +29,7 @@ map_t *vars_create(map_t *env)
         map_set(vars, STR("cwd"), str_create(cwd));
     if (term)
         map_set(vars, STR("term"), str_dup(term));
+    map_set(vars, STR("ignoreof"), str_create("0"));
     return vars;
 }
 
