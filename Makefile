@@ -6,7 +6,6 @@
 ##
 
 CC	=	gcc
-RM	=	rm -f
 
 
 SRC	=	./src/main.c								\
@@ -14,15 +13,19 @@ SRC	=	./src/main.c								\
 		./src/input/signal.c						\
 		./src/input/args.c							\
 		./src/input/variables.c						\
+		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/input/termios.c 						\
 		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
+		./src/builtins/history.c					\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
 		./src/builtins/fg.c							\
+		./src/builtins/alias.c						\
+		./src/builtins/unalias.c					\
 		./src/exec/exec.c							\
 		./src/exec/process.c						\
 		./src/exec/tree.c							\
@@ -44,14 +47,12 @@ SRC	=	./src/main.c								\
 		./src/parser/gen.c 							\
 
 
-
 CFLAGS		+=	-Werror -Wextra -Wall
 CPPFLAGS	+=	-I./include
 LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
-	CC 		= 	clang
 	CFLAGS	+=	-g3 -fsanitize=address
 	LDFLAGS	+=	-fsanitize=address
 endif
