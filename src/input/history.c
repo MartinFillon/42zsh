@@ -11,9 +11,10 @@
 #include <sys/param.h>
 #include <unistd.h>
 
+#include "my_map.h"
+
 #include "mysh/history.h"
 #include "mysh/mysh.h"
-#include "my_map.h"
 
 void save_history(history_t *history)
 {
