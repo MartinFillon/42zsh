@@ -25,26 +25,27 @@ void print_prompt(str_t *input, size_t *pos)
     fflush(stdout);
 }
 
-static str_t *delete_manager(size_t *pos, str_t *input)
+static str_t *delete_manager(size_t *position, str_t *input)
 {
     str_t *pre_input;
     str_t *post_input;
+    int pos = *position;
 
     if (input->length <= 0)
             return input;
-    if (*pos == input->length) {
+    if (*position == input->length)
         input->data[--input->length] = '\0';
-    } else {
-        if (input->length == 1)
+    else {
+        if (input->length == 1 || pos == -1)
             return input;
-        pre_input = str_substr(input, 0, *pos);
-        post_input = str_substr(input, *pos + 1, input->length - (*pos) - 1);
+        pre_input = str_substr(input, 0, pos);
+        post_input = str_substr(input, pos + 1, input->length - (pos) - 1);
         str_sadd(&pre_input, post_input);
         input = str_dup(pre_input);
         free(post_input);
         free(pre_input);
     }
-    (*pos)--;
+    (pos)--;
     return input;
 }
 
