@@ -16,6 +16,7 @@
 
 #include "mysh/builtins.h"
 #include "mysh/exec.h"
+#include "mysh/history.h"
 #include "mysh/middleware.h"
 #include "mysh/mysh.h"
 #include "mysh/read.h"
@@ -25,9 +26,11 @@ static void state_free(shell_t *state)
     map_free(state->middlewares, NULL);
     map_free(state->builtins, NULL);
     map_free(state->env, &free);
-    map_free(state->vars, &free);
     pipe_close(&state->pipe);
+    map_free(state->alias, &free);
+    map_free(state->vars, &free);
     free(state->jobs);
+    history_free(&state->history);
 }
 
 static void init_shell(shell_t *state, char const *const *envp)
@@ -42,6 +45,8 @@ static void init_shell(shell_t *state, char const *const *envp)
     state->pipe = pipe_create();
     state->vars = vars_create(state->env);
     state->jobs = vec_create(100, sizeof(pid_t));
+    state->alias = map_create(1000);
+    state->history = history_create();
     if (state->is_atty) {
         setpgid(state->shell_pgid, state->shell_pgid);
         tcsetpgrp(STDIN_FILENO, state->shell_pgid);

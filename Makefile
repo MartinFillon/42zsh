@@ -6,7 +6,6 @@
 ##
 
 CC	=	gcc
-RM	=	rm -f
 
 
 SRC	=	./src/main.c								\
@@ -14,6 +13,7 @@ SRC	=	./src/main.c								\
 		./src/input/signal.c						\
 		./src/input/args.c							\
 		./src/input/variables.c						\
+		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/input/split_args.c					\
 		./src/input/termios.c 						\
@@ -22,9 +22,12 @@ SRC	=	./src/main.c								\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
+		./src/builtins/history.c					\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
 		./src/builtins/fg.c							\
+		./src/builtins/alias.c						\
+		./src/builtins/unalias.c					\
 		./src/exec/exec.c							\
 		./src/exec/process.c						\
 		./src/exec/tree.c							\
@@ -44,7 +47,6 @@ SRC	=	./src/main.c								\
 		./src/middleware/pipe.c						\
 		./src/parser/symbol.c						\
 		./src/parser/gen.c 							\
-
 
 
 CFLAGS		+=	-Werror -Wextra -Wall
