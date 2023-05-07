@@ -42,6 +42,7 @@ void exec_command(
     shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 );
 void exec_error(int status);
+void exec_wrapper(shell_t *state, char const *line);
 
 
 // CONVERSIONS
