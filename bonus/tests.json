@@ -388,6 +388,26 @@
     {
       "name": "all globbings 2 error",
       "run": ["ls -l ../*/*/m[a-i]?.c ../*/s?c/m[a-z].c"]
+    },
+    {
+      "name": "quote command",
+      "run": ["echo \"Hello  '  \t \t  world'\""]
+    },
+    {
+      "name": "quote command with variable",
+      "run": ["set a=1", "echo \"Hello $a\""]
+    },
+    {
+      "name": "quote command with multiple variable",
+      "run": ["set hello=HELLO world=WORLD", "echo \"$hello $world\""]
+    },
+    {
+      "name": "complex quote command",
+      "run": ["set a=\"HELLO WORLD\"", "echo \"\"\"$a\"\"\""]
+    },
+    {
+      "name": "escape shell symbols",
+      "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
     }
   ]
 }
