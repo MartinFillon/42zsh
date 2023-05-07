@@ -61,6 +61,7 @@ typedef struct shell_s {
     redirect_t *redirect;
     pipe_t *pipe;
     map_t *vars;
+    map_t *alias;
     history_t *history;
 } shell_t;
 
