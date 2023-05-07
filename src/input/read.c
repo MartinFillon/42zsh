@@ -21,15 +21,6 @@
 #include "mysh/history.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
-
-static void print_prompt(shell_t *state)
-{
-    if (state->is_atty) {
-        write(1, PROMPT, sizeof(PROMPT) - 1);
-    }
-}
-
 static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);

@@ -15,7 +15,7 @@
 #include "my_str.h"
 #include "mysh/termios.h"
 
-const char PROMPT[] = "CapyShell $> ";
+const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 void print_prompt(str_t *input, size_t *pos)
 {
