@@ -34,7 +34,7 @@ static int setup_redirect(redirect_t *r, char *file)
 
 void append_file_middleware(shell_t *state, bnode_t *node)
 {
-    redirect_t *r = state->redirect;
+    redirect_t *r = &state->redirect;
     char *file = NULL;
 
     if (!IS_END(node->right)) {

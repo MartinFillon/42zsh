@@ -21,7 +21,9 @@ VEC_DEF(history_entry_t, history_entry)
 
 typedef struct history_s history_t;
 
-history_t *history_create(void);
+void history_free(history_t *history);
+
+history_t history_create(void);
 
 void history_append(char *input, history_t *history);
 

@@ -33,7 +33,10 @@ static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
 
-    state->stop_command = 0;
+    state->stop_cmd = 0;
+    state->cmd_pgid = -1;
+    state->exec_cmd_in_bg = 0;
+    remove_zombies(state);
     exec_tree(state, tree->root);
     btree_free(tree);
 }
@@ -65,9 +68,9 @@ void read_input(shell_t *state)
         if (temp == NULL)
             break;
 
-        history_append(temp->data, state->history);
+        history_append(temp->data, &state->history);
         parse_input(state, temp->data);
         free(temp);
     }
-    save_history(state->history);
+    save_history(&state->history);
 }

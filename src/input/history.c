@@ -5,13 +5,15 @@
 ** history
 */
 
-#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
 #include <sys/param.h>
+#include <unistd.h>
 
 #include "my_map.h"
+
+#include "mysh/history.h"
 #include "mysh/mysh.h"
 
 void save_history(history_t *history)
@@ -25,7 +27,6 @@ void save_history(history_t *history)
         fprintf(fp, "#+%ld\n", history->entries->data[i].timestamp);
         fprintf(fp, "%s\n", history->entries->data[i].command->data);
     }
-    free(history->destination);
     fclose(fp);
 }
 
@@ -39,14 +40,24 @@ void history_append(char *input, history_t *history)
     vec_pushback(&history->entries, &entry);
 }
 
-history_t *history_create(void)
+void history_free(history_t *history)
+{
+    for (size_t i = 0; i < history->entries->size; i++) {
+        free(history->entries->data[i].command);
+    }
+    free(history->entries);
+    free(history->destination);
+}
+
+history_t history_create(void)
 {
     static char PATHNAME[MAXPATHLEN] = "";
     char *cwd = getcwd(PATHNAME, MAXPATHLEN);
-    history_t *history = malloc(sizeof(history_t));
+    history_t history = {
+        .entries = vec_create(100, sizeof(history_entry_t)),
+        .destination = str_create(cwd),
+    };
 
-    history->entries = vec_create(100, sizeof(history_entry_t));
-    history->destination = str_create(cwd);
-    str_sadd(&history->destination, STR("/.42sh_history"));
+    str_add(&history.destination, "/.42sh_history");
     return history;
 }
