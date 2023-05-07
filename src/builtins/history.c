@@ -50,11 +50,12 @@ static int check_hist_cases(vec_str_t *av, shell_t *state)
             print_history(state->history, size -
             (size > atof(av->data[1]->data)) ? atof(av->data[1]->data) : 100);
         } else {
-            print_history(state->history, size - atof(av->data[1]->data));
+            print_history(state->history, (size > atof(av->data[1]->data)) ?
+            size - atof(av->data[1]->data) : 0);
         }
     } else if (str_startswith(av->data[1], STR("-")) &&
         strcmp(av->data[1]->data, "-") != 0) {
-            return check_hist_flags();
+        return check_hist_flags();
     } else {
         dprintf(2, "%s", ERROR[1]);
         return 1;
