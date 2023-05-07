@@ -15,7 +15,9 @@ SRC	=	./src/main.c								\
 		./src/input/variables.c						\
 		./src/input/history.c						\
 		./src/input/env.c							\
+		./src/input/split_args.c					\
 		./src/input/termios.c 						\
+		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\

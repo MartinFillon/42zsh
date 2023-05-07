@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "my_str.h"
+#include "my_vec.h"
 
 #include "mysh/exec.h"
 #include "mysh/middleware.h"
