@@ -40,7 +40,9 @@ static str_t *delete_manager(size_t *pos, str_t *input)
         pre_input = str_substr(input, 0, *pos);
         post_input = str_substr(input, *pos + 1, input->length - (*pos) - 1);
         str_sadd(&pre_input, post_input);
-        input = pre_input;
+        input = str_dup(pre_input);
+        free(post_input);
+        free(pre_input);
     }
     (*pos)--;
     return input;
@@ -62,10 +64,11 @@ str_t *add_to_input(size_t *pos, str_t *input, char c)
         post_input = str_substr(input, *pos + 1, input->length - (*pos) - 1);
         str_cadd(&pre_input, c);
         str_sadd(&pre_input, post_input);
-        input = pre_input;
+        input = str_dup(pre_input);
+        free(post_input);
+        free(pre_input);
     }
     (*pos)++;
-    fflush(stdout);
     return input;
 }
 
