@@ -18,13 +18,16 @@ SRC	=	./src/main.c								\
 		./src/input/termios.c 						\
 		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
+		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
 		./src/builtins/history.c					\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
+		./src/builtins/fg.c							\
 		./src/builtins/alias.c						\
 		./src/builtins/unalias.c					\
 		./src/exec/exec.c							\
+		./src/exec/process.c						\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\
 		./src/exec/pipe.c							\
@@ -50,7 +53,6 @@ LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
-	CC 		= 	clang
 	CFLAGS	+=	-g3 -fsanitize=address
 	LDFLAGS	+=	-fsanitize=address
 endif

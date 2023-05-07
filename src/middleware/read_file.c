@@ -35,10 +35,10 @@ static int setup_redirect(redirect_t *r, char *file)
 
 void read_file_middleware(shell_t *state, bnode_t *node)
 {
-    redirect_t *r = state->redirect;
+    redirect_t *r = &state->redirect;
     char *file = NULL;
 
-    if (state->pipe->action == READ && state->pipe->is_active) {
+    if (state->pipe.action == READ && state->pipe.is_active) {
         dprintf(2, "Ambiguous input redirect.\n");
         state->return_code = 1;
         return;

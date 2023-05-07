@@ -9,13 +9,13 @@
 
 #include "mysh/mysh.h"
 
-redirect_t *redirect_create(void)
+redirect_t redirect_create(void)
 {
-    redirect_t *redirect = malloc(sizeof(redirect_t));
-
-    redirect->is_active = 0;
-    redirect->fd = 0;
-    redirect->action = 0;
+    redirect_t redirect = {
+        .action = 0,
+        .fd = -1,
+        .is_active = 0,
+    };
 
     return redirect;
 }
@@ -31,19 +31,14 @@ void redirect_reset(redirect_t *red)
 
 void redirect_apply(shell_t *state)
 {
-    redirect_t *r = state->redirect;
+    redirect_t *r = &state->redirect;
 
     if (!r->is_active)
         return;
-
     switch (r->action) {
-    case READ:
-        dup2(r->fd, STDIN_FILENO);
-        break;
-    case WRITE:
-    case APPEND:
-        dup2(r->fd, STDOUT_FILENO);
-        break;
+        case READ: dup2(r->fd, STDIN_FILENO); break;
+        case WRITE:
+        case APPEND: dup2(r->fd, STDOUT_FILENO); break;
     }
     if (r->fd != -1)
         close(r->fd);
