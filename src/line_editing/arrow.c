@@ -25,7 +25,7 @@ static void move_left_in_line(int *pos)
 
 static void move_right_in_line(int *pos, size_t *position, str_t * input)
 {
-    if ((*position) >= input->length)
+    if ((*position) >= input->length && *pos != -1)
         return;
     (*pos)++;
     printf("\033[1C");
