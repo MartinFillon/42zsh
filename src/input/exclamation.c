@@ -5,6 +5,10 @@
 ** exclamation
 */
 
+history_t *travel_history(char *input, history_t *history)
+{
+
+}
 // int backstep_history()
 // !! -> latest command
 // up arrow -> -1 command in history

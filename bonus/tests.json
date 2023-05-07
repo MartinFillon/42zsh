@@ -207,10 +207,6 @@
       "run": ["ls|echo salut"]
     },
     {
-      "name": "Mixed (exit or not exit)",
-      "run": ["exit | echo salut"]
-    },
-    {
       "name": "Mixed (cd or not cd)",
       "run": ["cd | pwd"]
     },

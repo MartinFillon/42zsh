@@ -6,6 +6,7 @@
 */
 
 #include <errno.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,6 +20,7 @@
 
 #include "mysh/exec.h"
 #include "mysh/mysh.h"
+#include "mysh/read.h"
 
 static const char *ERROR[] = {
     "%s: Command not found.\n",
@@ -51,7 +53,7 @@ static void try_exec_or_exit(
     vec_str_t *av, shell_t *state, int (*builtin)(vec_str_t *, shell_t *)
 )
 {
-    char *file = (char *)str_tocstr(av->data[0]);
+    char const *file = str_tocstr(av->data[0]);
     char **argv = arg_to_tabl(av);
     char **envp = env_to_tabl(state->env);
     vec_str_t *path = path_to_vec(state->env);
@@ -74,22 +76,21 @@ void exec_command(
 )
 {
     int pid = fork();
-    int code = 0;
 
     if (pid == -1)
         exit(1);
     if (pid == 0) {
         pipe_apply(state);
         redirect_apply(state);
+        restore_signals();
+        if (state->is_atty && !state->exec_cmd_in_bg) {
+            state->cmd_pgid =
+                (state->cmd_pgid == -1) ? getpid() : state->cmd_pgid;
+            setpgid(0, state->cmd_pgid);
+        }
         try_exec_or_exit(av, state, builtin);
     }
-    if (state->redirect->is_active)
-        redirect_reset(state->redirect);
-    if (state->pipe->is_active) {
-        state->pipe->pids[state->pipe->pids[0] != -1] = pid;
-    } else {
-        waitpid(pid, &code, 0);
-        exec_error(code);
-        state->return_code = WEXITSTATUS(code);
-    }
+    if (state->cmd_pgid == -1)
+        state->cmd_pgid = pid;
+    wait_for_process(state, pid);
 }

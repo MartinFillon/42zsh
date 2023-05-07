@@ -9,7 +9,7 @@
     #define INCLUDE_MY_VEC_
     #include <stddef.h>
 
-    #define VEC_AT(v, i) ((i > 0) ? (v)->data[i] : (v)->data[(v)->size + i])
+    #define VEC_AT(v, i) ((i >= 0) ? (v)->data[i] : (v)->data[(v)->size + i])
     #define VEC_LAST(v)  ((v)->data[(v)->size - 1])
 
     #define VEC_DEF(t, n) \

@@ -18,6 +18,8 @@ map_t *builtins_create(void)
     map_set(cmd, STR("setenv"), &builtin_setenv);
     map_set(cmd, STR("unsetenv"), &builtin_unsetenv);
     map_set(cmd, STR("set"), &builtin_set);
+    map_set(cmd, STR("fg"), &builtin_fg);
+    map_set(cmd, STR("jobs"), &builtin_jobs);
     map_set(cmd, STR("alias"), &builtin_alias);
     map_set(cmd, STR("unalias"), &builtin_unalias);
     map_set(cmd, STR("unset"), &builtin_unset);
