@@ -15,7 +15,9 @@ SRC	=	./src/main.c								\
 		./src/input/args.c							\
 		./src/input/variables.c						\
 		./src/input/env.c							\
+		./src/input/split_args.c					\
 		./src/input/termios.c 						\
+		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
@@ -51,7 +53,6 @@ LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
-	CC 		= 	clang
 	CFLAGS	+=	-g3 -fsanitize=address
 	LDFLAGS	+=	-fsanitize=address
 endif
