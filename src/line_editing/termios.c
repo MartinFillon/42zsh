@@ -9,36 +9,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
-#include <curses.h>
 #include <unistd.h>
 #include <term.h>
 
 #include "my_str.h"
 #include "mysh/termios.h"
 
-static void arrow_builtins(str_t *input, size_t *pos)
+const char PROMPT[] = "CapyShell $> ";
+
+void print_prompt(str_t *input, size_t *pos)
 {
-    char c;
-    if (read(STDIN_FILENO, &c, 1) == 1) {
-        switch (c) {
-            case UP:
-                break;
-            case DOWN:
-                break;
-            case RIGHT:
-                if ((*pos) >= input->length)
-                    return;
-                (*pos)++;
-                printf("\033[1C");
-                break;
-            case LEFT:
-                if ((*pos) <= 0)
-                    return;
-                (*pos)--;
-                printf("\033[1D");
-                break;
-        }
-    }
+    printf("\033[2K\r");
+    printf("%s%s", PROMPT, input->data);
+    printf("\033[%ldD", input->length - (*pos + 1));
     fflush(stdout);
 }
 
@@ -47,21 +30,42 @@ static str_t *delete_manager(size_t *pos, str_t *input)
     str_t *pre_input;
     str_t *post_input;
 
+    if (input->length <= 0)
+            return input;
     if (*pos == input->length) {
-        if (input->length <= 0)
-                return input;
-            input->data[--input->length] = '\0';
-            printf("\b\b");
+        input->data[--input->length] = '\0';
     } else {
-        pre_input = str_substr(input, 0, *pos - 1);
-        post_input = str_substr(input, *pos, input->length - (*pos));
+        if (input->length == 1)
+            return input;
+        pre_input = str_substr(input, 0, *pos);
+        post_input = str_substr(input, *pos + 1, input->length - (*pos) - 1);
         str_sadd(&pre_input, post_input);
         input = pre_input;
-        printf("\b");
-        delch();
-
     }
     (*pos)--;
+    return input;
+}
+
+str_t *add_to_input(size_t *pos, str_t *input, char c)
+{
+    str_t *pre_input;
+    str_t *post_input;
+
+    if (c == 27)
+            return input;
+    if (*pos == input->length){
+        if (c == 27)
+            return input;
+        str_cadd(&input, c);
+    } else {
+        pre_input = str_substr(input, 0, *pos + 1);
+        post_input = str_substr(input, *pos + 1, input->length - (*pos) - 1);
+        str_cadd(&pre_input, c);
+        str_sadd(&pre_input, post_input);
+        input = pre_input;
+    }
+    (*pos)++;
+    fflush(stdout);
     return input;
 }
 
@@ -70,23 +74,22 @@ static str_t *manage_input(char c, bool *state, str_t *input, size_t *pos)
     switch (c) {
         case ENTER:
             *state = false;
-            return input;
+            print_prompt(input, pos);
+            break;
         case DELETE:
             input = delete_manager(pos, input);
-            fflush(stdout);
             break;
         case ARROW:
             arrow_builtins(input, pos);
             break;
+        case KILL:
+            *state = false;
+            return NULL;
         default:
-            if (c == 27)
-                return input;
-            (*pos)++;
-            write(1, &c, 1);
-            str_cadd(&input, c);
-            fflush(stdout);
+            input = add_to_input(pos, input, c);
             break;
     }
+    print_prompt(input, pos);
     return input;
 }
 
@@ -99,18 +102,15 @@ str_t *stock_input(void)
     size_t position = 0;
     bool state = true;
 
-    //initscr();
-    //cbreak();
-    //noecho();
+    printf("%s", PROMPT);
     tcgetattr(STDIN_FILENO, &old_tio);
     new_tio = old_tio;
     new_tio.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
     fflush(stdout);
-    while (state) {
+    while (state)
         if (read(STDIN_FILENO, &c, 1) == 1)
             input = manage_input(c, &state, input, &position);
-    }
     printf("\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
     return input;
