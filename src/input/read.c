@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #include "my_btree.h"
+#include "my_map.h"
 #include "my_str.h"
 #include "my_vec.h"
 
@@ -32,13 +33,19 @@ static void print_prompt(shell_t *state)
 static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
+    str_t *precmd = NULL;
+    str_t *postcmd = NULL;
 
     state->stop_cmd = 0;
     state->cmd_pgid = -1;
     state->exec_cmd_in_bg = 0;
     remove_zombies(state);
+    if ((postcmd = map_get(state->alias, STR("postcmd"))) != NULL)
+        exec_wrapper(state, postcmd->data);
     exec_tree(state, tree->root);
     btree_free(tree);
+    if ((precmd = map_get(state->alias, STR("precmd"))) != NULL)
+        exec_wrapper(state, precmd->data);
 }
 
 static str_t *handle_not_tty(void)
