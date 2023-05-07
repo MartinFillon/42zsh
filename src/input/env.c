@@ -10,7 +10,7 @@
 
 #include "my_map.h"
 
-map_t *env_create(char **env)
+map_t *env_create(char const *const *env)
 {
     map_t *env_ = map_create(100);
     str_t *key = NULL;

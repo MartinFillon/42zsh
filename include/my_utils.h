@@ -19,6 +19,7 @@
 
 
 void my_swap(void *a, void *b, size_t size);
+void my_vfree(int ac, ...);
 
 
 #endif /* INCLUDE_MY_UTILS_ */

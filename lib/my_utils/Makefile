@@ -10,7 +10,8 @@ CC = gcc
 INCLUDE	=	-I../../include
 
 
-SRC	=	./my_swap.c
+SRC	=	./my_swap.c			\
+		./my_vfree.c
 
 
 CFLAGS += -Werror -Wextra -Wall

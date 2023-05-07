@@ -6,7 +6,6 @@
 ##
 
 CC	=	gcc
-RM	=	rm -f
 
 
 SRC	=	./src/main.c								\
@@ -14,13 +13,24 @@ SRC	=	./src/main.c								\
 		./src/input/signal.c						\
 		./src/input/args.c							\
 		./src/input/variables.c						\
+		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/line_editing/termios.c 				\
 		./src/line_editing/arrow.c					\
+		./src/input/split_args.c					\
+		./src/input/escaped_chars.c					\
+		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
+		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
+		./src/builtins/history.c					\
 		./src/builtins/env.c						\
+		./src/builtins/set.c						\
+		./src/builtins/fg.c							\
+		./src/builtins/alias.c						\
+		./src/builtins/unalias.c					\
 		./src/exec/exec.c							\
+		./src/exec/process.c						\
 		./src/exec/tree.c							\
 		./src/exec/redirect.c						\
 		./src/exec/pipe.c							\
@@ -38,9 +48,6 @@ SRC	=	./src/main.c								\
 		./src/middleware/pipe.c						\
 		./src/parser/symbol.c						\
 		./src/parser/gen.c 							\
-		./src/globbings/question_mark_handler.c 	\
-		./src/globbings/wildcard_handler.c 			\
-
 
 
 CFLAGS		+=	-Werror -Wextra -Wall
@@ -49,7 +56,8 @@ LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
-	CFLAGS += -g3
+	CFLAGS	+=	-g3 -fsanitize=address
+	LDFLAGS	+=	-fsanitize=address
 endif
 
 

@@ -15,6 +15,9 @@
 #include "my_map.h"
 #include "my_str.h"
 
+#include "mysh/exec.h"
+#include "mysh/mysh.h"
+
 static char const *get_homepath(map_t *env)
 {
     str_t *path = NULL;
@@ -40,23 +43,25 @@ static char const *get_dirpath(str_t *p_, map_t *env)
     return str_tocstr(p_);
 }
 
-void update_pwd(map_t *env)
+void update_pwd(shell_t *state)
 {
     static char PATHNAME[MAXPATHLEN] = "";
-    str_t *old = map_get(env, STR("OLDPWD"));
-    str_t *curr = map_get(env, STR("PWD"));
+    str_t *old = map_get(state->env, STR("OLDPWD"));
+    str_t *curr = map_get(state->env, STR("PWD"));
+    str_t *cwd = map_get(state->vars, STR("cwd"));
 
     if (old == NULL) {
         old = str_create("");
-        map_set(env, STR("OLDPWD"), old);
+        map_set(state->env, STR("OLDPWD"), old);
     }
     if (curr == NULL) {
         curr = str_create("");
-        map_set(env, STR("PWD"), curr);
+        map_set(state->env, STR("PWD"), curr);
     }
 
     str_sadd(str_clear(&old), curr);
     str_add(str_clear(&curr), getcwd(PATHNAME, MAXPATHLEN));
+    str_sadd(str_clear(&cwd), curr);
 }
 
 static void perror_wrapper(char const *path)
@@ -66,20 +71,24 @@ static void perror_wrapper(char const *path)
     dprintf(2, "%s: %s.\n", path, error);
 }
 
-int builtin_chdir(vec_str_t *av, map_t *env)
+int builtin_chdir(vec_str_t *av, shell_t *state)
 {
     char const *path = NULL;
     int success;
+    str_t *cwdcmd;
 
     if (av->size > 2) {
         dprintf(2, "cd: Too many arguments.\n");
         return 1;
     }
-    if ((av->size == 1 && (path = get_homepath(env)) == NULL) ||
-        (av->size == 2 && (path = get_dirpath(av->data[1], env)) == NULL)) {
+    if ((av->size == 1 && (path = get_homepath(state->env)) == NULL) ||
+        (av->size == 2 && (path = get_dirpath(av->data[1], state->env)) == NULL
+        )) {
         return 1;
     }
     success = chdir(path) != 0;
-    (success) ? perror_wrapper(path) : update_pwd(env);
+    (success) ? perror_wrapper(path) : update_pwd(state);
+    if (!success && (cwdcmd = map_get(state->alias, STR("cwdcmd"))))
+        exec_wrapper(state, cwdcmd->data);
     return success;
 }

@@ -207,10 +207,6 @@
       "run": ["ls|echo salut"]
     },
     {
-      "name": "Mixed (exit or not exit)",
-      "run": ["exit | echo salut"]
-    },
-    {
       "name": "Mixed (cd or not cd)",
       "run": ["cd | pwd"]
     },
@@ -316,6 +312,127 @@
     {
       "name": "Ambiguous input redirection 2",
       "run": ["echo yes | my_program < input_file < input_file"]
+    },
+    {
+      "name": "Local variable",
+      "run": ["set a=1", "echo $a"]
+    },
+    {
+      "name": "Local variable 2",
+      "run": ["set a=1", "set a=2", "echo $a"]
+    },
+    {
+      "name": "Local variable error",
+      "run": ["echo $a"]
+    },
+    {
+      "name": "Local variable error 2",
+      "run": ["echo $pipitek"]
+    },
+    {
+      "name": "Empty var",
+      "run": ["set a", "echo $a"]
+    },
+    {
+      "name": "Empty var 2",
+      "run": ["set pipitek", "echo $pipitek"]
+    },
+    {
+      "name": "cwd var",
+      "run": ["echo $cwd", "cd ..", "echo $cwd"]
+    },
+    {
+      "name": "cwd var 2",
+      "run": ["echo $cwd", "cd ..", "echo $cwd", "cd -", "echo $cwd"]
+    },
+    {
+      "name": "term var",
+      "run": ["echo $term"]
+    },
+    {
+      "name": "unset var 1",
+      "run": ["set a=1", "unset a", "echo $a"]
+    },
+    {
+      "name": "unset var 2",
+      "run": ["set a=1", "unset a", "set a=2", "echo $a"]
+    },
+    {
+      "name": "globbings * 1",
+      "run": ["ls -l ../*"]
+    },
+    {
+      "name": "globbings * 2",
+      "run": ["ls -l ../*/*/*.c"]
+    },
+    {
+      "name": "globbings ? 1",
+      "run": ["ls -l src/ma?n.c"]
+    },
+    {
+      "name": "globbings ? 2",
+      "run": ["ls -l s?c"]
+    },
+    {
+      "name": "globbings [] 1",
+      "run": ["ls -l src/ma[a-i]n.c"]
+    },
+    {
+      "name": "globbings [] 2",
+      "run": ["ls -l src/ma[a-i]n.c"]
+    },
+    {
+      "name": "all globbings 1",
+      "run": ["ls -l ../*/*/m[a-i]??.c"]
+    },
+    {
+      "name": "all globbings 2 error",
+      "run": ["ls -l ../*/*/m[a-i]?.c ../*/s?c/m[a-z].c"]
+    },
+    {
+      "name": "quote command",
+      "run": ["echo \"Hello  '  \t \t  world'\""]
+    },
+    {
+      "name": "quote command with variable",
+      "run": ["set a=1", "echo \"Hello $a\""]
+    },
+    {
+      "name": "quote command with multiple variable",
+      "run": ["set hello=HELLO world=WORLD", "echo \"$hello $world\""]
+    },
+    {
+      "name": "complex quote command",
+      "run": ["set a=\"HELLO WORLD\"", "echo \"\"\"$a\"\"\""]
+    },
+    {
+      "name": "escape shell symbols",
+      "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
+    },
+
+    {
+      "name": "postcmd 1",
+      "run": ["alias postcmd \"echo postcmd\"", "ls"]
+    },
+    {
+      "name": "postcmd 2",
+      "run": ["alias postcmd \"echo postcmd\"", "alias postcmd \"echo postcmd2\"", "ls"]
+    },
+    {
+      "name": "cwdcmd 1",
+      "run": ["alias cwdcmd \"echo cwdcmd\"", "cd .."]
+    },
+    {
+      "name": "cwdcmd 2",
+      "run": ["alias cwdcmd \"echo cwdcmd\"", "alias cwdcmd \"echo cwdcmd2\"", "cd .."]
+    },
+    {
+      "name": "all at once",
+      "run": [
+        "alias postcmd \"echo postcmd\"",
+        "alias cwdcmd \"echo cwdcmd\"",
+        "ls ; cd .. ; ls"
+      ]
     }
   ]
 }

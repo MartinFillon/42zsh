@@ -14,9 +14,16 @@
 
     #include "mysh/mysh.h"
 
+// PROCESS
+void kill_children(shell_t *state);
+void wait_for_process(shell_t *state, pid_t pid);
+void print_job_status(int code, pid_t pid);
+long find_job_by_pid(shell_t *state, pid_t pid);
+void remove_zombies(shell_t *state);
+
 
 // PIPES
-pipe_t *pipe_create(void);
+pipe_t pipe_create(void);
 void pipe_apply(shell_t *state);
 void pipe_reset(pipe_t *pipe);
 void pipe_close(pipe_t *pipe);
@@ -24,7 +31,7 @@ void pipe_chain(pipe_t *pipe);
 
 
 // REDIRECT
-redirect_t *redirect_create(void);
+redirect_t redirect_create(void);
 void redirect_apply(shell_t *state);
 void redirect_reset(redirect_t *red);
 
@@ -32,9 +39,10 @@ void redirect_reset(redirect_t *red);
 // EXEC
 void exec_tree(shell_t *state, bnode_t *node);
 void exec_command(
-    shell_t *state, int (*builtin)(vec_str_t *av, map_t *env), vec_str_t *av
+    shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 );
 void exec_error(int status);
+void exec_wrapper(shell_t *state, char const *line);
 
 
 // CONVERSIONS

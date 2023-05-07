@@ -13,38 +13,21 @@
 
 #include "mysh/parser.h"
 
-static void parse_line(bnode_t **node, char *line, int *failed);
+static void parse_line(bnode_t **node, char *line);
 
-static int check_line(char const *symbol, char const *line)
-{
-    size_t len = strlen(line);
-
-    if (strcmp(symbol, ";") == 0)
-        return 0;
-    for (size_t i = 0; i < len; i++)
-        if (line[i] != ' ')
-            return 0;
-    return 1;
-}
-
-static int find_line(
-    bnode_t **node, char const *symbol, char *line, int *failed
-)
+static int find_line(bnode_t **node, char const *symbol, char *line)
 {
     char *symb = NULL;
-    char *left = NULL;
-    char *right = NULL;
 
     for (long i = strlen(line) - 1; i >= 0; --i) {
-        if ((symb = find_symbol(symbol, line + i)) != NULL) {
+        symb = find_symbol(symbol, line + i);
+        if (i > 0 && line[i - 1] == '\\')
+            continue;
+        if (symb != NULL) {
             line[i] = '\0';
             (*node)->data = symb;
-            left = strdup(line);
-            right = strdup(line + i + strlen(symb));
-
-            *failed |= check_line(symb, left) || check_line(symb, right);
-            parse_line(&(*node)->left, left, failed);
-            parse_line(&(*node)->right, right, failed);
+            parse_line(&(*node)->left, strdup(line));
+            parse_line(&(*node)->right, strdup(line + i + strlen(symb)));
             free(line);
             return 1;
         }
@@ -52,12 +35,12 @@ static int find_line(
     return 0;
 }
 
-static void parse_line(bnode_t **node, char *line, int *failed)
+static void parse_line(bnode_t **node, char *line)
 {
     *node = bnode_create();
 
     for (int i = 0; SYMBOLS[i]; ++i)
-        if (find_line(node, SYMBOLS[i], line, failed))
+        if (find_line(node, SYMBOLS[i], line))
             return;
 
     (*node)->data = line;
@@ -66,13 +49,8 @@ static void parse_line(bnode_t **node, char *line, int *failed)
 btree_t *gen_exec_tree(char const *line)
 {
     btree_t *tree = btree_create(NULL);
-    int failed = 0;
 
-    parse_line(&tree->root, strdup(line), &failed);
+    parse_line(&tree->root, strdup(line));
 
-    if (failed) {
-        btree_free(tree);
-        return NULL;
-    }
     return tree;
 }
