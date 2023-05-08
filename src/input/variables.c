@@ -34,6 +34,10 @@ static int get_variable(
     str_t *var_name = NULL;
     str_t *value = NULL;
 
+    if (*i - 2 != 0 && line[*i - 2] != ' ') {
+        str_cadd(new, '$');
+        return 0;
+    }
     while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
         ++*i;
     var_name = str_ncreate(line + start, *i + 1 - start);
