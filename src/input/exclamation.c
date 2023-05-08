@@ -5,10 +5,17 @@
 ** exclamation
 */
 
-history_t *travel_history(char *input, history_t *history)
-{
+#include "mysh/mysh.h"
+#include "mysh/history.h"
 
+history_t *travel_history(history_t *history, size_t position)
+{
+    size_t size = history->entries->size;
+    size_t new_pos = size + position;
+
+    printf("[%s]\n", history->entries->data[new_pos].command->data);
 }
+
 // int backstep_history()
 // !! -> latest command
 // up arrow -> -1 command in history
