@@ -64,15 +64,3 @@ str_t **str_clear(str_t **str)
 
     return str;
 }
-
-str_t **str_erase_at_idx(str_t **str, size_t idx)
-{
-    if (idx >= (*str)->length)
-        return str;
-
-    for (size_t i = idx; i < (*str)->length; i++)
-        (*str)->data[i] = (*str)->data[i + 1];
-
-    (*str)->length--;
-    return str;
-}
