@@ -8,22 +8,53 @@
 #include "mysh/mysh.h"
 #include "mysh/history.h"
 
-history_t *travel_history(history_t *history, size_t position)
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdio.h>
+
+void travel_history(history_t *history, size_t pos)
 {
     size_t size = history->entries->size;
-    size_t new_pos = size + position;
 
-    printf("[%s]\n", history->entries->data[new_pos].command->data);
+    printf("%s\n", history->entries->data[size + pos].command->data);
 }
 
-// int backstep_history()
-// !! -> latest command
-// up arrow -> -1 command in history
+char *get_history_str(history_t *history, char *input)
+{
+    for (size_t i = 0;i < history->entries->size; i++){
+        if (strncmp(input, history->entries->data[i].command->data,
+            strlen(input)) == 0){
+            return history->entries->data[i].command->data;
+        }
+    }
+    return NULL;
+}
 
-// int latest_nbr_command()
-// ![number] -> latest command number
+void get_history_index(history_t *history, size_t index)
+{
+    printf("%s\n", history->entries->data[index + 1].command->data);
+}
 
-// int latest_input_command()
-// ![character/ string] -> latest command starting with character/ string
+int exclamation_conditions(history_t *history, str_t *command)
+{
+    char *DOUB = NULL;
 
-// REMEMBER THAT PRECEDING ARGUMENTS ARE ALSO CONSIDERED AS THEY ARE
+    if (command->data[0] == '!') {
+        printf("1\n");
+        travel_history(history, -2);
+        return 0;
+    }
+    if (isdigit(command->data[0])) {
+        printf("2\n");
+        get_history_index(history, atoi(command->data));
+        return 0;
+    }
+    if (command->data[0] == '-') {
+        printf("3\n");
+        get_history_index(history, -atoi(command->data + 1));
+        return 0;
+    }
+    DOUB = get_history_str(history, command->data);
+    printf("%s\n", DOUB);
+    return 0;
+}
