@@ -19,6 +19,7 @@ SRC	=	./add.c 		\
 		./find.c 		\
 		./from.c 		\
 		./create.c 		\
+		./idx_ops.c		\
 		./join.c 		\
 		./modify.c 		\
 		./print.c 		\
