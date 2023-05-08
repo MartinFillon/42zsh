@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "my_str.h"
+#include "my_vec.h"
 
 #include "mysh/exec.h"
 #include "mysh/middleware.h"
@@ -48,7 +49,7 @@ static void exec_wrapper_inner(shell_t *state, vec_str_t *av)
     vec_free(av);
 }
 
-static void exec_wrapper(shell_t *state, char const *line)
+void exec_wrapper(shell_t *state, char const *line)
 {
     vec_str_t *av = parse_args(state, line);
 

@@ -388,6 +388,51 @@
     {
       "name": "all globbings 2 error",
       "run": ["ls -l ../*/*/m[a-i]?.c ../*/s?c/m[a-z].c"]
+    },
+    {
+      "name": "quote command",
+      "run": ["echo \"Hello  '  \t \t  world'\""]
+    },
+    {
+      "name": "quote command with variable",
+      "run": ["set a=1", "echo \"Hello $a\""]
+    },
+    {
+      "name": "quote command with multiple variable",
+      "run": ["set hello=HELLO world=WORLD", "echo \"$hello $world\""]
+    },
+    {
+      "name": "complex quote command",
+      "run": ["set a=\"HELLO WORLD\"", "echo \"\"\"$a\"\"\""]
+    },
+    {
+      "name": "escape shell symbols",
+      "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
+    },
+
+    {
+      "name": "postcmd 1",
+      "run": ["alias postcmd \"echo postcmd\"", "ls"]
+    },
+    {
+      "name": "postcmd 2",
+      "run": ["alias postcmd \"echo postcmd\"", "alias postcmd \"echo postcmd2\"", "ls"]
+    },
+    {
+      "name": "cwdcmd 1",
+      "run": ["alias cwdcmd \"echo cwdcmd\"", "cd .."]
+    },
+    {
+      "name": "cwdcmd 2",
+      "run": ["alias cwdcmd \"echo cwdcmd\"", "alias cwdcmd \"echo cwdcmd2\"", "cd .."]
+    },
+    {
+      "name": "all at once",
+      "run": [
+        "alias postcmd \"echo postcmd\"",
+        "alias cwdcmd \"echo cwdcmd\"",
+        "ls ; cd .. ; ls"
+      ]
     }
   ]
 }

@@ -17,12 +17,12 @@
 
 #include "mysh/mysh.h"
 
-static const char *ERROR[] = {
-    "setenv: Variable name must contain alphanumeric characters.\n",
-    "setenv: Too many arguments.\n",
-    "unsetenv: Too few arguments.\n",
-    "setenv: Variable name must begin with a letter.\n",
-};
+static const char *ALPHA_CHARS =
+    "setenv: Variable name must contain alphanumeric characters.\n";
+static const char *TOO_FEW = "unsetenv: Too few arguments.\n";
+static const char *TOO_MANY = "setenv: Too many arguments.\n";
+static const char *BEGIN_WITH_LETTER =
+    "setenv: Variable name must begin with a letter.\n";
 
 int builtin_env(vec_str_t UNUSED *av, shell_t *state)
 {
@@ -39,38 +39,47 @@ int builtin_env(vec_str_t UNUSED *av, shell_t *state)
     return 0;
 }
 
+static void update_value(shell_t *state, vec_str_t *av)
+{
+    if (map_get(state->env, av->data[1]) != NULL)
+        free(map_get(state->env, av->data[1]));
+    map_set(
+        state->env, av->data[1],
+        (av->size == 2) ? str_create("") : str_dup(av->data[2])
+    );
+}
+
 int builtin_setenv(vec_str_t *av, shell_t *state)
 {
     if (av->size == 1)
         return builtin_env(av, state);
     if (av->size == 2 || av->size == 3) {
         if (!isalpha(av->data[1]->data[0])) {
-            dprintf(2, "%s", ERROR[3]);
+            dprintf(2, "%s", BEGIN_WITH_LETTER);
             return 1;
         }
         if (!str_isalphanum(av->data[1])) {
-            dprintf(2, "%s", ERROR[0]);
+            dprintf(2, "%s", ALPHA_CHARS);
             return 1;
         }
-        map_set(
-            state->env, str_dup(av->data[1]),
-            (av->size == 2) ? str_create("") : str_dup(av->data[2])
-        );
+        update_value(state, av);
         return 0;
     }
-    dprintf(2, "%s", ERROR[1]);
+    dprintf(2, "%s", TOO_MANY);
     return 1;
 }
 
 int builtin_unsetenv(vec_str_t *av, shell_t *state)
 {
     if (av->size < 2) {
-        dprintf(2, "%s", ERROR[2]);
+        dprintf(2, "%s", TOO_FEW);
         return 1;
     }
-
-    for (size_t i = 1; i < av->size; ++i)
-        map_del(state->env, av->data[i]);
-
+    for (size_t i = 1; i < av->size; ++i) {
+        if (map_get(state->env, av->data[i]) != NULL) {
+            free(map_get(state->env, av->data[i]));
+            map_del(state->env, av->data[i]);
+        }
+    }
     return 0;
 }

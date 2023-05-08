@@ -15,6 +15,7 @@
 #include "my_map.h"
 #include "my_str.h"
 
+#include "mysh/exec.h"
 #include "mysh/mysh.h"
 
 static char const *get_homepath(map_t *env)
@@ -74,6 +75,7 @@ int builtin_chdir(vec_str_t *av, shell_t *state)
 {
     char const *path = NULL;
     int success;
+    str_t *cwdcmd;
 
     if (av->size > 2) {
         dprintf(2, "cd: Too many arguments.\n");
@@ -86,5 +88,7 @@ int builtin_chdir(vec_str_t *av, shell_t *state)
     }
     success = chdir(path) != 0;
     (success) ? perror_wrapper(path) : update_pwd(state);
+    if (!success && (cwdcmd = map_get(state->alias, STR("cwdcmd"))))
+        exec_wrapper(state, cwdcmd->data);
     return success;
 }
