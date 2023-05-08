@@ -15,16 +15,19 @@
 
 char *exclamation_conditions(history_t *history, str_t *command);
 
-static int get_exclamation(char const *line, shell_t *state)
+static int get_exclamation(str_t **new, char const *line, shell_t *state)
 {
     str_t *designator = str_create(line);
     char *res = NULL;
+    (void)new;
 
     if (str_startswith(str_create(line), STR("!")) == 1 && line[1] != '\0'){
         str_erase_at_idx(&designator, 0);
         res = exclamation_conditions(&state->history, designator);
-        if (res)
+        if (res){
             printf("%s\n", res);
+        }
+        return 0;
     }
     str_erase_at_idx(&designator, 0);
     dprintf(2, "%s: Event not found.\n", designator->data);
@@ -85,7 +88,7 @@ str_t *parse_variables(char const *line, shell_t *state)
         switch (line[i]) {
             case '~': error = add_home(&line_, state->env); break;
             case '$': error = get_variable(&line_, line, &i, state); break;
-            case '!': error = get_exclamation(line, state); break;
+            case '!': error = get_exclamation(&line_, line, state); break;
             default: str_cadd(&line_, line[i]); break;
         }
         if (error) {

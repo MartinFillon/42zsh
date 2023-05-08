@@ -40,19 +40,15 @@ char *exclamation_conditions(history_t *history, str_t *command)
     char *result = NULL;
 
     if (str_compare(command, STR("!")) == 0) {
-        result = travel_history(history, -2);
-        return 0;
+        return travel_history(history, -2);
     }
     if (str_isnum(command) == 1) {
-        result = get_history_index(history, atoi(command->data));
-        return 0;
+        return get_history_index(history, atoi(command->data));
     }
     result = get_history_str(history, command->data);
     if (result == NULL){
         printf("->>>");
         str_print(command);
-    } else {
-        printf("->%s\n", result);
     }
     return result;
 }
