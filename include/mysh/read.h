@@ -19,9 +19,14 @@ void catch_signals(void);
 
 void restore_signals(void);
 
+void remove_escaped_chars_and_quotes(str_t *arg);
+
 vec_str_t *parse_args(shell_t *state, char const *line);
 
+vec_str_t *split_args(str_t *line);
+
 str_t *parse_variables(char const *line, shell_t *state);
+
 vec_str_t *get_globbings(vec_str_t *args);
 
 map_t *env_create(char const *const *env);

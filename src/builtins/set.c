@@ -5,6 +5,7 @@
 ** set
 */
 
+#include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,38 +29,55 @@ map_t *vars_create(map_t *env)
         map_set(vars, STR("cwd"), str_create(cwd));
     if (term)
         map_set(vars, STR("term"), str_dup(term));
+    map_set(vars, STR("ignoreof"), str_create("0"));
     return vars;
 }
 
-void builtin_unset(vec_str_t *av, shell_t *state)
+int builtin_unset(vec_str_t *av, shell_t *state)
 {
-    str_t *value = NULL;
-
+    if (av->size < 2) {
+        dprintf(2, "unset: Too few arguments.\n");
+        return 1;
+    }
     for (size_t i = 0; i < av->size; i++) {
-        if ((value = map_get(state->vars, av->data[i])) != NULL) {
+        if (map_get(state->vars, av->data[i]) != NULL) {
+            free(map_get(state->vars, av->data[i]));
             map_del(state->vars, av->data[i]);
-            free(value);
         }
     }
+    return 0;
 }
 
-void builtin_set(vec_str_t *av, shell_t *state)
+static void update_value(shell_t *state, str_t *key, str_t *arg, long eq_idx)
 {
-    vec_str_t *tmp = NULL;
-    str_t *value = NULL;
-
-    for (size_t i = 0; i < av->size; i++) {
-        tmp = str_split(av->data[i], STR("="));
-        if ((value = map_get(state->vars, tmp->data[0])) == NULL)
-            map_set(
-                state->vars, tmp->data[0],
-                (tmp->size == 2) ? str_dup(tmp->data[1]) : str_create("")
-            );
-        else
-            value = *str_add(
-                str_clear(&value),
-                (tmp->size == 2) ? str_tocstr(tmp->data[1]) : ""
-            );
-        vec_free(tmp);
+    if (map_get(state->vars, key) != NULL)
+        free(map_get(state->vars, key));
+    if (eq_idx == -1) {
+        map_set(state->vars, key, str_create(""));
+        free(key);
+        return;
     }
+    map_set(
+        state->vars, key, str_substr(arg, eq_idx + 1, arg->length - eq_idx - 1)
+    );
+    free(key);
+}
+
+int builtin_set(vec_str_t *av, shell_t *state)
+{
+    str_t *key = NULL;
+
+    for (size_t i = 1; i < av->size; i++) {
+        if (!isalpha(av->data[i]->data[0])) {
+            dprintf(2, "set: Variable name must begin with a letter.");
+            return 1;
+        }
+        long eq_idx = str_find(av->data[i], STR("="), 0);
+        key = str_substr(
+            av->data[i], 0,
+            (eq_idx == -1) ? av->data[i]->length : (size_t)eq_idx
+        );
+        update_value(state, key, av->data[i], eq_idx);
+    }
+    return 0;
 }

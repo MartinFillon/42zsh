@@ -348,6 +348,15 @@ str_t **str_cadd(str_t **str, char const chr);
 str_t **str_sadd(str_t **str, str_t const *src);
 
 /**
+ * @brief remove a character at a given index
+ *
+ * @param str  string to remove the character from
+ * @param idx  index of the character to remove
+ * @return  the string with the character removed
+ */
+str_t **str_erase_at_idx(str_t **str, size_t idx);
+
+/**
  * @brief checks if 2 strings are equal
  *
  * @param s1    string 1
