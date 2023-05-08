@@ -10,45 +10,40 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-#include <term.h>
 
 #include "my_str.h"
+
 #include "mysh/termios.h"
 
-static void move_left_in_line(int *pos)
+static void move_left_in_line(size_t *pos)
 {
-    if ((*pos) < 0)
+    if (*pos == 0)
         return;
-    (*pos)--;
+
+    --*pos;
     printf("\033[1D");
 }
 
-static void move_right_in_line(int *pos, size_t *position, str_t * input)
+static void move_right_in_line(size_t *pos, str_t *input)
 {
-    if (*position >= input->length && *pos != -1)
+    if (*pos >= input->length)
         return;
-    (*pos)++;
+
+    ++*pos;
     printf("\033[1C");
 }
 
-void arrow_builtins(str_t *input, size_t *position)
+void handle_arrows(str_t **input, size_t *pos)
 {
-    int pos = *position;
     char c;
+
     if (read(STDIN_FILENO, &c, 1) == 1) {
         switch (c) {
-            case UP:
-                break;
-            case DOWN:
-                break;
-            case RIGHT:
-                move_right_in_line(&pos, position, input);
-                break;
-            case LEFT:
-                move_left_in_line(&pos);
-                break;
+            case UP: break;
+            case DOWN: break;
+            case RIGHT: move_right_in_line(pos, *input); break;
+            case LEFT: move_left_in_line(pos); break;
         }
     }
-    *position = pos;
     fflush(stdout);
 }

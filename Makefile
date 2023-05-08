@@ -16,6 +16,7 @@ SRC	=	./src/main.c								\
 		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/line_editing/termios.c 				\
+		./src/line_editing/manage_input.c 			\
 		./src/line_editing/arrow.c					\
 		./src/input/split_args.c					\
 		./src/input/escaped_chars.c					\

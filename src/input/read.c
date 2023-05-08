@@ -61,7 +61,7 @@ void read_input(shell_t *state)
         if (!state->is_atty) {
             temp = handle_not_tty();
         } else {
-            temp = stock_input();
+            temp = handle_line_editing();
         }
         if (temp == NULL)
             break;
