@@ -7,8 +7,6 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <termios.h>
 #include <unistd.h>
 
 #include "my_str.h"
@@ -22,6 +20,7 @@ static void move_left_in_line(size_t *pos)
 
     --*pos;
     printf("\033[1D");
+    fflush(stdout);
 }
 
 static void move_right_in_line(size_t *pos, str_t *input)
@@ -31,19 +30,18 @@ static void move_right_in_line(size_t *pos, str_t *input)
 
     ++*pos;
     printf("\033[1C");
+    fflush(stdout);
 }
 
-void handle_arrows(str_t **input, size_t *pos)
+bool handle_arrows(char c, str_t **input, size_t *pos)
 {
-    char c;
-
-    if (read(STDIN_FILENO, &c, 1) == 1) {
-        switch (c) {
-            case UP: break;
-            case DOWN: break;
-            case RIGHT: move_right_in_line(pos, *input); break;
-            case LEFT: move_left_in_line(pos); break;
-        }
+    switch (c) {
+        case UP: break;
+        case DOWN: break;
+        case RIGHT: move_right_in_line(pos, *input); break;
+        case LEFT: move_left_in_line(pos); break;
+        default: return false;
     }
-    fflush(stdout);
+
+    return true;
 }

@@ -5,7 +5,9 @@
 ** manage input
 */
 
+#include <ctype.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "my_str.h"
@@ -38,19 +40,36 @@ static void add_char(size_t *pos, str_t **input, char c)
     ++*pos;
 }
 
+static bool handle_composed_char(char *c, str_t **input, size_t *pos)
+{
+    read(STDIN_FILENO, c, 1);
+    if (*c != COMPOSED)
+        return false;
+
+    read(STDIN_FILENO, c, 1);
+    if (*c == BEFORE_SUPPR) {
+        read(STDIN_FILENO, c, 1);
+        if (*c != SUPPR) {
+            return false;
+        }
+        suppr_char(pos, input);
+    } else if (handle_arrows(*c, input, pos) == false) {
+        return false;
+    }
+    print_prompt(input, pos);
+    return true;
+}
+
 bool manage_input(char c, str_t **input, size_t *pos)
 {
+    if (c == ESCAPE && handle_composed_char(&c, input, pos))
+        return false;
+
     switch (c) {
-        case ESCAPE: break;
+        case KILL: free(*input); *input = NULL; return true;
         case ENTER: print_prompt(input, pos); return true;
-        case SUPPR: suppr_char(pos, input); break;
         case DELETE: delete_char(pos, input); break;
-        case ARROW: handle_arrows(input, pos); break;
-        case KILL:
-            free(*input);
-            *input = NULL;
-            return true;
-        default: add_char(pos, input, c); break;
+        default: if (isprint(c)) add_char(pos, input, c);
     }
     print_prompt(input, pos);
     return false;

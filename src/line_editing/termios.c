@@ -5,17 +5,15 @@
 ** termios
 */
 
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
-#include <unistd.h>
 
 #include "my_str.h"
 
 #include "mysh/termios.h"
 
-const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
+static const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 void print_prompt(str_t **input, size_t *pos)
 {
@@ -26,25 +24,24 @@ void print_prompt(str_t **input, size_t *pos)
     fflush(stdout);
 }
 
-str_t *handle_line_editing(void)
+static void setup_termios(struct termios *old_tio, struct termios *new_tio)
+{
+    tcgetattr(STDIN_FILENO, old_tio);
+    *new_tio = *old_tio;
+    new_tio->c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, new_tio);
+    fflush(stdout);
+}
+
+str_t *handle_line_editing(shell_t *state)
 {
     struct termios old_tio;
     struct termios new_tio;
     str_t *input = str_create("");
-    char c;
-    size_t pos = 0;
 
     printf("%s", PROMPT);
-    tcgetattr(STDIN_FILENO, &old_tio);
-    new_tio = old_tio;
-    new_tio.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
-    fflush(stdout);
-
-    while (read(STDIN_FILENO, &c, 1) == 1)
-        if (manage_input(c, &input, &pos))
-            break;
-
+    setup_termios(&old_tio, &new_tio);
+    read_termios(state, &input);
     printf("\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
     return input;

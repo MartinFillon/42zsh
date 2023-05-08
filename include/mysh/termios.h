@@ -12,20 +12,28 @@
 
     #include "my_str.h"
 
-    #define DELETE  (127)
-    #define ENTER   ('\n')
-    #define ESCAPE  (27)
-    #define SUPPR   ('~')
-    #define ARROW   ('[')
-    #define UP      ('A')
-    #define DOWN    ('B')
-    #define RIGHT   ('C')
-    #define LEFT    ('D')
-    #define KILL    (4)
+    #include "mysh/mysh.h"
 
-str_t *handle_line_editing(void);
+    #define DELETE      (127)
+    #define KILL        (4)
+    #define ENTER       ('\n')
+
+    #define ESCAPE      (27)
+
+    #define COMPOSED    ('[')
+
+    #define BEFORE_SUPPR  (51)
+    #define SUPPR         ('~')
+
+    #define UP     ('A')
+    #define DOWN   ('B')
+    #define RIGHT  ('C')
+    #define LEFT   ('D')
+
+str_t *handle_line_editing(shell_t *state);
 void print_prompt(str_t **input, size_t *pos);
-void handle_arrows(str_t **input, size_t *pos);
+void read_termios(shell_t *state, str_t **input);
+bool handle_arrows(char c, str_t **input, size_t *pos);
 bool manage_input(char c, str_t **input, size_t *pos);
 
 #endif /* !TERMIOS_H_ */
