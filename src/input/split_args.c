@@ -41,7 +41,7 @@ static vec_str_t *filter_args_and_check_quotes(
 
 vec_str_t *split_args(str_t *line)
 {
-    int _quote = 0, _dquote = 0;
+    int _quote = 0, _dquote = 0, _btick = 0;
 
     for (size_t i = 0; i < line->length; ++i) {
         if (i > 0 && line->data[i - 1] == '\\')
@@ -50,8 +50,10 @@ vec_str_t *split_args(str_t *line)
             _quote = !_quote;
         if (!_quote && line->data[i] == '"')
             _dquote = !_dquote;
-        if ((line->data[i] == ' ' || line->data[i] == '\t') &&
-            (!_quote && !_dquote))
+        if (!_btick && line->data[i] == '`')
+            _btick = !_btick;
+        if (str_contains(STR("\n \t"), line->data[i]) &&
+            (!_quote && !_dquote && !_btick))
             line->data[i] = '\0';
     }
     return filter_args_and_check_quotes(_quote, _dquote, line);
