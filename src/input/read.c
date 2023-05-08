@@ -24,22 +24,21 @@
 static void parse_input(shell_t *state, char *input)
 {
     btree_t *tree = gen_exec_tree(input);
-    str_t *precmd = NULL;
-    str_t *postcmd = NULL;
+    str_t *cmd = NULL;
 
     state->stop_cmd = 0;
     state->cmd_pgid = -1;
     state->exec_cmd_in_bg = 0;
     remove_zombies(state);
-    if ((postcmd = map_get(state->alias, STR("postcmd"))) != NULL)
-        exec_wrapper(state, postcmd->data);
+    if ((cmd = map_get(state->alias, STR("postcmd"))) != NULL)
+        exec_wrapper(state, cmd->data);
     exec_tree(state, tree->root);
     btree_free(tree);
-    if ((precmd = map_get(state->alias, STR("precmd"))) != NULL)
-        exec_wrapper(state, precmd->data);
+    if ((cmd = map_get(state->alias, STR("precmd"))) != NULL)
+        exec_wrapper(state, cmd->data);
 }
 
-static str_t *handle_not_tty(void)
+static str_t *handle_no_tty(void)
 {
     static char *input = NULL;
     static size_t l_cap = 0;
@@ -55,17 +54,10 @@ static str_t *handle_not_tty(void)
 
 void read_input(shell_t *state)
 {
-    str_t *temp;
-    int ignore;
+    str_t *temp = NULL;
 
     while (!state->stop_shell) {
-        if (!state->is_atty) {
-            temp = handle_not_tty();
-        } else {
-            ignore =
-                atoi(((str_t *)map_get(state->vars, STR("ignoreof")))->data);
-            temp = stock_input(ignore);
-        }
+        temp = (state->is_atty) ? handle_line_editing(state) : handle_no_tty();
         if (temp == NULL)
             break;
 
