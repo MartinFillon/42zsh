@@ -409,14 +409,25 @@
       "name": "escape shell symbols",
       "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
     },
-
+    {
+      "name": "backticks 1",
+      "run": ["echo `echo Hello world`"]
+    },
+    {
+      "name": "backticks 2",
+      "run": ["echo `ls | cat -e`"]
+    },
     {
       "name": "postcmd 1",
       "run": ["alias postcmd \"echo postcmd\"", "ls"]
     },
     {
       "name": "postcmd 2",
-      "run": ["alias postcmd \"echo postcmd\"", "alias postcmd \"echo postcmd2\"", "ls"]
+      "run": [
+        "alias postcmd \"echo postcmd\"",
+        "alias postcmd \"echo postcmd2\"",
+        "ls"
+      ]
     },
     {
       "name": "cwdcmd 1",
@@ -424,7 +435,11 @@
     },
     {
       "name": "cwdcmd 2",
-      "run": ["alias cwdcmd \"echo cwdcmd\"", "alias cwdcmd \"echo cwdcmd2\"", "cd .."]
+      "run": [
+        "alias cwdcmd \"echo cwdcmd\"",
+        "alias cwdcmd \"echo cwdcmd2\"",
+        "cd .."
+      ]
     },
     {
       "name": "all at once",
@@ -433,6 +448,10 @@
         "alias cwdcmd \"echo cwdcmd\"",
         "ls ; cd .. ; ls"
       ]
+    },
+    {
+      "name": "subshell 1",
+      "run": ["(cd ..; pwd | cat -e); pwd"]
     }
   ]
 }

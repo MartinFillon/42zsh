@@ -47,6 +47,9 @@ static void init_shell(shell_t *state, char const *const *envp)
     state->jobs = vec_create(100, sizeof(pid_t));
     state->alias = map_create(1000);
     state->history = history_create();
+
+    catch_signals();
+
     if (state->is_atty) {
         setpgid(state->shell_pgid, state->shell_pgid);
         tcsetpgrp(STDIN_FILENO, state->shell_pgid);
@@ -58,7 +61,6 @@ int main(int UNUSED ac, char UNUSED **av, char const *const *envp)
     shell_t state = {0};
 
     init_shell(&state, envp);
-    catch_signals();
     read_input(&state);
     state_free(&state);
     return state.return_code;

@@ -58,6 +58,7 @@ void exec_wrapper(shell_t *state, char const *line)
         return;
     }
     if (av->size == 0 || should_exit(state, av)) {
+        vec_free(av);
         return;
     }
     exec_wrapper_inner(state, av);

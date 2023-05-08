@@ -40,8 +40,9 @@ void remove_escaped_chars_and_quotes(str_t *arg)
             case 't': arg->data[i] = '\t'; break;
             case 'r': arg->data[i] = '\r'; break;
             case '"': arg->data[i] = '\"'; break;
+            case '`': arg->data[i] = '`'; break;
             case '\'': arg->data[i] = '\''; break;
-            case '\\': arg->data[i++] = '\\'; break;
+            case '\\': arg->data[i] = '\\'; break;
         };
         i++;
     }
