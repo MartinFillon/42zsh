@@ -32,6 +32,7 @@ vec_str_t *parse_args(shell_t *state, char const *line)
     if (line_ == NULL)
         return NULL;
 
+    // TODO: exec `$()` + `()` subshell
     line_ = exec_sub_cmds(state, line_);
     vec_str_t *args_ = split_args(line_);
     if (args_ == NULL)

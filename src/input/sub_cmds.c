@@ -11,6 +11,8 @@
 
 #include "mysh/exec.h"
 #include "mysh/mysh.h"
+#include "mysh/parser.h"
+#include "my_btree.h"
 #include "my_str.h"
 #include "my_utils.h"
 
@@ -22,7 +24,7 @@ static void read_output(str_t **out, int fd)
         str_cadd(out, c);
 }
 
-static void exec_sub_cmd(shell_t *state, str_t *sub_cmd, str_t **out)
+void exec_sub_shell(shell_t *state, str_t *sub_cmd, str_t **out)
 {
     int p[2];
     int stdout = dup(STDOUT_FILENO);
@@ -32,7 +34,9 @@ static void exec_sub_cmd(shell_t *state, str_t *sub_cmd, str_t **out)
         exit(1);
     }
     dup2(p[1], STDOUT_FILENO);
-    exec_wrapper(state, sub_cmd->data);
+    btree_t *tree = gen_exec_tree(sub_cmd->data);
+    exec_tree(state, tree->root);
+    btree_free(tree);
     close(STDOUT_FILENO);
     close(p[1]);
     read_output(out, p[0]);
@@ -56,7 +60,7 @@ str_t *exec_sub_cmds(shell_t *state, str_t *line)
         }
         if (_btick == -1) str_cadd(&line_, line->data[i]);
         if (line->data[i] == '`') {
-            exec_sub_cmd(state, str_substr(line, _btick, i - _btick), &line_);
+            exec_sub_shell(state, str_substr(line, _btick, i - _btick), &line_);
             _btick = -1;
         }
     }

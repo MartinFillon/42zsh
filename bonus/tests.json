@@ -415,7 +415,7 @@
     },
     {
       "name": "backticks 2",
-      "run": ["echo `ls`"]
+      "run": ["echo `ls | cat -e`"]
     },
     {
       "name": "postcmd 1",

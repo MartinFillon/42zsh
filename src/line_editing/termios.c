@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <term.h>
 #include <termios.h>
 
 #include "my_str.h"
