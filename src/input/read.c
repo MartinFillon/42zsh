@@ -15,10 +15,10 @@
 #include "my_vec.h"
 
 #include "mysh/exec.h"
+#include "mysh/history.h"
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
-#include "mysh/history.h"
 #include "mysh/termios.h"
 
 static void parse_input(shell_t *state, char *input)
@@ -56,12 +56,15 @@ static str_t *handle_not_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp;
+    int ignore;
 
     while (!state->stop_shell) {
         if (!state->is_atty) {
             temp = handle_not_tty();
         } else {
-            temp = stock_input();
+            ignore =
+                atoi(((str_t *)map_get(state->vars, STR("ignoreof")))->data);
+            temp = stock_input(ignore);
         }
         if (temp == NULL)
             break;
