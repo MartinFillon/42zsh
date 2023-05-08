@@ -5,6 +5,7 @@
 ** symbols
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,15 +16,36 @@
 
 static void parse_line(bnode_t **node, char *line);
 
+static void update_ignored(int *ignore, char tok)
+{
+    if (!ignore[1] && tok == '\'')
+        ignore[0] = !ignore[0];
+    if (!ignore[0] && tok == '"')
+        ignore[1] = !ignore[1];
+    if (!ignore[2] && tok == '`')
+        ignore[2] = !ignore[2];
+    if (ignore[0] || ignore[1] || ignore[2])
+        return;
+    if (!ignore[3] ? (tok == ')') : (tok == '('))
+        ignore[3] = !ignore[3];
+}
+
+static int should_ignored(int *ignore)
+{
+    return (ignore[0] || ignore[1] || ignore[2] || ignore[3]);
+}
+
 static int find_line(bnode_t **node, char const *symbol, char *line)
 {
     char *symb = NULL;
+    int ignore[4] = {0};
 
     for (long i = strlen(line) - 1; i >= 0; --i) {
         symb = find_symbol(symbol, line + i);
+        update_ignored(ignore, line[i]);
         if (i > 0 && line[i - 1] == '\\')
             continue;
-        if (symb != NULL) {
+        if (symb != NULL && !should_ignored(ignore)) {
             line[i] = '\0';
             (*node)->data = symb;
             parse_line(&(*node)->left, strdup(line));

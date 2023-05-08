@@ -75,10 +75,12 @@ void exec_command(
     shell_t *state, int (*builtin)(vec_str_t *, shell_t *), vec_str_t *av
 )
 {
-    int pid = fork();
+    pid_t pid = fork();
 
-    if (pid == -1)
+    if (pid == -1) {
+        perror("fork");
         exit(1);
+    }
     if (pid == 0) {
         pipe_apply(state);
         redirect_apply(state);

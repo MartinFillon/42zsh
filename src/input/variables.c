@@ -30,7 +30,7 @@ static int get_exclamation(str_t **new, char const *line, shell_t *state)
         return 0;
     }
     str_erase_at_idx(&designator, 0);
-    dprintf(2, "%s: Event not found.\n", designator->data);
+    dprintf(2, "%s: Event not found.\n", str_tocstr(designator));
     return 1;
 }
 
@@ -51,13 +51,15 @@ static int get_variable(
     str_t **new, char const *line, size_t *i, shell_t *state
 )
 {
-    size_t start = ++*i;
+    size_t start = *i;
     str_t *var_name = NULL;
     str_t *value = NULL;
 
     while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
         ++*i;
-    var_name = str_ncreate(line + start, *i + 1 - start);
+    if (start == *i)
+        return 1;
+    var_name = str_ncreate(line + start + 1, *i - start);
     if ((value = map_get(state->env, var_name)) != NULL ||
         (value = map_get(state->vars, var_name)) != NULL) {
         str_sadd(new, value);

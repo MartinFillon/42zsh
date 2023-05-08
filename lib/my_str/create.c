@@ -21,6 +21,7 @@ str_t *str_screate(size_t n)
 
     str->length = 0;
     str->capacity = capacity;
+    str->data[0] = '\0';
 
     return str;
 }
