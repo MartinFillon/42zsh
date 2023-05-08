@@ -16,8 +16,9 @@ SRC	=	./src/main.c								\
 		./src/input/history.c						\
 		./src/input/env.c							\
 		./src/line_editing/termios.c 				\
+		./src/line_editing/read_termios.c 			\
+		./src/line_editing/manage_input.c 			\
 		./src/line_editing/arrow.c					\
-		./src/line_editing/setup_termios.c			\
 		./src/input/split_args.c					\
 		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
@@ -62,7 +63,7 @@ ifeq ($(DEBUG),1)
 endif
 
 
-OBJ	=	$(SRC:.c=.o)
+OBJ		=	$(SRC:.c=.o)
 NAME	=	42sh
 
 
