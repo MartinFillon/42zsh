@@ -12,11 +12,11 @@
 #include <ctype.h>
 #include <stdio.h>
 
-void travel_history(history_t *history, size_t pos)
+char *travel_history(history_t *history, size_t pos)
 {
     size_t size = history->entries->size;
 
-    printf("%s\n", history->entries->data[size + pos].command->data);
+    return history->entries->data[size + pos].command->data;
 }
 
 char *get_history_str(history_t *history, char *input)
@@ -30,31 +30,29 @@ char *get_history_str(history_t *history, char *input)
     return NULL;
 }
 
-void get_history_index(history_t *history, size_t index)
+char *get_history_index(history_t *history, size_t index)
 {
-    printf("%s\n", history->entries->data[index + 1].command->data);
+    return history->entries->data[index + 1].command->data;
 }
 
-int exclamation_conditions(history_t *history, str_t *command)
+char *exclamation_conditions(history_t *history, str_t *command)
 {
-    char *DOUB = NULL;
+    char *result = NULL;
 
-    if (command->data[0] == '!') {
-        printf("1\n");
-        travel_history(history, -2);
+    if (str_compare(command, STR("!")) == 0) {
+        result = travel_history(history, -2);
         return 0;
     }
-    if (isdigit(command->data[0])) {
-        printf("2\n");
-        get_history_index(history, atoi(command->data));
+    if (str_isnum(command) == 1) {
+        result = get_history_index(history, atoi(command->data));
         return 0;
     }
-    if (command->data[0] == '-') {
-        printf("3\n");
-        get_history_index(history, -atoi(command->data + 1));
-        return 0;
+    result = get_history_str(history, command->data);
+    if (result == NULL){
+        printf("->>>");
+        str_print(command);
+    } else {
+        printf("->%s\n", result);
     }
-    DOUB = get_history_str(history, command->data);
-    printf("%s\n", DOUB);
-    return 0;
+    return result;
 }

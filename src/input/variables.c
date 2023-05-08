@@ -13,16 +13,18 @@
 #include "my_map.h"
 #include "my_str.h"
 
-int exclamation_conditions(history_t *history, str_t *command);
+char *exclamation_conditions(history_t *history, str_t *command);
 
 static int get_exclamation(char const *line, shell_t *state)
 {
-    (void)state;
     str_t *designator = str_create(line);
+    char *res = NULL;
 
-    if (str_startswith(designator, STR("!")) == 1 && line[1] != '\0'){
+    if (str_startswith(str_create(line), STR("!")) == 1 && line[1] != '\0'){
         str_erase_at_idx(&designator, 0);
-        return exclamation_conditions(&state->history, designator);
+        res = exclamation_conditions(&state->history, designator);
+        if (res)
+            printf("%s\n", res);
     }
     str_erase_at_idx(&designator, 0);
     dprintf(2, "%s: Event not found.\n", designator->data);
