@@ -448,6 +448,10 @@
         "alias cwdcmd \"echo cwdcmd\"",
         "ls ; cd .. ; ls"
       ]
+    },
+    {
+      "name": "subshell 1",
+      "run": ["(cd ..; pwd | cat -e); pwd"]
     }
   ]
 }

@@ -15,14 +15,15 @@ SRC	=	./src/main.c								\
 		./src/input/variables.c						\
 		./src/input/history.c						\
 		./src/input/env.c							\
+		./src/input/split_args.c					\
+		./src/input/backticks.c 					\
+		./src/input/subshell.c 						\
+		./src/input/escaped_chars.c					\
+		./src/input/globbings.c 					\
 		./src/line_editing/termios.c 				\
 		./src/line_editing/read_termios.c 			\
 		./src/line_editing/manage_input.c 			\
 		./src/line_editing/arrow.c					\
-		./src/input/split_args.c					\
-		./src/input/sub_cmds.c 						\
-		./src/input/escaped_chars.c					\
-		./src/input/globbings.c 					\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\

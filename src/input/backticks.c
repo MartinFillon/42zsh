@@ -24,7 +24,7 @@ static void read_output(str_t **out, int fd)
         str_cadd(out, c);
 }
 
-void exec_sub_shell(shell_t *state, str_t *sub_cmd, str_t **out)
+static void exec_sub_proc(shell_t *state, str_t *sub_cmd, str_t **out)
 {
     int p[2];
     int stdout = dup(STDOUT_FILENO);
@@ -42,9 +42,10 @@ void exec_sub_shell(shell_t *state, str_t *sub_cmd, str_t **out)
     read_output(out, p[0]);
     close(p[0]);
     dup2(stdout, STDOUT_FILENO);
+    free(sub_cmd);
 }
 
-str_t *exec_sub_cmds(shell_t *state, str_t *line)
+str_t *exec_backticks(shell_t *state, str_t *line)
 {
     str_t *line_ = str_screate(line->length);
     long _btick = -1;
@@ -60,7 +61,7 @@ str_t *exec_sub_cmds(shell_t *state, str_t *line)
         }
         if (_btick == -1) str_cadd(&line_, line->data[i]);
         if (line->data[i] == '`') {
-            exec_sub_shell(state, str_substr(line, _btick, i - _btick), &line_);
+            exec_sub_proc(state, str_substr(line, _btick, i - _btick), &line_);
             _btick = -1;
         }
     }

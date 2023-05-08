@@ -7,6 +7,7 @@
 
 #ifndef MYSH_READ_H
     #define MYSH_READ_H
+
     #include "my_str.h"
     #include "my_map.h"
 
@@ -25,9 +26,9 @@ vec_str_t *parse_args(shell_t *state, char const *line);
 
 vec_str_t *split_args(str_t *line);
 
-str_t *exec_sub_cmds(shell_t *state, str_t *line);
+str_t *exec_backticks(shell_t *state, str_t *line);
 
-void exec_sub_shell(shell_t *state, str_t *sub_cmd, str_t **out);
+str_t *exec_sub_shell(shell_t *state, str_t *line);
 
 str_t *parse_variables(char const *line, shell_t *state);
 

@@ -68,18 +68,6 @@ static void parse_line(bnode_t **node, char *line)
     (*node)->data = line;
 }
 
-// void treeprint(bnode_t *root, int level)
-// {
-//     if (root == NULL)
-//         return;
-//     for (int i = 0; i < level; i++)
-//         printf(i == level - 1 ? "|-" : "  ");
-
-//     printf("[%s]\n", (char *)root->data);
-//     treeprint(root->left, level + 1);
-//     treeprint(root->right, level + 1);
-// }
-
 btree_t *gen_exec_tree(char const *line)
 {
     btree_t *tree = btree_create(NULL);
