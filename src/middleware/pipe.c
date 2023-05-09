@@ -23,10 +23,10 @@ static void pipe_end(shell_t *state)
     int code = 0;
 
     pipe_close(p);
-    waitpid(p->first_pid, &code, WUNTRACED);
-    if (!state->exec_cmd_in_bg)
-        tcsetpgrp(STDIN_FILENO, state->shell_pgid);
-    state->return_code = WEXITSTATUS(code);
+    if (!state->exec_cmd_in_bg) {
+        waitpid_for_process(state, p->first_pid, &code);
+        state->return_code = WEXITSTATUS(code);
+    }
     print_job_status(code, p->first_pid);
     pipe_reset(p);
 }

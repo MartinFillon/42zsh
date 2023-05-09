@@ -41,9 +41,8 @@ int builtin_fg(vec_str_t *av, shell_t *state)
         if ((pid = find_latest_process(state)) == -1)
             return 1;
     }
-    tcsetpgrp(0, pid);
-    waitpid(pid, &code, WUNTRACED);
-    tcsetpgrp(0, state->shell_pgid);
+    tcsetpgrp(STDIN_FILENO, pid);
+    waitpid_for_process(state, pid, &code);
     print_job_status(code, pid);
     return 0;
 }
