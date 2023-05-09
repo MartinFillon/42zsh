@@ -84,7 +84,7 @@ int builtin_foreach(vec_str_t *av, shell_t *state)
     for (size_t i = 0; i < list->size; i++) {
         map_set(state->vars, var, list->data[i]);
         for (size_t i = 0; i < commands->size; i++) {
-            tree = gen_exec_tree(commands->data[i]->data);
+            tree = gen_exec_tree(commands->data[i]->data, state);
             exec_tree(state, tree->root);
             btree_free(tree);
         }

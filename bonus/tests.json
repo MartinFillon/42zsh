@@ -464,6 +464,18 @@
     {
       "name": "backtick with error",
       "run": ["echo `ls | cut`"]
+    },
+    {
+      "name": "repeat builtin",
+      "run": ["repeat 5 echo Hello"]
+    },
+    {
+      "name": "repeat builtin error",
+      "run": ["repeat"]
+    },
+    {
+      "name": "repeat 2",
+      "run": ["repeat 5 ls", "repeat 5 ls"]
     }
   ]
 }

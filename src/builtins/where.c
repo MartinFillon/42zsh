@@ -53,7 +53,7 @@ int builtin_where(vec_str_t *av, shell_t *state)
     int err = 0;
 
     if (av->size == 1) {
-        dprintf(0, "where: Too few arguments.\n");
+        dprintf(2, "where: Too few arguments.\n");
         return (1);
     }
     for (size_t i = 1; i < av->size; i++) {
