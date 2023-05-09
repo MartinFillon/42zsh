@@ -27,7 +27,7 @@ static void exec_sub_proc(shell_t *state, str_t *sub_cmd)
         exit(1);
     }
     if (pid == 0) {
-        btree_t *tree = gen_exec_tree(sub_cmd->data);
+        btree_t *tree = gen_exec_tree(sub_cmd->data, state);
         exec_tree(state, tree->root);
         btree_free(tree);
         exit(0);

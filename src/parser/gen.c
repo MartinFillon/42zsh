@@ -11,7 +11,10 @@
 
 #include "my_btree.h"
 #include "my_cstr.h"
+#include "my_str.h"
 
+#include "mysh/mysh.h"
+#include "mysh/history.h"
 #include "mysh/parser.h"
 
 static void parse_line(bnode_t **node, char *line);
@@ -68,11 +71,18 @@ static void parse_line(bnode_t **node, char *line)
     (*node)->data = line;
 }
 
-btree_t *gen_exec_tree(char const *line)
+btree_t *gen_exec_tree(char const *line, shell_t *state)
 {
     btree_t *tree = btree_create(NULL);
+    str_t *line_cpy = str_create(line);
+    long index = str_find(line_cpy, STR("!"), 0);
 
-    parse_line(&tree->root, strdup(line));
+    if (index != -1){
+        get_exclamation(&line_cpy, index, state);
+    }
+    history_append(line_cpy->data, &state->history);
+    parse_line(&tree->root, strdup(line_cpy->data));
+    free(line_cpy);
 
     return tree;
 }

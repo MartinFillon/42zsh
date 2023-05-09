@@ -29,4 +29,12 @@ void history_append(char *input, history_t *history);
 
 void save_history(history_t *history);
 
+// EXCLAMATION POINT
+
+typedef struct shell_s shell_t;
+
+int get_exclamation(str_t **line, long i, shell_t *state);
+
+str_t *exclamation_conditions(history_t *history, str_t *command);
+
 #endif /* MYSH_HISTORY_*/

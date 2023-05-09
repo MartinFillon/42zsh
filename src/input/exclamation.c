@@ -12,43 +12,46 @@
 #include <ctype.h>
 #include <stdio.h>
 
-char *travel_history(history_t *history, size_t pos)
+str_t *get_history_str(history_t *history, char *input)
 {
-    size_t size = history->entries->size;
-
-    return history->entries->data[size + pos].command->data;
-}
-
-char *get_history_str(history_t *history, char *input)
-{
-    for (size_t i = 0;i < history->entries->size; i++){
+    for (size_t i = history->entries->size - 1;i != 0; i--){
         if (strncmp(input, history->entries->data[i].command->data,
             strlen(input)) == 0){
-            return history->entries->data[i].command->data;
+            return history->entries->data[i].command;
         }
     }
     return NULL;
 }
 
-char *get_history_index(history_t *history, size_t index)
+str_t *exclamation_conditions(history_t *history, str_t *input)
 {
-    return history->entries->data[index + 1].command->data;
-}
+    size_t size = history->entries->size;
+    str_t *result = NULL;
 
-char *exclamation_conditions(history_t *history, str_t *command)
-{
-    char *result = NULL;
-
-    if (str_compare(command, STR("!")) == 0) {
-        return travel_history(history, -2);
+    if (str_compare(input, STR("!")) == 0) {
+        return history->entries->data[size - 1].command;
     }
-    if (str_isnum(command) == 1) {
-        return get_history_index(history, atoi(command->data));
-    }
-    result = get_history_str(history, command->data);
-    if (result == NULL){
-        printf("->>>");
-        str_print(command);
+    if (str_isnum(input) == 1) {
+        return history->entries->data[atoi(input->data) - 1].command;;
+    } else {
+        return get_history_str(history, input->data);
     }
     return result;
+}
+
+int get_exclamation(str_t **line, long index, shell_t *state)
+{
+    str_t *designator = NULL;
+
+    designator = str_ncreate((*line)->data + index, (*line)->length - index);
+    str_erase_at_idx(&designator, 0);
+    designator = exclamation_conditions(&state->history, designator);
+    if (designator != NULL){
+        str_insert_str(line, index, designator);
+        str_slice(line, 0, index + designator->length);
+        printf("%s\n", (*line)->data);
+        return 0;
+    }
+    dprintf(2, "%s: Event not found.\n", (*line)->data);
+    return 1;
 }

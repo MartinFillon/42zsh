@@ -34,7 +34,7 @@ static void exec_sub_proc(shell_t *state, str_t *sub_cmd, str_t **out)
         exit(1);
     }
     dup2(p[1], STDOUT_FILENO);
-    btree_t *tree = gen_exec_tree(sub_cmd->data);
+    btree_t *tree = gen_exec_tree(sub_cmd->data, state);
     exec_tree(state, tree->root);
     btree_free(tree);
     close(STDOUT_FILENO);

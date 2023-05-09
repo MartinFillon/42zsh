@@ -33,8 +33,10 @@ int is_symbol(char *data);
 char *find_symbol(char const *symbol, char *line_at);
 
 
+typedef struct shell_s shell_t;
+
 // TREE
-btree_t *gen_exec_tree(char const *line);
+btree_t *gen_exec_tree(char const *line, shell_t *state);
 
 
 #endif /* MYSH_PARSER_ */
