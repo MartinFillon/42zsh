@@ -14,7 +14,7 @@
 
 static str_t *get_history_str(history_t *history, char *input)
 {
-    for (size_t i = history->entries->size - 1; i > 0; i--){
+    for (size_t i = history->entries->size - 1;i > 0; i--){
         if (strncmp(input, history->entries->data[i].command->data,
             strlen(input)) == 0){
             return history->entries->data[i].command;
@@ -55,10 +55,8 @@ int get_exclamation(str_t **line, long index, shell_t *state)
         str_insert_str(line, index, tmp);
         str_slice(line, 0, index + tmp->length);
         printf("%s\n", (*line)->data);
-        free(tmp);
         return 0;
     }
-    free(tmp);
     dprintf(2, "%s: Event not found.\n", (*line)->data);
     return 1;
 }
