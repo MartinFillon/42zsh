@@ -39,7 +39,7 @@ void read_termios(shell_t *state, str_t **input)
         ignoreeof--;
         if (handle_ignoreeof(input, ignore, ignoreeof) == false) {
             *input = str_create("");
-            printf("^D\nUse \"exit\" to leave tcsh.\n");
+            printf("^D\nUse \"exit\" to leave.\n");
             print_prompt(input, &pos);
         } else {
             return;

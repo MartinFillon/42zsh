@@ -23,7 +23,7 @@
 
 static void parse_input(shell_t *state, char *input)
 {
-    btree_t *tree = gen_exec_tree(input);
+    btree_t *tree = gen_exec_tree(input, state);
     str_t *cmd = NULL;
 
     state->stop_cmd = 0;
@@ -32,6 +32,7 @@ static void parse_input(shell_t *state, char *input)
     remove_zombies(state);
     if ((cmd = map_get(state->alias, STR("postcmd"))) != NULL)
         exec_wrapper(state, cmd->data);
+
     exec_tree(state, tree->root);
     btree_free(tree);
     if ((cmd = map_get(state->alias, STR("precmd"))) != NULL)
@@ -61,7 +62,6 @@ void read_input(shell_t *state)
         if (temp == NULL)
             break;
 
-        history_append(temp->data, &state->history);
         parse_input(state, temp->data);
         free(temp);
     }

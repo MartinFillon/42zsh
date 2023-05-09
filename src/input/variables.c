@@ -37,7 +37,7 @@ static int get_variable(
     while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
         ++*i;
     if (start == *i)
-        return 1;
+        return 0;
     var_name = str_ncreate(line + start + 1, *i - start);
     if ((value = map_get(state->env, var_name)) != NULL ||
         (value = map_get(state->vars, var_name)) != NULL) {

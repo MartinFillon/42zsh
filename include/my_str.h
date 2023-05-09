@@ -367,6 +367,16 @@ str_t **str_erase_at_idx(str_t **str, size_t idx);
 str_t **str_insert_at_idx(str_t **str, size_t idx, char chr);
 
 /**
+ * @brief insert a string at a given index
+ *
+ * @param str  string to insert the string into
+ * @param idx  index of the string to insert
+ * @param add  string to insert
+ * @return  the string with the string inserted
+ */
+str_t **str_insert_str(str_t **str, size_t idx, str_t const *add);
+
+/**
  * @brief checks if 2 strings are equal
  *
  * @param s1    string 1

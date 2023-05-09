@@ -20,6 +20,7 @@ SRC	=	./src/main.c								\
 		./src/input/subshell.c 						\
 		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
+		./src/input/exclamation.c 					\
 		./src/line_editing/termios.c 				\
 		./src/line_editing/read_termios.c 			\
 		./src/line_editing/manage_input.c 			\
