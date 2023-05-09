@@ -460,6 +460,10 @@
     {
       "name": "where builtin error",
       "run": ["where"]
+    },
+    {
+      "name": "backtick with error",
+      "run": ["echo `ls | cut`"]
     }
   ]
 }

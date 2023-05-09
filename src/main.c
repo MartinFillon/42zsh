@@ -46,7 +46,7 @@ static void init_shell(shell_t *state, char const *const *envp)
     state->redirect = redirect_create();
     state->pipe = pipe_create();
     state->vars = vars_create(state->env);
-    state->jobs = vec_create(100, sizeof(pid_t));
+    state->jobs = vec_create(100, sizeof(job_t));
     state->alias = map_create(1000);
     state->history = history_create();
 

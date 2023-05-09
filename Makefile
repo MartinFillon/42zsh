@@ -20,6 +20,7 @@ SRC	=	./src/main.c								\
 		./src/input/subshell.c 						\
 		./src/input/escaped_chars.c					\
 		./src/input/globbings.c 					\
+		./src/input/exclamation.c 					\
 		./src/line_editing/termios.c 				\
 		./src/line_editing/read_termios.c 			\
 		./src/line_editing/manage_input.c 			\
@@ -80,12 +81,6 @@ all:	lib $(NAME)
 $(NAME):	$(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
-tests_run: all
-	make -C ./tests/unit_tests
-
-func_run: all
-	make -C ./tests/func_tests
-
 lib:
 	make -C ./lib
 
@@ -95,8 +90,6 @@ clean:
 
 fclean:	clean
 	make -C ./lib fclean
-	make -C ./tests/unit_tests fclean
-	make -C ./tests/func_tests clean
 	$(RM) $(NAME)
 
 re:	fclean lib all

@@ -7,6 +7,7 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 
 #include "my_str.h"
@@ -19,14 +20,14 @@
 void print_job_status(int code, pid_t pid)
 {
     if (WIFSTOPPED(code)) {
-        fprintf(stderr, "\n[%d] Stopped\n", pid);
+        dprintf(2, "\n[%d] Stopped\n", pid);
     }
 }
 
 long find_job_by_pid(shell_t *state, pid_t pid)
 {
     for (size_t i = 0; i < state->jobs->size; ++i)
-        if (state->jobs->data[i] == pid)
+        if (state->jobs->data[i].pgid == pid)
             return i;
 
     return -1;
@@ -44,7 +45,9 @@ void remove_zombies(shell_t *state)
 
         job_idx = find_job_by_pid(state, pid);
 
-        if (job_idx != -1)
+        if (job_idx != -1) {
+            free(state->jobs->data[job_idx].cmd);
             vec_remove(state->jobs, job_idx);
+        }
     }
 }

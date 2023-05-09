@@ -21,6 +21,12 @@ typedef int fd_set_t[2];
 
 VEC_DEF(fd_set_t, fd)
 
+typedef struct job_s {
+    pid_t pgid;
+    str_t *cmd;
+} job_t;
+
+VEC_DEF(job_t, job)
 VEC_DEF(pid_t, pid)
 
 enum {
@@ -70,7 +76,7 @@ typedef struct shell_s {
     redirect_t redirect;
     pipe_t pipe;
     map_t *vars;
-    vec_pid_t *jobs;
+    vec_job_t *jobs;
     map_t *alias;
     history_t history;
 } shell_t;

@@ -36,3 +36,22 @@ str_t **str_insert_at_idx(str_t **str, size_t idx, char chr)
 
     return str;
 }
+
+str_t **str_insert_str(str_t **str, size_t idx, str_t const *add)
+{
+    if (idx > (*str)->length)
+        return str;
+
+    if ((*str)->length + add->length + 1 > (*str)->capacity)
+        str_resize(str, (*str)->length + add->length + 1);
+
+    memmove(
+        (*str)->data + idx + add->length, (*str)->data + idx,
+        (*str)->length - idx
+    );
+    memcpy((*str)->data + idx, add->data, add->length);
+    (*str)->length += add->length;
+    (*str)->data[(*str)->length] = '\0';
+
+    return str;
+}
