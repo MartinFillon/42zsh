@@ -13,8 +13,8 @@
 #include "my_cstr.h"
 #include "my_str.h"
 
-#include "mysh/mysh.h"
 #include "mysh/history.h"
+#include "mysh/mysh.h"
 #include "mysh/parser.h"
 
 static void parse_line(bnode_t **node, char *line);
@@ -76,10 +76,9 @@ btree_t *gen_exec_tree(char const *line, shell_t *state)
     btree_t *tree = btree_create(NULL);
     str_t *line_cpy = str_create(line);
 
-    if (str_find(line_cpy, STR("!"), 0) != -1){
-        if (get_exclamation(&line_cpy, state) == 1){
-            tree->root = bnode_create();
-            tree->root->data = strdup("");
+    if (str_find(line_cpy, STR("!"), 0) != -1) {
+        if (get_exclamation(&line_cpy, state)) {
+            (tree->root = bnode_create())->data = strdup("");
             free(line_cpy);
             return tree;
         }
