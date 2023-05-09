@@ -33,6 +33,7 @@ SRC	=	./src/main.c								\
 		./src/builtins/fg.c							\
 		./src/builtins/alias.c						\
 		./src/builtins/unalias.c					\
+		./src/builtins/scripting/if.c 				\
 		./src/exec/exec.c							\
 		./src/exec/process.c						\
 		./src/exec/tree.c							\
