@@ -14,6 +14,8 @@
 
 static str_t *get_history_str(history_t *history, char *input)
 {
+    if (history->entries->size == 0)
+        return NULL;
     for (size_t i = history->entries->size - 1;i > 0; i--){
         if (strncmp(input, history->entries->data[i].command->data,
             strlen(input)) == 0){
@@ -42,10 +44,11 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
     return NULL;
 }
 
-int get_exclamation(str_t **line, long index, shell_t *state)
+int get_exclamation(str_t **line, shell_t *state)
 {
     str_t *designator = NULL;
     str_t *tmp = NULL;
+    long index = str_find(*line, STR("!"), 0);
 
     designator = str_ncreate((*line)->data + index, (*line)->length - index);
     str_erase_at_idx(&designator, 0);

@@ -75,10 +75,14 @@ btree_t *gen_exec_tree(char const *line, shell_t *state)
 {
     btree_t *tree = btree_create(NULL);
     str_t *line_cpy = str_create(line);
-    long index = str_find(line_cpy, STR("!"), 0);
 
-    if (index != -1){
-        get_exclamation(&line_cpy, index, state);
+    if (str_find(line_cpy, STR("!"), 0) != -1){
+        if (get_exclamation(&line_cpy, state) == 1){
+            tree->root = bnode_create();
+            tree->root->data = strdup("");
+            free(line_cpy);
+            return tree;
+        }
     }
     history_append(line_cpy->data, &state->history);
     parse_line(&tree->root, strdup(line_cpy->data));

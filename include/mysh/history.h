@@ -33,6 +33,6 @@ void save_history(history_t *history);
 
 typedef struct shell_s shell_t;
 
-int get_exclamation(str_t **line, long i, shell_t *state);
+int get_exclamation(str_t **line, shell_t *state);
 
 #endif /* MYSH_HISTORY_*/
