@@ -14,7 +14,6 @@ void catch_signals(void)
     signal(SIGTSTP, SIG_IGN);
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
-    signal(SIGCHLD, SIG_IGN);
 }
 
 void restore_signals(void)

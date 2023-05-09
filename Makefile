@@ -41,6 +41,7 @@ SRC	=	./src/main.c								\
 		./src/exec/pipe.c							\
 		./src/exec/error.c							\
 		./src/exec/utils.c							\
+		./src/exec/jobs.c							\
 		./src/middleware/middleware.c				\
 		./src/middleware/semicolumn.c				\
 		./src/middleware/exec_if_fail.c				\

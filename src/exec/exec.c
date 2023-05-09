@@ -22,11 +22,9 @@
 #include "mysh/mysh.h"
 #include "mysh/read.h"
 
-static const char *ERROR[] = {
-    "%s: Command not found.\n",
-    "%s: Permission denied.\n",
-    "%s: Exec format error. Wrong Architecture.\n",
-};
+static const char *NOT_FOUND = "%s: Command not found.\n";
+static const char *PERM_DENI = "%s: Permission denied.\n";
+static const char *EXEC_ERR = "%s: Exec format error. Wrong Architecture.\n";
 
 static void exec_from_path(vec_str_t *path, char **argv, char **envp)
 {
@@ -42,9 +40,9 @@ static void exec_from_path(vec_str_t *path, char **argv, char **envp)
 static void perror_wrapper(str_t *file)
 {
     switch (errno) {
-        case ENOENT: dprintf(2, ERROR[0], str_tocstr(file)); break;
-        case EACCES: dprintf(2, ERROR[1], str_tocstr(file)); break;
-        case ENOEXEC: dprintf(2, ERROR[2], str_tocstr(file)); break;
+        case ENOENT: dprintf(2, NOT_FOUND, str_tocstr(file)); break;
+        case EACCES: dprintf(2, PERM_DENI, str_tocstr(file)); break;
+        case ENOEXEC: dprintf(2, EXEC_ERR, str_tocstr(file)); break;
         default: dprintf(2, "%s: %s.\n", str_tocstr(file), strerror(errno));
     }
 }
@@ -85,7 +83,7 @@ void exec_command(
         pipe_apply(state);
         redirect_apply(state);
         restore_signals();
-        if (state->is_atty && !state->exec_cmd_in_bg) {
+        if (state->is_atty) {
             state->cmd_pgid =
                 (state->cmd_pgid == -1) ? getpid() : state->cmd_pgid;
             setpgid(0, state->cmd_pgid);
