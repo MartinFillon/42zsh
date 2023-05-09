@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 
 #include "mysh/exec.h"
@@ -15,10 +16,11 @@
 static pid_t find_latest_process(shell_t *state)
 {
     while (state->jobs->size > 0) {
-        if (kill(-VEC_LAST(state->jobs), SIGCONT) < 0) {
+        if (kill(-VEC_LAST(state->jobs).pgid, SIGCONT) < 0) {
+            free(VEC_LAST(state->jobs).cmd);
             vec_popback(state->jobs);
         } else {
-            return VEC_LAST(state->jobs);
+            return VEC_LAST(state->jobs).pgid;
         }
     }
 

@@ -18,19 +18,17 @@
 
 void kill_children(shell_t *state)
 {
-    vec_pid_t *pids = state->jobs;
+    vec_job_t *pids = state->jobs;
 
     for (size_t i = 0; i < pids->size; ++i) {
-        kill(pids->data[i], SIGKILL);
+        kill(pids->data[i].pgid, SIGKILL);
     }
 }
 
 void waitpid_for_process(shell_t *state, pid_t pid, int *code)
 {
     waitpid(pid, code, WUNTRACED);
-    signal(SIGTTOU, SIG_IGN);
     tcsetpgrp(STDIN_FILENO, state->shell_pgid);
-    signal(SIGTTOU, SIG_DFL);
 }
 
 void wait_for_process(shell_t *state, pid_t pid)
@@ -40,7 +38,6 @@ void wait_for_process(shell_t *state, pid_t pid)
     setpgid(pid, state->cmd_pgid);
     if (!state->exec_cmd_in_bg)
         tcsetpgrp(STDIN_FILENO, state->cmd_pgid);
-    vec_pushback(&state->jobs, &pid);
     if (state->redirect.is_active)
         redirect_reset(&state->redirect);
     if (state->pipe.is_active) {
