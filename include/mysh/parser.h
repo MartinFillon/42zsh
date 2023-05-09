@@ -38,5 +38,4 @@ typedef struct shell_s shell_t;
 // TREE
 btree_t *gen_exec_tree(char const *line, shell_t *state);
 
-
 #endif /* MYSH_PARSER_ */

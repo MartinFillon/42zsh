@@ -14,11 +14,15 @@
 
 static str_t *get_history_str(history_t *history, char *input)
 {
-    for (size_t i = history->entries->size - 1;i != 0; i--){
+    for (size_t i = history->entries->size - 1;i > 0; i--){
         if (strncmp(input, history->entries->data[i].command->data,
             strlen(input)) == 0){
             return history->entries->data[i].command;
         }
+    }
+    if (strncmp(input, history->entries->data[0].command->data,
+        strlen(input)) == 0){
+        return history->entries->data[0].command;
     }
     return NULL;
 }
@@ -26,7 +30,6 @@ static str_t *get_history_str(history_t *history, char *input)
 static str_t *exclamation_conditions(history_t *history, str_t *input)
 {
     size_t size = history->entries->size;
-    str_t *result = NULL;
 
     if (str_compare(input, STR("!")) == 0) {
         return history->entries->data[size - 1].command;
@@ -36,7 +39,7 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
     } else {
         return get_history_str(history, input->data);
     }
-    return result;
+    return NULL;
 }
 
 int get_exclamation(str_t **line, long index, shell_t *state)
@@ -48,12 +51,12 @@ int get_exclamation(str_t **line, long index, shell_t *state)
     designator = exclamation_conditions(&state->history, designator);
     if (designator != NULL){
         str_insert_str(line, index, designator);
-        str_slice(line, 0, index + designator->length);
+        str_slice(line, 0, index + designator->length + 1);
         printf("%s\n", (*line)->data);
-        free(designator);
         return 0;
+    } else {
+        free(designator);
     }
-    free(designator);
     dprintf(2, "%s: Event not found.\n", (*line)->data);
     return 1;
 }
