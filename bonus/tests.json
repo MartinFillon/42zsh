@@ -452,6 +452,14 @@
     {
       "name": "subshell 1",
       "run": ["(cd ..; pwd | cat -e); pwd"]
+    },
+    {
+      "name": "where builtin",
+      "run": ["where cd"]
+    },
+    {
+      "name": "where builtin error",
+      "run": ["where"]
     }
   ]
 }

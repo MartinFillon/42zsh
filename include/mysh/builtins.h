@@ -47,4 +47,6 @@ int builtin_if(vec_str_t *, shell_t *);
 int builtin_foreach(vec_str_t *, shell_t *);
 
 int builtin_foreach(vec_str_t *, shell_t *);
+
+int builtin_where(vec_str_t *, shell_t *);
 #endif /* MYSH_BUILTINS_H */
