@@ -12,7 +12,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-str_t *get_history_str(history_t *history, char *input)
+static str_t *get_history_str(history_t *history, char *input)
 {
     for (size_t i = history->entries->size - 1;i != 0; i--){
         if (strncmp(input, history->entries->data[i].command->data,
@@ -23,7 +23,7 @@ str_t *get_history_str(history_t *history, char *input)
     return NULL;
 }
 
-str_t *exclamation_conditions(history_t *history, str_t *input)
+static str_t *exclamation_conditions(history_t *history, str_t *input)
 {
     size_t size = history->entries->size;
     str_t *result = NULL;
@@ -50,8 +50,10 @@ int get_exclamation(str_t **line, long index, shell_t *state)
         str_insert_str(line, index, designator);
         str_slice(line, 0, index + designator->length);
         printf("%s\n", (*line)->data);
+        free(designator);
         return 0;
     }
+    free(designator);
     dprintf(2, "%s: Event not found.\n", (*line)->data);
     return 1;
 }
