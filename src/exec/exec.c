@@ -75,10 +75,8 @@ void exec_command(
 {
     pid_t pid = fork();
 
-    if (pid == -1) {
-        perror("fork");
+    if (pid == -1)
         exit(1);
-    }
     if (pid == 0) {
         pipe_apply(state);
         redirect_apply(state);
@@ -92,5 +90,7 @@ void exec_command(
     }
     if (state->cmd_pgid == -1)
         state->cmd_pgid = pid;
+    job_t job = {pid, str_join(av, STR(" "))};
+    vec_pushback(&state->jobs, &job);
     wait_for_process(state, pid);
 }

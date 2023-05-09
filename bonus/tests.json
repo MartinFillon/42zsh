@@ -452,6 +452,10 @@
     {
       "name": "subshell 1",
       "run": ["(cd ..; pwd | cat -e); pwd"]
+    },
+    {
+      "name": "backtick with error",
+      "run": ["echo `ls | cut`"]
     }
   ]
 }
