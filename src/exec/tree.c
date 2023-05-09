@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "my_map.h"
 #include "my_str.h"
 #include "my_vec.h"
 
@@ -29,6 +30,23 @@ static int should_exit(shell_t *state, vec_str_t *av)
     return 0;
 }
 
+static void exec_alias(shell_t *state, str_t *alias, vec_str_t *av)
+{
+    map_set(state->alias, av->data[0], NULL);
+
+    str_t *line = str_dup(alias);
+    for (size_t i = 1; i < av->size; ++i)
+        str_sadd(&line, av->data[i]);
+
+    btree_t *tree = gen_exec_tree(str_tocstr(line), state);
+    exec_tree(state, tree->root);
+
+    btree_free(tree);
+    free(line);
+
+    map_set(state->alias, av->data[0], alias);
+}
+
 static void exec_wrapper_inner(shell_t *state, vec_str_t *av)
 {
     int (*builtin)(vec_str_t *, shell_t *) = NULL;
@@ -42,8 +60,9 @@ static void exec_wrapper_inner(shell_t *state, vec_str_t *av)
         return;
     }
     if ((alias = map_get(state->alias, av->data[0])) != NULL) {
+        exec_alias(state, alias, av);
         vec_free(av);
-        av = parse_args(state, alias->data);
+        return;
     }
     exec_command(state, builtin, av);
     vec_free(av);

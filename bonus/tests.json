@@ -456,6 +456,18 @@
     {
       "name": "backtick with error",
       "run": ["echo `ls | cut`"]
+    },
+    {
+      "name": "alias simple",
+      "run": ["alias test echo Hello world", "test"]
+    },
+    {
+      "name": "alias complex command",
+      "run": ["alias test 'echo hello | cat -e'", "test"]
+    },
+    {
+      "name": "alias error",
+      "run": ["alias test 'ls -la | cat -e'", "test -la"]
     }
   ]
 }

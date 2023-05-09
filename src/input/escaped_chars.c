@@ -13,7 +13,7 @@ static void remove_quotes(str_t *arg, int *quotes, size_t *i)
     int *_dquote = &quotes[1];
 
     if (arg->data[*i] == '\'')
-        *_dquote = !*_quote;
+        *_quote = !*_quote;
     if (arg->data[*i] == '"')
         *_dquote = !*_dquote;
     if ((arg->data[*i] == '\'' && !*_dquote) ||
