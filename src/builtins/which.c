@@ -2,19 +2,18 @@
 ** EPITECH PROJECT, 2023
 ** 42zsh
 ** File description:
-** where
+** which
 */
 
-#include <stddef.h>
 #include <stdio.h>
+
 #include "mysh/mysh.h"
 #include "my_str.h"
 
-static int is_in_path(str_t *s, shell_t *state)
+static int which_path(str_t *s, shell_t *state)
 {
     str_t *path = map_get(state->env, STR("PATH"));
     vec_str_t *paths = NULL;
-    int err = 0;
 
     if (path == NULL)
         return 1;
@@ -25,39 +24,35 @@ static int is_in_path(str_t *s, shell_t *state)
         str_sadd(&paths->data[i], s);
         if (access(paths->data[i]->data, F_OK) == 0) {
             printf("%s\n", paths->data[i]->data);
-            err |= 1;
+            return 0;
         }
     }
-    return err;
+    return 1;
 }
 
 static int check_presence(str_t *s, shell_t *state)
 {
     str_t *tmp;
-    int err = 0;
 
     if ((tmp = map_get(state->alias, s)) != NULL) {
-        printf("%s is aliased to %s\n", s->data, tmp->data);
-        err |= 1;
+        tmp->data[tmp->length - 1] = (tmp->data[tmp->length - 1] == ' ')
+            ? '\0'
+            : tmp->data[tmp->length - 1];
+        printf("%s: \t aliased to %s\n", s->data, tmp->data);
+        return 0;
     }
     if ((tmp = map_get(state->builtins, s)) != NULL) {
-        printf("%s is a shell built-in\n", s->data);
-        err |= 1;
+        printf("%s: shell built-in command\n", s->data);
+        return 0;
     }
-    err |= is_in_path(s, state);
-    return (!err);
+    return which_path(s, state);
 }
 
-int builtin_where(vec_str_t *av, shell_t *state)
+int builtin_which(vec_str_t *av, shell_t *state)
 {
     int err = 0;
 
-    if (av->size == 1) {
-        dprintf(0, "where: Too few arguments.\n");
-        return (1);
-    }
-    for (size_t i = 1; i < av->size; i++) {
+    for (size_t i = 1; i < av->size; i++)
         err |= check_presence(av->data[i], state);
-    }
     return (err);
 }

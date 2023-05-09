@@ -36,6 +36,7 @@ SRC	=	./src/main.c								\
 		./src/builtins/scripting/if.c 				\
 		./src/builtins/scripting/foreach.c 			\
 		./src/builtins/where.c 						\
+		./src/builtins/which.c 						\
 		./src/exec/exec.c							\
 		./src/exec/process.c						\
 		./src/exec/tree.c							\

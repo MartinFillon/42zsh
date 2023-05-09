@@ -27,6 +27,6 @@ map_t *builtins_create(void)
     map_set(cmd, STR("if"), &builtin_if);
     map_set(cmd, STR("foreach"), &builtin_foreach);
     map_set(cmd, STR("where"), &builtin_where);
-
+    map_set(cmd, STR("which"), &builtin_which);
     return cmd;
 }
