@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "my_btree.h"
 #include "my_map.h"
@@ -20,6 +21,8 @@
 #include "mysh/parser.h"
 #include "mysh/read.h"
 #include "mysh/termios.h"
+
+static const char PROMPT[] = "\033[1;31m42zsh $>\033[0m ";
 
 static void parse_input(shell_t *state, char *input)
 {
@@ -55,9 +58,11 @@ static str_t *handle_no_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp = NULL;
+    char *prompt = strdup(PROMPT);
 
     while (!state->stop_shell) {
-        temp = (state->is_atty) ? handle_line_editing(state) : handle_no_tty();
+        temp = (state->is_atty) ? handle_line_editing(state, prompt)
+                                : handle_no_tty();
         if (temp == NULL)
             break;
 
@@ -66,4 +71,5 @@ void read_input(shell_t *state)
         free(temp);
     }
     save_history(&state->history);
+    free(prompt);
 }

@@ -13,6 +13,9 @@
     #include "my_map.h"
     #include "mysh/history.h"
 
+    #define EQUAL 1
+    #define NOT_EQUAL 0
+
 
 typedef int fd_set_t[2];
 

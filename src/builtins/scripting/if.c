@@ -13,9 +13,6 @@
 #include "mysh/mysh.h"
 #include "my_str.h"
 
-#define EQUAL 1
-#define NOT_EQUAL 0
-
 static int exec_on_condition(vec_str_t *av, shell_t *state, int operation)
 {
     int right = str_toint(av->data[3]);
