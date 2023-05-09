@@ -41,10 +41,11 @@ static int check_hist_cases(vec_str_t *av, shell_t *state)
     if (str_isnum(av->data[1]) == 1) {
         if (size > 100) {
             print_history(&state->history,
-                size - ((size > atof(av->data[1]->data)) ?
-                    atof(av->data[1]->data) : 100));
+            size - ((size > atof(av->data[1]->data)) ?
+            atof(av->data[1]->data) : 100));
         } else {
-            print_history(&state->history, 0);
+            print_history(&state->history, (size > atof(av->data[1]->data)) ?
+            size - atof(av->data[1]->data) : 0);
         }
         return 0;
     }
