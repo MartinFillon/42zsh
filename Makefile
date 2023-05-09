@@ -75,12 +75,6 @@ all:	lib $(NAME)
 $(NAME):	$(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
-tests_run: all
-	make -C ./tests/unit_tests
-
-func_run: all
-	make -C ./tests/func_tests
-
 lib:
 	make -C ./lib
 
@@ -90,8 +84,6 @@ clean:
 
 fclean:	clean
 	make -C ./lib fclean
-	make -C ./tests/unit_tests fclean
-	make -C ./tests/func_tests clean
 	$(RM) $(NAME)
 
 re:	fclean lib all
