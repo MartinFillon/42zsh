@@ -29,6 +29,8 @@ static void read_output(str_t **out, int fd)
 static void exec_sub_proc(shell_t *state, str_t *sub_cmd, int p[2])
 {
     dup2(p[1], STDOUT_FILENO);
+    state->redirect.is_active = false;
+    state->pipe.is_active = false;
     btree_t *tree = gen_exec_tree(sub_cmd->data, state);
     exec_tree(state, tree->root);
     btree_free(tree);

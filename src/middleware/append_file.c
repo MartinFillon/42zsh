@@ -49,4 +49,5 @@ void append_file_middleware(shell_t *state, bnode_t *node)
     }
     exec_tree(state, node->left);
     free(file);
+    redirect_reset(&state->redirect);
 }

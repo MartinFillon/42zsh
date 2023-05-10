@@ -8,9 +8,10 @@
 #ifndef MYSH_HISTORY_
     #define MYSH_HISTORY_
 
-    #include "my_map.h"
-
     #include <time.h>
+    #include <stdbool.h>
+
+    #include "my_map.h"
 
 typedef struct history_entry_s {
     time_t timestamp;
@@ -33,6 +34,6 @@ void save_history(history_t *history);
 
 typedef struct shell_s shell_t;
 
-int get_exclamation(str_t **line, shell_t *state);
+bool get_exclamation(str_t **line, shell_t *state);
 
 #endif /* MYSH_HISTORY_*/

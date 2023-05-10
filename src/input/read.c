@@ -33,7 +33,6 @@ void parse_input(shell_t *state, char *input)
     remove_zombies(state);
     if ((cmd = map_get(state->alias, STR("postcmd"))) != NULL)
         exec_wrapper(state, cmd->data);
-
     exec_tree(state, tree->root);
     btree_free(tree);
     if ((cmd = map_get(state->alias, STR("precmd"))) != NULL)
@@ -59,6 +58,7 @@ static str_t *handle_no_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp = NULL;
+    char *prompt = strdup(PROMPT);
 
     while (!state->stop_shell) {
         temp = (state->is_atty)
@@ -72,4 +72,5 @@ void read_input(shell_t *state)
         free(temp);
     }
     save_history(&state->history);
+    free(prompt);
 }
