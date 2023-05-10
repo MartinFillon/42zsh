@@ -12,7 +12,6 @@
 map_t *builtins_create(void)
 {
     map_t *cmd = map_create(30);
-
     map_set(cmd, STR("cd"), &builtin_chdir);
     map_set(cmd, STR("env"), &builtin_env);
     map_set(cmd, STR("setenv"), &builtin_setenv);
@@ -30,6 +29,5 @@ map_t *builtins_create(void)
     map_set(cmd, STR("where"), &builtin_where);
     map_set(cmd, STR("which"), &builtin_which);
     map_set(cmd, STR("repeat"), &builtin_repeat);
-
     return cmd;
 }
