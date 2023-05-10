@@ -41,7 +41,7 @@ void heredoc_middleware(shell_t *state, bnode_t *node)
     redirect_t *r = &state->redirect;
     char *end = trim_string(node->right->data);
 
-    if (pipe(fds) == -1)
+    if (pipe(fds) < 0)
         exit(1);
 
     r->is_active = 1;

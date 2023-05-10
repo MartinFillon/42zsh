@@ -32,7 +32,6 @@ static void parse_input(shell_t *state, char *input)
     remove_zombies(state);
     if ((cmd = map_get(state->alias, STR("postcmd"))) != NULL)
         exec_wrapper(state, cmd->data);
-
     exec_tree(state, tree->root);
     btree_free(tree);
     if ((cmd = map_get(state->alias, STR("precmd"))) != NULL)

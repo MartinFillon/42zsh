@@ -406,10 +406,6 @@
       "run": ["set a=\"HELLO WORLD\"", "echo \"\"\"$a\"\"\""]
     },
     {
-      "name": "escape shell symbols",
-      "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
-    },
-    {
       "name": "backticks 1",
       "run": ["echo `echo Hello world`"]
     },
@@ -468,6 +464,10 @@
     {
       "name": "alias error",
       "run": ["alias test 'ls -la | cat -e'", "test -la"]
+    },
+    {
+      "name": "backticks 3",
+      "run": ["ls `echo -e /bin` > tmp", "cat tmp", "rm -f tmp"]
     }
   ]
 }

@@ -30,8 +30,9 @@ static int should_exit(shell_t *state, vec_str_t *av)
     return 0;
 }
 
-static void exec_alias(shell_t *state, str_t *alias, vec_str_t *av)
+static void exec_alias(shell_t *state, vec_str_t *av)
 {
+    str_t *alias = map_get(state->alias, av->data[0]);
     map_set(state->alias, av->data[0], NULL);
 
     str_t *line = str_dup(alias);
@@ -50,17 +51,20 @@ static void exec_alias(shell_t *state, str_t *alias, vec_str_t *av)
 static void exec_wrapper_inner(shell_t *state, vec_str_t *av)
 {
     int (*builtin)(vec_str_t *, shell_t *) = NULL;
-    int is_out_pipe = !state->pipe.is_active || state->pipe.action == READ;
-    str_t *alias = NULL;
+    int dont_redirect_output =
+        (!state->pipe.is_active || state->pipe.action == READ) &&
+        (!state->redirect.is_active || state->redirect.action == READ);
 
     if ((builtin = map_get(state->builtins, av->data[0])) != NULL &&
-        is_out_pipe) {
+        dont_redirect_output) {
         state->return_code = builtin(av, state);
         vec_free(av);
         return;
     }
-    if ((alias = map_get(state->alias, av->data[0])) != NULL) {
-        exec_alias(state, alias, av);
+    if (str_startswith(av->data[0], STR("\\"))) {
+        str_erase_at_idx(&av->data[0], 0);
+    } else if (map_get(state->alias, av->data[0]) != NULL) {
+        exec_alias(state, av);
         vec_free(av);
         return;
     }
