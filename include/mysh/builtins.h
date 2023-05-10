@@ -30,9 +30,7 @@ int builtin_fg(vec_str_t *, shell_t *);
 
 int builtin_jobs(vec_str_t *, shell_t *);
 
-int builtin_fg(vec_str_t *, shell_t *);
-
-int builtin_jobs(vec_str_t *, shell_t *);
+int builtin_echo(vec_str_t *, shell_t *);
 
 int builtin_alias(vec_str_t *, shell_t *);
 

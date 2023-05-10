@@ -24,6 +24,7 @@ map_t *builtins_create(void)
     map_set(cmd, STR("unalias"), &builtin_unalias);
     map_set(cmd, STR("unset"), &builtin_unset);
     map_set(cmd, STR("history"), &builtin_history);
+    map_set(cmd, STR("echo"), &builtin_echo);
 
     return cmd;
 }
