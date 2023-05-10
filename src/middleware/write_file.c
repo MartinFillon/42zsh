@@ -51,4 +51,5 @@ void write_file_middleware(shell_t *state, bnode_t *node)
     exec_tree(state, node->left);
     r->is_active = 0;
     free(file);
+    redirect_reset(&state->redirect);
 }

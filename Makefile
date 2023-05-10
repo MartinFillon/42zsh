@@ -28,6 +28,7 @@ SRC	=	./src/main.c								\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
+		./src/builtins/echo.c						\
 		./src/builtins/history.c					\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\

@@ -7,6 +7,7 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 
 #include "my_str.h"
@@ -29,6 +30,12 @@ void waitpid_for_process(shell_t *state, pid_t pid, int *code)
 {
     waitpid(pid, code, WUNTRACED);
     tcsetpgrp(STDIN_FILENO, state->shell_pgid);
+
+    if (WIFEXITED(*code) || WIFSIGNALED(*code)) {
+        long job_idx = find_job_by_pid(state, pid);
+        free(state->jobs->data[job_idx].cmd);
+        vec_remove(state->jobs, job_idx);
+    }
 }
 
 void wait_for_process(shell_t *state, pid_t pid)
@@ -38,8 +45,6 @@ void wait_for_process(shell_t *state, pid_t pid)
     setpgid(pid, state->cmd_pgid);
     if (!state->exec_cmd_in_bg)
         tcsetpgrp(STDIN_FILENO, state->cmd_pgid);
-    if (state->redirect.is_active)
-        redirect_reset(&state->redirect);
     if (state->pipe.is_active) {
         if (state->pipe.first_pid == -1)
             state->pipe.first_pid = pid;
