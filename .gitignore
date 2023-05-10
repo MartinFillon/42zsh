@@ -25,6 +25,7 @@ coding-style-reports.log
 compile_commands.json
 *.log
 /.42sh_history
+/.42zshrc
 
 # project bin
 /42sh
