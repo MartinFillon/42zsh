@@ -6,6 +6,7 @@
 */
 
 #include <ctype.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "mysh/mysh.h"
@@ -31,17 +32,19 @@ static int get_variable(
 )
 {
     size_t start = *i;
+    size_t skip = line[*i + 1] == '{';
     str_t *var_name = NULL;
     str_t *value = NULL;
 
+    *i += skip;
     while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
         ++*i;
-    if (start == *i)
-        return 0;
-    var_name = str_ncreate(line + start + 1, *i - start);
+    if (start == *i) return 0;
+    var_name = str_ncreate(line + start + 1 + skip, *i - start - skip);
     if ((value = map_get(state->env, var_name)) != NULL ||
         (value = map_get(state->vars, var_name)) != NULL) {
         str_sadd(new, value);
+        *i += skip;
         free(var_name);
         return 0;
     }

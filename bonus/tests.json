@@ -450,6 +450,14 @@
       "run": ["(cd ..; pwd | cat -e); pwd"]
     },
     {
+      "name": "where builtin",
+      "run": ["where cd"]
+    },
+    {
+      "name": "where builtin error",
+      "run": ["where"]
+    },
+    {
       "name": "backtick with error",
       "run": ["echo `ls | cut`"]
     },
@@ -468,6 +476,18 @@
     {
       "name": "backticks 3",
       "run": ["ls `echo -e /bin` > tmp", "cat tmp", "rm -f tmp"]
+    },
+    {
+      "name": "repeat builtin",
+      "run": ["repeat 5 echo Hello"]
+    },
+    {
+      "name": "repeat builtin error",
+      "run": ["repeat"]
+    },
+    {
+      "name": "repeat 2",
+      "run": ["repeat 5 ls", "repeat 5 ls"]
     }
   ]
 }

@@ -25,6 +25,11 @@ map_t *builtins_create(void)
     map_set(cmd, STR("unset"), &builtin_unset);
     map_set(cmd, STR("history"), &builtin_history);
     map_set(cmd, STR("echo"), &builtin_echo);
+    map_set(cmd, STR("if"), &builtin_if);
+    map_set(cmd, STR("foreach"), &builtin_foreach);
+    map_set(cmd, STR("where"), &builtin_where);
+    map_set(cmd, STR("which"), &builtin_which);
+    map_set(cmd, STR("repeat"), &builtin_repeat);
 
     return cmd;
 }
