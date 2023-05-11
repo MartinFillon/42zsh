@@ -30,6 +30,8 @@ str_t *exec_backticks(shell_t *state, str_t *line);
 
 str_t *exec_sub_shell(shell_t *state, str_t *line);
 
+int exec_sub_proc(shell_t *state, str_t *cmd);
+
 str_t *parse_variables(char const *line, shell_t *state);
 
 vec_str_t *get_globbings(vec_str_t *args);

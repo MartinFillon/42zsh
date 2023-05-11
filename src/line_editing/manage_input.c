@@ -41,7 +41,7 @@ static void add_char(size_t *pos, str_t **input, char c)
 }
 
 static bool handle_composed_char(
-    char *prompt, char *c, struct input_s *input, shell_t *state
+    char const *prompt, char *c, struct input_s *input, shell_t *state
 )
 {
     read(STDIN_FILENO, c, 1);
@@ -63,7 +63,7 @@ static bool handle_composed_char(
 }
 
 bool manage_input(
-    char *prompt, char c, struct input_s *input, shell_t *state
+    char const *prompt, char c, struct input_s *input, shell_t *state
 )
 {
     if (c == ESCAPE && handle_composed_char(prompt, &c, input, state))
