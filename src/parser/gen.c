@@ -40,7 +40,7 @@ static int should_ignored(int *ignore)
 
 static int find_line(bnode_t **node, char const *symbol, char *line)
 {
-    char *symb = NULL;
+    char const *symb = NULL;
     int ignore[4] = {0};
 
     for (long i = strlen(line) - 1; i >= 0; --i) {
@@ -50,7 +50,7 @@ static int find_line(bnode_t **node, char const *symbol, char *line)
             continue;
         if (symb != NULL && !should_ignored(ignore)) {
             line[i] = '\0';
-            (*node)->data = symb;
+            (*node)->data = strdup(symb);
             parse_line(&(*node)->left, strdup(line));
             parse_line(&(*node)->right, strdup(line + i + strlen(symb)));
             free(line);

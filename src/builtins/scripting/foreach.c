@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include "my_btree.h"
+#include "my_map.h"
 #include "my_str.h"
 #include "my_vec.h"
 
@@ -28,14 +29,14 @@ static vec_str_t *get_commands(shell_t *state)
     char *prompt = strdup(PROMPT);
     str_t *tmp = NULL;
 
-    tmp = handle_line_editing(state, prompt);
+    tmp = get_user_input(state, prompt);
     if (tmp == NULL) {
         dprintf(2, "foreach: end not found.\n");
         return NULL;
     }
     while (str_compare(tmp, STR("end")) != 0) {
         vec_pushback(&commands, &tmp);
-        tmp = handle_line_editing(state, prompt);
+        tmp = get_user_input(state, prompt);
         if (tmp == NULL) {
             dprintf(2, "foreach: end not found.\n");
             return NULL;
@@ -97,6 +98,7 @@ int builtin_foreach(vec_str_t *av, shell_t *state)
     for (size_t i = 0; i < list->size; i++) {
         map_set(state->vars, var, list->data[i]);
         exec_commands(state, commands);
+        map_del(state->vars, var);
     }
     vec_free(commands);
     vec_free(list);

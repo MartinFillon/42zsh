@@ -51,25 +51,36 @@ static str_t *handle_no_tty(void)
     }
     input[l_size - 1] = '\0';
     if (input[0] == '\0')
-        return handle_no_tty();
+        return NULL;
     return str_create(input);
 }
 
-void read_input(shell_t *state)
+str_t *get_user_input(shell_t *state, char const *prompt)
+{
+    if (state->is_atty)
+        return handle_line_editing(state, prompt);
+    return handle_no_tty();
+}
+
+static void update_return_code(shell_t *state)
+{
+    if (map_get(state->vars, STR("?")) != NULL)
+        free(map_get(state->vars, STR("?")));
+
+    map_set(state->vars, STR("?"), my_itostr(state->return_code));
+}
+
+void shell_loop(shell_t *state)
 {
     str_t *temp = NULL;
     char const *prompt;
 
     while (!state->stop_shell) {
         prompt = str_tocstr(map_get(state->vars, STR("prompt")));
-        map_set(state->vars, STR("?"), my_itostr(state->return_code));
-
-        temp = (state->is_atty) ? handle_line_editing(state, prompt)
-                                : handle_no_tty();
-        if (temp == NULL)
+        update_return_code(state);
+        if ((temp = get_user_input(state, prompt)) == NULL)
             break;
         parse_input(state, temp->data);
         free(temp);
     }
-    save_history(&state->history);
 }

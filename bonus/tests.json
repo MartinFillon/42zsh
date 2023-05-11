@@ -484,6 +484,10 @@
     {
       "name": "repeat 2",
       "run": ["repeat 5 ls", "repeat 5 ls"]
+    },
+    {
+      "name": "foreach 1",
+      "run":["foreach toto (1 2 3 4 5)", "echo $toto", "end"]
     }
   ]
 }

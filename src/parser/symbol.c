@@ -19,9 +19,9 @@ int is_symbol(char *data)
     return 0;
 }
 
-char *find_symbol(char const *symbol, char *line_at)
+char const *find_symbol(char const *symbol, char *line_at)
 {
     if (strncmp(line_at, symbol, strlen(symbol)) == 0)
-        return strdup(symbol);
+        return symbol;
     return NULL;
 }
