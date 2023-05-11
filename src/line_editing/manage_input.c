@@ -41,7 +41,7 @@ static void add_char(size_t *pos, str_t **input, char c)
 }
 
 static bool handle_composed_char(
-    char *c, str_t **input, size_t *pos, shell_t *state
+    char *prompt, char *c, str_t **input, size_t *pos, shell_t *state
 )
 {
     read(STDIN_FILENO, c, 1);
@@ -58,21 +58,28 @@ static bool handle_composed_char(
     } else if (handle_arrows(*c, input, pos, state) == false) {
         return false;
     }
-    print_prompt(input, pos);
+    print_prompt(prompt, input, pos);
     return true;
 }
 
-bool manage_input(char c, str_t **input, size_t *pos, shell_t *state)
+bool manage_input(
+    char *prompt, char c, str_t **input, size_t *pos, shell_t *state
+)
 {
-    if (c == ESCAPE && handle_composed_char(&c, input, pos, state))
+    if (c == ESCAPE && handle_composed_char(prompt, &c, input, pos, state))
         return false;
 
     switch (c) {
-        case KILL: free(*input); *input = NULL; return true;
-        case ENTER: print_prompt(input, pos); return true;
+        case KILL:
+            free(*input);
+            *input = NULL;
+            return true;
+        case ENTER: print_prompt(prompt, input, pos); return true;
         case DELETE: delete_char(pos, input); break;
-        default: if (isprint(c)) add_char(pos, input, c);
+        default:
+            if (isprint(c))
+                add_char(pos, input, c);
     }
-    print_prompt(input, pos);
+    print_prompt(prompt, input, pos);
     return false;
 }

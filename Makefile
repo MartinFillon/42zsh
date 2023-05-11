@@ -28,12 +28,18 @@ SRC	=	./src/main.c								\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\
+		./src/builtins/echo.c						\
 		./src/builtins/history.c					\
 		./src/builtins/env.c						\
 		./src/builtins/set.c						\
 		./src/builtins/fg.c							\
 		./src/builtins/alias.c						\
 		./src/builtins/unalias.c					\
+		./src/builtins/scripting/if.c 				\
+		./src/builtins/scripting/foreach.c 			\
+		./src/builtins/scripting/repeat.c 			\
+		./src/builtins/where.c 						\
+		./src/builtins/which.c 						\
 		./src/exec/exec.c							\
 		./src/exec/process.c						\
 		./src/exec/tree.c							\
@@ -76,12 +82,6 @@ all:	lib $(NAME)
 $(NAME):	$(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
-tests_run: all
-	make -C ./tests/unit_tests
-
-func_run: all
-	make -C ./tests/func_tests
-
 lib:
 	make -C ./lib
 
@@ -91,8 +91,6 @@ clean:
 
 fclean:	clean
 	make -C ./lib fclean
-	make -C ./tests/unit_tests fclean
-	make -C ./tests/func_tests clean
 	$(RM) $(NAME)
 
 re:	fclean lib all

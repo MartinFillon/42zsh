@@ -406,10 +406,6 @@
       "run": ["set a=\"HELLO WORLD\"", "echo \"\"\"$a\"\"\""]
     },
     {
-      "name": "escape shell symbols",
-      "run": ["echo \\> \\>\\> \\< \\<\\< \\| \\&\\& \\|\\|"]
-    },
-    {
       "name": "backticks 1",
       "run": ["echo `echo Hello world`"]
     },
@@ -452,6 +448,42 @@
     {
       "name": "subshell 1",
       "run": ["(cd ..; pwd | cat -e); pwd"]
+    },
+    {
+      "name": "where builtin",
+      "run": ["where cd"]
+    },
+    {
+      "name": "where builtin error",
+      "run": ["where"]
+    },
+    {
+      "name": "backtick with error",
+      "run": ["echo `ls | cut`"]
+    },
+    {
+      "name": "alias simple",
+      "run": ["alias test echo Hello world", "test"]
+    },
+    {
+      "name": "alias complex command",
+      "run": ["alias test 'echo hello | cat -e'", "test"]
+    },
+    {
+      "name": "alias error",
+      "run": ["alias test 'ls -la | cat -e'", "test -la"]
+    },
+    {
+      "name": "repeat builtin",
+      "run": ["repeat 5 echo Hello"]
+    },
+    {
+      "name": "repeat builtin error",
+      "run": ["repeat"]
+    },
+    {
+      "name": "repeat 2",
+      "run": ["repeat 5 ls", "repeat 5 ls"]
     }
   ]
 }

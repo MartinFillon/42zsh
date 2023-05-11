@@ -30,9 +30,7 @@ int builtin_fg(vec_str_t *, shell_t *);
 
 int builtin_jobs(vec_str_t *, shell_t *);
 
-int builtin_fg(vec_str_t *, shell_t *);
-
-int builtin_jobs(vec_str_t *, shell_t *);
+int builtin_echo(vec_str_t *, shell_t *);
 
 int builtin_alias(vec_str_t *, shell_t *);
 
@@ -41,5 +39,17 @@ int builtin_unalias(vec_str_t *, shell_t *);
 int builtin_unset(vec_str_t *, shell_t *);
 
 int builtin_history(vec_str_t *, shell_t *);
+
+int builtin_if(vec_str_t *, shell_t *);
+
+int builtin_foreach(vec_str_t *, shell_t *);
+
+int builtin_foreach(vec_str_t *, shell_t *);
+
+int builtin_where(vec_str_t *, shell_t *);
+
+int builtin_which(vec_str_t *, shell_t *);
+
+int builtin_repeat(vec_str_t *, shell_t *);
 
 #endif /* MYSH_BUILTINS_H */

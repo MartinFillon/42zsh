@@ -5,27 +5,26 @@
 ** exclamation
 */
 
-#include "mysh/mysh.h"
-#include "mysh/history.h"
-
-#include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-static str_t *get_history_str(history_t *history, char *input)
+#include "mysh/history.h"
+#include "mysh/mysh.h"
+
+static str_t *get_history_str(vec_history_entry_t *ent, char *input)
 {
-    if (history->entries->size == 0)
+    if (ent->size == 0)
         return NULL;
-    for (size_t i = history->entries->size - 1;i > 0; i--){
-        if (strncmp(input, history->entries->data[i].command->data,
-            strlen(input)) == 0){
-            return history->entries->data[i].command;
-        }
-    }
-    if (strncmp(input, history->entries->data[0].command->data,
-        strlen(input)) == 0){
-        return history->entries->data[0].command;
-    }
+
+    for (size_t i = ent->size - 1; i > 0; i--)
+        if (strncmp(input, ent->data[i].command->data, strlen(input)) == 0)
+            return ent->data[i].command;
+
+    if (strncmp(input, ent->data[0].command->data, strlen(input)) == 0)
+        return ent->data[0].command;
+
     return NULL;
 }
 
@@ -42,12 +41,12 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
         if (str_ncompare(input, STR("-"), 1) == 0) {
             return history->entries->data[size + atoi(input->data)].command;
         }
-        return get_history_str(history, input->data);
+        return get_history_str(history->entries, input->data);
     }
     return NULL;
 }
 
-int get_exclamation(str_t **line, shell_t *state)
+bool get_exclamation(str_t **line, shell_t *state)
 {
     long ind = str_find(*line, STR("!"), 0);
     str_t *designator = str_ncreate((*line)->data + ind, (*line)->length - ind);
@@ -60,13 +59,13 @@ int get_exclamation(str_t **line, shell_t *state)
     str_erase_at_idx(&designator, 0);
     tmp = exclamation_conditions(&state->history, designator);
     free(designator);
-    if (tmp != NULL){
+    if (tmp != NULL) {
         str_insert_str(line, ind, tmp);
         str_slice(line, 0, ind + tmp->length);
         printf("%s\n", (*line)->data);
-        return 0;
+        return false;
     }
     str_erase_at_idx(line, 0);
-    dprintf(2, "%s: Event not found.\n", str_tocstr(*line));
-    return 1;
+    dprintf(2, "%s: Event not found.\n", (*line)->data);
+    return true;
 }

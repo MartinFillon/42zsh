@@ -14,7 +14,10 @@
 int builtin_jobs(vec_str_t UNUSED *av, shell_t *state)
 {
     for (size_t i = 0; i < state->jobs->size; ++i) {
-        printf("[%ld] %d\n", i + 1, state->jobs->data[i]);
+        printf(
+            "[%ld] %d %s\n", i + 1, state->jobs->data[i].pgid,
+            str_tocstr(state->jobs->data[i].cmd)
+        );
     }
 
     return 0;
