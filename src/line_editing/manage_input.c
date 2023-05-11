@@ -41,7 +41,7 @@ static void add_char(size_t *pos, str_t **input, char c)
 }
 
 static bool handle_composed_char(
-    char const *prompt, char *c, struct input_s *input, shell_t *state
+    char const *prompt, char *c, shell_input_t *in, shell_t *state
 )
 {
     read(STDIN_FILENO, c, 1);
@@ -51,35 +51,33 @@ static bool handle_composed_char(
     read(STDIN_FILENO, c, 1);
     if (*c == BEFORE_SUPPR) {
         read(STDIN_FILENO, c, 1);
-        if (*c != SUPPR) {
+        if (*c != SUPPR)
             return false;
-        }
-        suppr_char(&input->pos, input->input);
-    } else if (handle_arrows(*c, input, state) == false) {
+
+        suppr_char(&in->pos, &in->input);
+    } else if (handle_arrows(*c, in, state) == false)
         return false;
-    }
-    print_prompt(prompt, input);
+
+    print_prompt(prompt, in);
     return true;
 }
 
-bool manage_input(
-    char const *prompt, char c, struct input_s *input, shell_t *state
-)
+bool manage_input(char const *prompt, char c, shell_input_t *in, shell_t *state)
 {
-    if (c == ESCAPE && handle_composed_char(prompt, &c, input, state))
+    if (c == ESCAPE && handle_composed_char(prompt, &c, in, state))
         return false;
 
     switch (c) {
         case KILL:
-            free(*input->input);
-            *input->input = NULL;
+            free(in->input);
+            in->input = NULL;
             return true;
-        case ENTER: print_prompt(prompt, input); return true;
-        case DELETE: delete_char(&input->pos, input->input); break;
+        case ENTER: print_prompt(prompt, in); return true;
+        case DELETE: delete_char(&in->pos, &in->input); break;
         default:
             if (isprint(c))
-                add_char(&input->pos, input->input, c);
+                add_char(&in->pos, &in->input, c);
     }
-    print_prompt(prompt, input);
+    print_prompt(prompt, in);
     return false;
 }

@@ -14,12 +14,12 @@
 
 #include "mysh/termios.h"
 
-void print_prompt(char const *prompt, struct input_s *input)
+void print_prompt(char const *prompt, shell_input_t *in)
 {
     printf("\033[2K\r");
-    printf("%s%s", prompt, (*input->input)->data);
-    if ((*input->input)->length - input->pos > 0)
-        printf("\033[%ldD", (*input->input)->length - input->pos);
+    printf("%s%s", prompt, in->input->data);
+    if (in->input->length - in->pos > 0)
+        printf("\033[%ldD", in->input->length - in->pos);
     fflush(stdout);
 }
 
@@ -36,12 +36,12 @@ str_t *handle_line_editing(shell_t *state, char const *prompt)
 {
     struct termios old_tio;
     struct termios new_tio;
-    struct input_s input = {&(str_t *){str_create("")}, 0, 0};
+    shell_input_t in = {str_create(""), 0, 0};
 
     printf("%s", prompt);
     setup_termios(&old_tio, &new_tio);
-    read_termios(prompt, state, &input);
+    read_termios(prompt, state, &in);
     printf("\n");
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
-    return (*input.input);
+    return in.input;
 }
