@@ -52,7 +52,8 @@ static void move_down_history(struct input_s *input, shell_t *state)
     if (*input->input)
         free(*input->input);
     *input->input =
-        str_dup(state->history.entries->data[size - input->history_position].command);
+        str_dup(state->history.entries->
+        data[size - input->history_position].command);
     input->pos = (*input->input)->length;
     fflush(stdout);
 }
@@ -68,7 +69,8 @@ static void move_up_history(struct input_s *input, shell_t *state)
     if (*input->input)
         free(*input->input);
     *input->input =
-        str_dup(state->history.entries->data[size - input->history_position].command);
+        str_dup(state->history.entries->
+        data[size - input->history_position].command);
     input->pos = (*input->input)->length;
     fflush(stdout);
 }
