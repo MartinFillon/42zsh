@@ -95,11 +95,12 @@ int builtin_foreach(vec_str_t *av, shell_t *state)
         return 1;
     }
     for (size_t i = 0; i < list->size; i++) {
+        if (map_get(state->vars, var) != NULL)
+            free(map_get(state->vars, var));
         map_set(state->vars, var, list->data[i]);
         exec_commands(state, commands);
     }
     vec_free(commands);
-    vec_free(list);
     free(var);
     return 0;
 }
