@@ -36,4 +36,8 @@ typedef struct shell_s shell_t;
 
 bool get_exclamation(str_t **line, shell_t *state);
 
+// UTIL
+
+char *open_file(char const *file_name);
+
 #endif /* MYSH_HISTORY_*/

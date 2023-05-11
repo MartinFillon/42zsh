@@ -14,6 +14,7 @@ SRC	=	./src/main.c								\
 		./src/input/args.c							\
 		./src/input/variables.c						\
 		./src/input/history.c						\
+		./src/input/open_file.c 					\
 		./src/input/env.c							\
 		./src/input/split_args.c					\
 		./src/input/backticks.c 					\

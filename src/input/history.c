@@ -16,6 +16,31 @@
 #include "mysh/history.h"
 #include "mysh/mysh.h"
 
+
+void load_history(history_t *history)
+{
+    char *buffer = open_file(history->destination->data);
+    vec_str_t *lines = NULL;
+    history_entry_t entry;
+    str_t *tmp = NULL;
+
+    if (buffer == NULL){
+        return;
+    }
+
+    lines = str_split(str_create(buffer), STR("\n"));
+    for (size_t i = 0;i < lines->size;i++){
+        if (str_startswith(lines->data[i], STR("#+")) == 1){
+            tmp = str_create(lines->data[i]->data);
+            str_slice(&tmp, 2, lines->data[i]->length);
+            entry.timestamp = atof(tmp->data);
+            printf("%ld\n", entry.timestamp);
+        }
+        entry.command = lines->data[i + 1];
+        vec_pushback(&history->entries, &entry);
+    }
+}
+
 void save_history(history_t *history)
 {
     FILE *fp = fopen(history->destination->data, "w+");
@@ -56,6 +81,6 @@ history_t history_create(void)
         .destination = str_create(cwd),
     };
 
-    str_add(&history.destination, "/.42sh_history");
+    str_add(&history.destination, "/.42zsh_history");
     return history;
 }

@@ -24,7 +24,7 @@ coding-style-reports.log
 /src/parser/utils.txt
 compile_commands.json
 *.log
-/.42sh_history
+/.42zsh_history
 
 # project bin
 /42sh
