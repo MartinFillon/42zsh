@@ -17,7 +17,7 @@
 #include "mysh/mysh.h"
 
 
-void load_history(history_t *history)
+static void load_history(history_t *history)
 {
     char *buffer = open_file(history->destination->data);
     vec_str_t *lines = NULL;
@@ -27,17 +27,15 @@ void load_history(history_t *history)
     if (buffer == NULL){
         return;
     }
-
     lines = str_split(str_create(buffer), STR("\n"));
     for (size_t i = 0;i < lines->size;i++){
         if (str_startswith(lines->data[i], STR("#+")) == 1){
             tmp = str_create(lines->data[i]->data);
             str_slice(&tmp, 2, lines->data[i]->length);
             entry.timestamp = atof(tmp->data);
-            printf("%ld\n", entry.timestamp);
+            entry.command = lines->data[i + 1];
+            vec_pushback(&history->entries, &entry);
         }
-        entry.command = lines->data[i + 1];
-        vec_pushback(&history->entries, &entry);
     }
 }
 
@@ -82,5 +80,6 @@ history_t history_create(void)
     };
 
     str_add(&history.destination, "/.42zsh_history");
+    load_history(&history);
     return history;
 }
