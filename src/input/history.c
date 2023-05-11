@@ -33,10 +33,8 @@ void save_history(history_t *history)
 void history_append(char *input, history_t *history)
 {
     time_t now = time(NULL);
-    history_entry_t entry;
+    history_entry_t entry = {now, str_create(input)};
 
-    entry.command = str_create(input);
-    entry.timestamp = now;
     vec_pushback(&history->entries, &entry);
 }
 

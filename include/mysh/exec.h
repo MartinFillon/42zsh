@@ -18,10 +18,10 @@
 void kill_children(shell_t *state);
 void wait_for_process(shell_t *state, pid_t pid);
 void waitpid_for_process(shell_t *state, pid_t pid, int *code);
-void remove_zombies(shell_t *state);
 
 
 // JOBS
+void remove_zombies(shell_t *state);
 long find_job_by_pid(shell_t *state, pid_t pid);
 void print_job_status(int code, pid_t pid);
 
