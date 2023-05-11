@@ -40,7 +40,9 @@ static void add_char(size_t *pos, str_t **input, char c)
     ++*pos;
 }
 
-static bool handle_composed_char(char *c, str_t **input, size_t *pos)
+static bool handle_composed_char(
+    char *c, str_t **input, size_t *pos, shell_t *state
+)
 {
     read(STDIN_FILENO, c, 1);
     if (*c != COMPOSED)
@@ -53,16 +55,16 @@ static bool handle_composed_char(char *c, str_t **input, size_t *pos)
             return false;
         }
         suppr_char(pos, input);
-    } else if (handle_arrows(*c, input, pos) == false) {
+    } else if (handle_arrows(*c, input, pos, state) == false) {
         return false;
     }
     print_prompt(input, pos);
     return true;
 }
 
-bool manage_input(char c, str_t **input, size_t *pos)
+bool manage_input(char c, str_t **input, size_t *pos, shell_t *state)
 {
-    if (c == ESCAPE && handle_composed_char(&c, input, pos))
+    if (c == ESCAPE && handle_composed_char(&c, input, pos, state))
         return false;
 
     switch (c) {

@@ -76,7 +76,7 @@ btree_t *gen_exec_tree(char const *line, shell_t *state)
     btree_t *tree = btree_create(NULL);
     str_t *line_cpy = str_create(line);
 
-    if (str_find(line_cpy, STR("!"), 0) != -1){
+    while (str_find(line_cpy, STR("!"), 0) != -1){
         if (get_exclamation(&line_cpy, state) == 1){
             tree->root = bnode_create();
             tree->root->data = strdup("");

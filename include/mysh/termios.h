@@ -33,7 +33,7 @@
 str_t *handle_line_editing(shell_t *state);
 void print_prompt(str_t **input, size_t *pos);
 void read_termios(shell_t *state, str_t **input);
-bool handle_arrows(char c, str_t **input, size_t *pos);
-bool manage_input(char c, str_t **input, size_t *pos);
+bool handle_arrows(char c, str_t **input, size_t *pos, shell_t *state);
+bool manage_input(char c, str_t **input, size_t *pos, shell_t *state);
 
 #endif /* !TERMIOS_H_ */

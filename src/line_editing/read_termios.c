@@ -34,7 +34,7 @@ void read_termios(shell_t *state, str_t **input)
     long ignoreeof = (ignore != NULL) ? str_toint(ignore) : 0;
 
     while (read(STDIN_FILENO, &c, 1) > 0) {
-        if (manage_input(c, input, &pos) == false)
+        if (manage_input(c, input, &pos, state) == false)
             continue;
         ignoreeof--;
         if (handle_ignoreeof(input, ignore, ignoreeof) == false) {
