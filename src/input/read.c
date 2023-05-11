@@ -58,11 +58,14 @@ static str_t *handle_no_tty(void)
 void read_input(shell_t *state)
 {
     str_t *temp = NULL;
+    char const *prompt;
 
     while (!state->stop_shell) {
-        temp = (state->is_atty) ? handle_line_editing(
-            state, ((str_t *)map_get(state->vars, STR("prompt")))->data)
-            : handle_no_tty();
+        prompt = str_tocstr(map_get(state->vars, STR("prompt")));
+        map_set(state->vars, STR("?"), my_itostr(state->return_code));
+
+        temp = (state->is_atty) ? handle_line_editing(state, prompt)
+                                : handle_no_tty();
         if (temp == NULL)
             break;
         parse_input(state, temp->data);

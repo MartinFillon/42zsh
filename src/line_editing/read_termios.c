@@ -26,7 +26,7 @@ static bool handle_ignoreeof(struct input_s *input, str_t *ign_, long ignoreeof)
     return false;
 }
 
-void read_termios(char *prompt, shell_t *state, struct input_s *input)
+void read_termios(char const *prompt, shell_t *state, struct input_s *input)
 {
     char c = 0;
     str_t *ignore = map_get(state->vars, STR("ignoreeof"));
