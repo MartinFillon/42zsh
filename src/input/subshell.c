@@ -37,26 +37,34 @@ int exec_sub_proc(shell_t *state, str_t *cmd)
     return code;
 }
 
+static int can_exec_subshell(str_t *line)
+{
+    if (str_find(line, STR("if"), 0) != -1 ||
+        str_find(line, STR("foreach"), 0) != -1) {
+        return 0;
+    }
+    return 1;
+}
+
+// clang-format off
 str_t *exec_sub_shell(shell_t *state, str_t *line)
 {
+    if (can_exec_subshell(line))
+        return line;
     str_t *line_ = str_screate(line->length);
     long _par = -1;
-
     for (size_t i = 0; i < line->length; ++i) {
         if (i > 0 && line->data[i - 1] == '\\') {
             str_cadd(&line_, line->data[i]);
             continue;
-        }
-        if (_par == -1 && line->data[i] == '(') {
+        } if (_par == -1 && line->data[i] == '(') {
             _par = i + 1;
             continue;
-        }
-        if (_par == -1) str_cadd(&line_, line->data[i]);
+        } if (_par == -1) str_cadd(&line_, line->data[i]);
         if (line->data[i] == ')') {
             exec_sub_proc(state, str_substr(line, _par, i - _par));
             _par = -1;
         }
-    }
-    free(line);
+    } free(line);
     return line_;
 }
