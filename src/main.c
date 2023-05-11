@@ -38,6 +38,7 @@ static void read_rc(shell_t *state)
         line[strlen(line) - 1] = '\0';
         parse_input(state, line);
     }
+    free(line);
     fclose(fd);
     return;
 }
@@ -77,29 +78,32 @@ static void init_shell(shell_t *state, char const *const *envp)
     }
 }
 
-void handle_shebang(int ac, char **av)
+int handle_shebang(int ac, char **av)
 {
     int fd = 0;
     char *line = NULL;
     size_t len = 0;
 
     if (ac != 2)
-        return;
-    if (access(av[1], F_OK) == 0) {
-        fd = open(av[1], O_RDONLY);
+        return - 1;
+    if ((fd = open(av[1], O_RDONLY)) >= 0) {
         dup2(fd, 0);
         getline(&line, &len, stdin);
-        return;
+        free(line);
+        return fd;
     }
+    return -1;
 }
 
 int main(int ac, char **av, char const *const *envp)
 {
     shell_t state = {0};
 
-    handle_shebang(ac, av);
+    int fd = handle_shebang(ac, av);
     init_shell(&state, envp);
     read_input(&state);
     state_free(&state);
+    if (fd != -1)
+        close(fd);
     return state.return_code;
 }
