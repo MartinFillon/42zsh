@@ -30,10 +30,18 @@
     #define RIGHT  ('C')
     #define LEFT   ('D')
 
+struct input_s {
+    str_t **input;
+    size_t pos;
+    size_t history_position;
+};
+
 str_t *handle_line_editing(shell_t *state, char const *prompt);
-void print_prompt(char const *prompt, str_t **input, size_t *pos);
-void read_termios(char const *prompt, shell_t *state, str_t **input);
-bool handle_arrows(char c, str_t **input, size_t *pos);
-bool manage_input(char const *prompt, char c, str_t **input, size_t *pos);
+void print_prompt(char const *prompt, struct input_s *input);
+void read_termios(char const *prompt, shell_t *state, struct input_s *input);
+bool handle_arrows(char c, struct input_s *input, shell_t *state);
+bool manage_input(
+    char const *prompt, char c, struct input_s *input, shell_t *state
+);
 
 #endif /* !TERMIOS_H_ */

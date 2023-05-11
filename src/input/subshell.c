@@ -37,19 +37,19 @@ int exec_sub_proc(shell_t *state, str_t *cmd)
     return code;
 }
 
-static int can_exec_subshell(str_t *line)
+static int cant_exec_subshell(str_t *line)
 {
     if (str_find(line, STR("if"), 0) != -1 ||
         str_find(line, STR("foreach"), 0) != -1) {
-        return 0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 // clang-format off
 str_t *exec_sub_shell(shell_t *state, str_t *line)
 {
-    if (can_exec_subshell(line))
+    if (cant_exec_subshell(line))
         return line;
     str_t *line_ = str_screate(line->length);
     long _par = -1;
