@@ -37,9 +37,10 @@ static int get_variable(
     str_t *value = NULL;
 
     *i += skip;
-    while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
+    while ((isalnum(line[*i + 1]) || line[*i + 1] == '?') && line[*i + 1])
         ++*i;
-    if (start == *i) return 0;
+    if (start == *i)
+        return 0;
     var_name = str_ncreate(line + start + 1 + skip, *i - start - skip);
     if ((value = map_get(state->env, var_name)) != NULL ||
         (value = map_get(state->vars, var_name)) != NULL) {
@@ -56,7 +57,7 @@ static int get_variable(
 static void trim_cmd_line(str_t *line)
 {
     while (str_startswith(line, STR(" ")) || str_startswith(line, STR("\t")) ||
-        str_endswith(line, STR(" ")) || str_endswith(line, STR("\t"))) {
+           str_endswith(line, STR(" ")) || str_endswith(line, STR("\t"))) {
         str_trim(&line, ' ');
         str_trim(&line, '\t');
     }

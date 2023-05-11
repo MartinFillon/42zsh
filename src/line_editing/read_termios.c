@@ -26,7 +26,7 @@ static bool handle_ignoreeof(str_t **input, str_t *ign_, long ignoreeof)
     return false;
 }
 
-void read_termios(char *prompt, shell_t *state, str_t **input)
+void read_termios(char const *prompt, shell_t *state, str_t **input)
 {
     char c = 0;
     size_t pos = 0;

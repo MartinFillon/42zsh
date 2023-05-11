@@ -14,7 +14,7 @@
 
 #include "mysh/termios.h"
 
-void print_prompt(char *prompt, str_t **input, size_t *pos)
+void print_prompt(char const *prompt, str_t **input, size_t *pos)
 {
     printf("\033[2K\r");
     printf("%s%s", prompt, (*input)->data);
@@ -32,7 +32,7 @@ static void setup_termios(struct termios *old_tio, struct termios *new_tio)
     fflush(stdout);
 }
 
-str_t *handle_line_editing(shell_t *state, char *prompt)
+str_t *handle_line_editing(shell_t *state, char const *prompt)
 {
     struct termios old_tio;
     struct termios new_tio;
