@@ -56,6 +56,6 @@ history_t history_create(void)
         .destination = str_create(cwd),
     };
 
-    str_add(&history.destination, "/.42sh_history");
+    str_add(&history.destination, "/.42zsh_history");
     return history;
 }
