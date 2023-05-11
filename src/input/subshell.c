@@ -18,22 +18,23 @@
 #include "mysh/mysh.h"
 #include "mysh/parser.h"
 
-static void exec_sub_proc(shell_t *state, str_t *sub_cmd)
+int exec_sub_proc(shell_t *state, str_t *cmd)
 {
     pid_t pid = fork();
+    int code = 0;
 
     if (pid == -1) {
         perror("fork");
         exit(1);
     }
     if (pid == 0) {
-        btree_t *tree = gen_exec_tree(sub_cmd->data, state);
+        btree_t *tree = gen_exec_tree(cmd->data, state);
         exec_tree(state, tree->root);
-        btree_free(tree);
-        exit(0);
+        exit(state->return_code);
     }
-    waitpid(pid, NULL, 0);
-    free(sub_cmd);
+    waitpid(pid, &code, 0);
+    free(cmd);
+    return code;
 }
 
 str_t *exec_sub_shell(shell_t *state, str_t *line)
