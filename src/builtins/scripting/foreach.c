@@ -28,14 +28,14 @@ static vec_str_t *get_commands(shell_t *state)
     char *prompt = strdup(PROMPT);
     str_t *tmp = NULL;
 
-    tmp = handle_line_editing(state, prompt);
+    tmp = get_user_input(state, prompt);
     if (tmp == NULL) {
         dprintf(2, "foreach: end not found.\n");
         return NULL;
     }
     while (str_compare(tmp, STR("end")) != 0) {
         vec_pushback(&commands, &tmp);
-        tmp = handle_line_editing(state, prompt);
+        tmp = get_user_input(state, prompt);
         if (tmp == NULL) {
             dprintf(2, "foreach: end not found.\n");
             return NULL;
