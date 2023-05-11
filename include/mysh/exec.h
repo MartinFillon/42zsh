@@ -39,6 +39,8 @@ redirect_t redirect_create(void);
 void redirect_apply(shell_t *state);
 void redirect_reset(redirect_t *red);
 
+void parse_input(shell_t *state, char *input);
+
 
 // EXEC
 void exec_tree(shell_t *state, bnode_t *node);
