@@ -25,6 +25,11 @@ coding-style-reports.log
 compile_commands.json
 *.log
 /.42zsh_history
+<<<<<<< HEAD
+=======
+/.42zshrc
+/test_script
+>>>>>>> main
 
 # project bin
 /42sh

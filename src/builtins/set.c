@@ -29,6 +29,7 @@ map_t *vars_create(map_t *env)
         map_set(vars, STR("cwd"), str_create(cwd));
     if (term)
         map_set(vars, STR("term"), str_dup(term));
+    map_set(vars, STR("prompt"), str_create("\033[1;31m42zsh $>\033[0m "));
     return vars;
 }
 

@@ -32,6 +32,8 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
 {
     size_t size = history->entries->size;
 
+    if (size == 0)
+        return NULL;
     if (str_compare(input, STR("!")) == 0) {
         return history->entries->data[size - 1].command;
     }
@@ -46,17 +48,26 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
     return NULL;
 }
 
+static bool handle_errors(str_t **line, str_t **designator)
+{
+    if (str_eq(*line, STR("!-"))){
+        str_slice(line, 0, 1);
+        return false;
+    }
+    str_erase_at_idx(designator, 0);
+    if ((*designator)->length == 0)
+        return false;
+    return true;
+}
+
 bool get_exclamation(str_t **line, shell_t *state)
 {
     long ind = str_find(*line, STR("!"), 0);
     str_t *designator = str_ncreate((*line)->data + ind, (*line)->length - ind);
     str_t *tmp = NULL;
 
-    if (str_eq(*line, STR("!-"))){
-        str_slice(line, 0, 1);
-        return 0;
-    }
-    str_erase_at_idx(&designator, 0);
+    if (handle_errors(line, &designator) == false)
+        return false;
     tmp = exclamation_conditions(&state->history, designator);
     free(designator);
     if (tmp != NULL) {

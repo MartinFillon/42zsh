@@ -37,7 +37,7 @@ static int get_variable(
     str_t *value = NULL;
 
     *i += skip;
-    while (isalnum(line[*i + 1]) && line[*i + 1] != '\0')
+    while ((isalnum(line[*i + 1]) || line[*i + 1] == '?') && line[*i + 1])
         ++*i;
     if (start == *i) return 0;
     var_name = str_ncreate(line + start + 1 + skip, *i - start - skip);
