@@ -55,7 +55,14 @@ static str_t *handle_no_tty(void)
     return str_create(input);
 }
 
-void read_input(shell_t *state)
+str_t *get_user_input(shell_t *state, char const *prompt)
+{
+    if (state->is_atty)
+        return handle_line_editing(state, prompt);
+    return handle_no_tty();
+}
+
+void shell_loop(shell_t *state)
 {
     str_t *temp = NULL;
     char const *prompt;
@@ -64,9 +71,7 @@ void read_input(shell_t *state)
         prompt = str_tocstr(map_get(state->vars, STR("prompt")));
         map_set(state->vars, STR("?"), my_itostr(state->return_code));
 
-        temp = (state->is_atty) ? handle_line_editing(state, prompt)
-                                : handle_no_tty();
-        if (temp == NULL)
+        if ((temp = get_user_input(state, prompt)) == NULL)
             break;
         parse_input(state, temp->data);
         free(temp);
