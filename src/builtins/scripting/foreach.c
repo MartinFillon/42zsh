@@ -91,7 +91,6 @@ int builtin_foreach(vec_str_t *av, shell_t *state)
         if (exec_commands(state))
             return 1;
     }
-    free(list);
-    free(var);
+    my_vfree(2, var, list);
     return 0;
 }

@@ -50,7 +50,7 @@ static str_t *handle_no_tty(void)
         free(input);
         return NULL;
     }
-    input[l_size - 1] = (input[l_size - 1] == '\n') ? '\0' : input[l_size - 1];
+    input[l_size - 1] = '\0';
     if (input[0] == '\0' || input[0] == '#') {
         return handle_no_tty();
     }

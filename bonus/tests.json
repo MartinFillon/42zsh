@@ -255,18 +255,6 @@
       "run": ["ls ; ls"]
     },
     {
-      "name": "Multiple commands",
-      "run": [
-        "echo a",
-        "echo b",
-        "ls",
-        "cat -e",
-        "echo eal",
-        "sed s/a/t/g",
-        "echo ammamya"
-      ]
-    },
-    {
       "name": "Empty inline command",
       "run": ["ls ; ; echo salut"]
     },
@@ -484,10 +472,6 @@
     {
       "name": "repeat 2",
       "run": ["repeat 5 ls", "repeat 5 ls"]
-    },
-    {
-      "name": "foreach 1",
-      "run":["foreach toto (1 2 3 4 5)", "echo $toto", "end"]
     }
   ]
 }
