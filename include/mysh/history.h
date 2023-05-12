@@ -28,16 +28,13 @@ history_t history_create(void);
 
 void history_append(char *input, history_t *history);
 
-void save_history(history_t *history);
+void save_history(history_t *history, char const *filename);
+
+void load_history(history_t *history, char const *filename);
 
 // EXCLAMATION POINT
-
 typedef struct shell_s shell_t;
 
 bool get_exclamation(str_t **line, shell_t *state);
-
-// UTIL
-
-char *open_file(char const *file_name);
 
 #endif /* MYSH_HISTORY_*/
