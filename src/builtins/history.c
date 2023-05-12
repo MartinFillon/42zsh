@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "my_map.h"
 #include "my_vec.h"
@@ -21,12 +22,31 @@ static const char *TOO_MANY = "history: Too many arguments.\n";
 static const char *BAD_FORM = "history: Badly formed number.\n";
 static const char *USAGE = "Usage: history [-chrSLMT] [# number of events].\n";
 
+void print_reverse_history(history_t *history, size_t start)
+{
+    struct tm *time;
+
+    for (size_t i = start; i > 0; i--){
+        time = localtime(&history->entries->data[i].timestamp);
+        if (time == NULL)
+            return;
+        printf(
+            "%5ld  %01d:%02d   %s\n", i + 1, time->tm_hour, time->tm_min,
+            history->entries->data[i].command->data
+        );
+    }
+}
+
 static void print_history(history_t *history, size_t start)
 {
     struct tm *time;
 
+    if (history->entries->size == 0)
+        return;
     for (size_t i = start; i < history->entries->size; i++) {
         time = localtime(&history->entries->data[i].timestamp);
+        if (time == NULL)
+            return;
         printf(
             "%5ld  %01d:%02d   %s\n", i + 1, time->tm_hour, time->tm_min,
             history->entries->data[i].command->data

@@ -15,9 +15,9 @@
 #include "my_str.h"
 #include "my_vec.h"
 
+#include "mysh/mysh.h"
 #include "mysh/exec.h"
 #include "mysh/history.h"
-#include "mysh/mysh.h"
 #include "mysh/parser.h"
 #include "mysh/read.h"
 #include "mysh/termios.h"

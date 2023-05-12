@@ -27,7 +27,6 @@ history_t history_create(void);
 void history_free(history_t *history);
 void history_append(char *input, history_t *history);
 
-
 // EXCLAMATION POINTS
 typedef struct shell_s shell_t;
 bool get_exclamation(str_t **line, shell_t *state);
