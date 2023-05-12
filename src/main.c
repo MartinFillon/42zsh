@@ -101,7 +101,7 @@ int main(int ac, char **av, char const *const *envp)
 
     int fd = handle_shebang(ac, av);
     init_shell(&state, envp);
-    read_input(&state);
+    shell_loop(&state);
     state_free(&state);
     if (fd != -1)
         close(fd);

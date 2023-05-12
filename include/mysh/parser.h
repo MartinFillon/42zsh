@@ -30,7 +30,7 @@ static const char UNUSED *SYMBOLS[] = {
 };
 
 int is_symbol(char *data);
-char *find_symbol(char const *symbol, char *line_at);
+char const *find_symbol(char const *symbol, char *line_at);
 
 
 typedef struct shell_s shell_t;

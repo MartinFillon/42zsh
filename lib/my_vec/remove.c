@@ -16,7 +16,7 @@ void vec_remove(void *v, size_t idx)
 
     memset(vec_at(vec, idx), 0, vec->_elem_size);
     if (idx < vec->size - 1) {
-        memcpy(
+        memmove(
             vec_at(vec, idx), vec_at(vec, idx + 1),
             (vec->size - idx) * vec->_elem_size
         );
