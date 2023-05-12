@@ -79,7 +79,7 @@ int builtin_echo(vec_str_t *av, shell_t UNUSED *state)
     for (; i < av->size; ++i) {
         if (_e)
             parse_escaped_char(&av->data[i]);
-        else 
+        else
             parse_no_escaped_char(&av->data[i]);
         str_print(av->data[i]);
         if (i + 1 < av->size)

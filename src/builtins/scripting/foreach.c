@@ -75,8 +75,10 @@ static vec_str_t *get_arg_list(str_t *line)
 
 static void exec_commands(shell_t *state, vec_str_t *commands)
 {
+    btree_t *tree = NULL;
+
     for (size_t i = 0; i < commands->size; i++) {
-        btree_t *tree = gen_exec_tree(commands->data[i]->data, state);
+        tree = gen_exec_tree(commands->data[i]->data, state);
         exec_tree(state, tree->root);
         btree_free(tree);
     }
@@ -85,13 +87,11 @@ static void exec_commands(shell_t *state, vec_str_t *commands)
 int builtin_foreach(vec_str_t *av, shell_t *state)
 {
     vec_str_t *commands = get_commands(state);
-    if (commands == NULL)
-        return 1;
     str_t *tmp = str_join(av, STR(" "));
     str_t *var = get_var_name(tmp);
     vec_str_t *list = get_arg_list(tmp);
     free(tmp);
-    if (list == NULL) {
+    if (list == NULL || commands == NULL) {
         free(var);
         return 1;
     }

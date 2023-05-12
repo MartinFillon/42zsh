@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <term.h>
 
 #include "my_btree.h"
 #include "my_map.h"
@@ -41,8 +42,8 @@ void parse_input(shell_t *state, char *input)
 
 static str_t *handle_no_tty(void)
 {
-    static char *input = NULL;
-    static size_t l_cap = 0;
+    char *input = NULL;
+    size_t l_cap = 0;
     ssize_t l_size = 0;
 
     if ((l_size = getline(&input, &l_cap, stdin)) < 0) {
@@ -50,8 +51,10 @@ static str_t *handle_no_tty(void)
         return NULL;
     }
     input[l_size - 1] = '\0';
-    if (input[0] == '\0')
-        return NULL;
+    if (input[0] == '\0') {
+        free(input);
+        return handle_no_tty();
+    }
     return str_create(input);
 }
 
