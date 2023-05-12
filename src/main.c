@@ -80,18 +80,9 @@ static void init_shell(shell_t *state, char const *const *envp)
 
 static FILE *handle_shebang(int ac, char **av)
 {
-    FILE *fd = 0;
-    char *line = NULL;
-    size_t len = 0;
-
     if (ac != 2)
         return NULL;
-    if ((fd = freopen(av[1], "r", stdin)) != NULL) {
-        getline(&line, &len, stdin);
-        free(line);
-        return fd;
-    }
-    return NULL;
+    return freopen(av[1], "r", stdin);
 }
 
 int main(int ac, char **av, char const *const *envp)
