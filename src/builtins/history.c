@@ -95,32 +95,3 @@ int builtin_history(vec_str_t *av, shell_t *state)
     }
     return 0;
 }
-
-// static int setup_flags(vec_str_t *av, shell_t *state)
-// {
-//     size_t size = state->history.entries->size;
-
-//     for (size_t i = 1;i < av->data[1]->length; i++){
-//         switch(av->data[1]->data[i])
-//         {
-//             case 'c': vec_clear(&state->history.entries); break;
-//             // case 'r': vec_sort(&state->history.entries, &rever);
-//             // vec_revforeach()
-//             case 'S':
-//                 save_history(&state->history.destination, av->data[2]->data);
-//                 break;
-//             case 'L': load_history(&state->history, av->data[2]->data);
-//                 break;
-//             case 'M': load_history(&state->history, av->data[2]->data);
-//                 break;
-//             case 'T':
-//                 print_history(&state->history, (size < 100) ?
-//                 0 : (size - 100));
-//                 break;
-//             // case 'h': no leading numbers;
-//             default:
-//                 dprintf(2, "%s", USAGE);
-//                 return 1;
-//         }
-//     }
-// }

@@ -9,6 +9,7 @@
     #define MYSH_MYSH_
 
     #include <unistd.h>
+    #include <stdio.h>
 
     #include "my_map.h"
     #include "mysh/history.h"
@@ -57,8 +58,8 @@ typedef struct redirect_s {
 } redirect_t;
 
 typedef struct history_s {
-    str_t *destination;
     vec_history_entry_t *entries;
+    FILE *dest;
 } history_t;
 
 typedef struct shell_s {
