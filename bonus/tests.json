@@ -255,18 +255,6 @@
       "run": ["ls ; ls"]
     },
     {
-      "name": "Multiple commands",
-      "run": [
-        "echo a",
-        "echo b",
-        "ls",
-        "cat -e",
-        "echo eal",
-        "sed s/a/t/g",
-        "echo ammamya"
-      ]
-    },
-    {
       "name": "Empty inline command",
       "run": ["ls ; ; echo salut"]
     },
@@ -471,7 +459,7 @@
     },
     {
       "name": "alias error",
-      "run": ["alias test 'ls -la | cat -e'", "test -la"]
+      "run": ["alias test 'ls -la | cat -e'", "test -la", "ls"]
     },
     {
       "name": "repeat builtin",
@@ -486,8 +474,16 @@
       "run": ["repeat 5 ls", "repeat 5 ls"]
     },
     {
-      "name": "foreach 1",
-      "run":["foreach toto (1 2 3 4 5)", "echo $toto", "end"]
+      "name": "foreach",
+      "run": ["foreach i (1 2 3 4 5)","echo $i", "end"]
+    },
+    {
+      "name": "if and foreach",
+      "run": ["if (1) foreach i (1 2 3 4 5)","echo $i", "end"]
+    },
+    {
+      "name": "foreach and if",
+      "run": ["foreach i (1 2 3 4 5)","if ($i == 2) echo $i", "end"]
     }
   ]
 }

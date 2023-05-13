@@ -6,6 +6,7 @@
 */
 
 #include <signal.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -36,12 +37,14 @@ long find_job_by_pid(shell_t *state, pid_t pid)
 void remove_zombies(shell_t *state)
 {
     int status = 0;
-    pid_t pid = 0;
+    pid_t pid = waitpid(-1, &status, WNOHANG | WUNTRACED | WCONTINUED);
     long job_idx = 0;
 
-    while ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0) {
-        if (!WIFEXITED(status))
+    while (pid >= 0) {
+        if (!WIFEXITED(status) && !WIFSIGNALED(status)) {
+            pid = waitpid(-1, &status, WNOHANG | WUNTRACED | WCONTINUED);
             continue;
+        }
 
         job_idx = find_job_by_pid(state, pid);
 
@@ -49,5 +52,6 @@ void remove_zombies(shell_t *state)
             free(state->jobs->data[job_idx].cmd);
             vec_remove(state->jobs, job_idx);
         }
+        pid = waitpid(-1, &status, WNOHANG | WUNTRACED | WCONTINUED);
     }
 }

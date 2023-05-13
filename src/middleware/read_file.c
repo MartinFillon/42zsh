@@ -45,6 +45,7 @@ void read_file_middleware(shell_t *state, bnode_t *node)
     }
     file = trim_string(node->right->data);
     if (setup_redirect(r, file) != 0) {
+        free(file);
         state->return_code = 1;
         return;
     }
