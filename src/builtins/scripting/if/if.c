@@ -26,42 +26,10 @@ struct if_s {
     str_t *cond;
 };
 
-size_t parenthesis_case(vec_str_t *av, str_t **cond)
-{
-    str_add(cond, av->data[1]->data + 1);
-    str_cadd(cond, ' ');
+size_t parenthesis_case(vec_str_t *av, str_t **cond);
+size_t get_condition(vec_str_t *av, str_t **cond);
 
-    for (size_t i = 2; i < av->size; i++) {
-        if (str_endswith(av->data[i], STR(")"))) {
-            av->data[i]->data[av->data[i]->length - 1] = '\0';
-            str_sadd(cond, av->data[i]);
-            return i + 1;
-        }
-        str_sadd(cond, av->data[i]);
-        str_cadd(cond, ' ');
-    }
-    return av->size + 1;
-}
-
-size_t get_condition(vec_str_t *av, str_t **cond)
-{
-    if (str_eq(av->data[1], STR("1")) || str_eq(av->data[1], STR("0"))) {
-        str_sadd(cond, av->data[1]);
-        return 2;
-    }
-    if (str_startswith(av->data[1], STR("(")))
-        return parenthesis_case(av, cond);
-    else {
-        str_sadd(cond, av->data[1]);
-        str_cadd(cond, ' ');
-        str_sadd(cond, av->data[2]);
-        str_cadd(cond, ' ');
-        str_sadd(cond, av->data[3]);
-        return 4;
-    }
-}
-
-void get_then_commands(
+static void get_then_commands(
     vec_str_t **commands_true, vec_str_t **commands_false, shell_t *state
 )
 {
@@ -82,29 +50,40 @@ void get_then_commands(
     free(tmp);
 }
 
+static void one_line_if(struct if_s *commands, vec_str_t *av, size_t i)
+{
+    str_t *tmp = str_create("");
+
+    for (; i < av->size; i++) {
+        str_sadd(&tmp, av->data[i]);
+        str_cadd(&tmp, ' ');
+    }
+    vec_pushback(&commands->commands_true, &tmp);
+}
+
 static int obtain_if_content(
-    struct if_s commands, shell_t *state, vec_str_t *av
+    struct if_s *commands, shell_t *state, vec_str_t *av
 )
 {
     size_t i = 0;
+
     if (av->size < 2) {
         dprintf(2, "if: Too few arguments.\n");
         return 1;
     }
-    i = get_condition(av, &commands.cond);
-    if (i > av->size) {
+    i = get_condition(av, &commands->cond);
+    if (i >= av->size) {
         dprintf(2, "if: Empty if.\n");
         return 1;
     }
     if (str_eq(av->data[i], STR("then")) && !state->is_atty) {
         get_then_commands(
-            &commands.commands_true, &commands.commands_false, state);
+            &commands->commands_true, &commands->commands_false, state);
     } else if (str_eq(av->data[i], STR("then")) && state->is_atty) {
         dprintf(2, "if: Improper then.\n");
         return 1;
     } else
-        for (; i < av->size; i++)
-            vec_pushback(&commands.commands_true, &av->data[i]);
+        one_line_if(commands, av, i);
     return 0;
 }
 
@@ -114,7 +93,7 @@ int builtin_if(vec_str_t *av, shell_t *state)
         vec_create(1, sizeof(str_t *)), vec_create(1, sizeof(str_t *)),
         str_create("test ")};
 
-    if (obtain_if_content(if_s, state, av) == 1)
+    if (obtain_if_content(&if_s, state, av) == 1)
         return 1;
     if (exec_sub_proc(state, if_s.cond) == 0) {
         for (size_t i = 0; i < if_s.commands_true->size; i++)
