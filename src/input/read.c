@@ -38,6 +38,7 @@ void parse_input(shell_t *state, char *input)
     btree_free(tree);
     if ((cmd = map_get(state->alias, STR("precmd"))) != NULL)
         exec_wrapper(state, cmd->data);
+    remove_zombies(state);
 }
 
 static str_t *handle_no_tty(void)

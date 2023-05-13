@@ -29,6 +29,13 @@ class Parser:
             action=argparse.BooleanOptionalAction,
             default=False,
         )
+        self.parser.add_argument(
+            "-l",
+            "--leaks",
+            help="Check for leaks",
+            action=argparse.BooleanOptionalAction,
+            default=False,
+        )
 
     def parse_args(self) -> dict:
         return {k: v for k, v in self.parser.parse_args()._get_kwargs()}
@@ -166,10 +173,122 @@ class Tests:
             sys.exit(1)
 
 
+class Leaks:
+    tests: list[dict] = []
+    verbose: bool = False
+    ci_mode: bool = False
+    failed: bool = False
+
+    def __init__(self, args: dict):
+        try:
+            with open(args["file"], "r") as f:
+                tests = json.loads(f.read())
+                if "tests" in tests.keys():
+                    self.tests = tests["tests"]
+                    self.verbose = args["verbose"]
+                    self.ci_mode = args["github_ci"]
+                else:
+                    self._printAnnotation("No tests found", file=sys.stderr)
+                    sys.exit(1)
+        except FileNotFoundError:
+            self._printAnnotation("File not found", file=sys.stderr)
+            sys.exit(1)
+    
+    def _printAnnotation(self, message: str, test_name: str = "", file=sys.stdout):
+        if self.ci_mode:
+            print(
+                f"::error title={test_name}:: Leak Found", end="", file=file)
+        print(message, file=file)
+    
+    def _printTestSuccess(
+        self,
+        name: str,
+        run: str,
+    ):
+        print(f"[✅] Test passed: {name}")
+        if self.verbose:
+            print(f"command: [{run}]")
+            print(
+                f"No leaks found",
+                sep="\n",
+                end="\n\n",
+            )
+
+    def _printTestFailed(
+        self,
+        name: str,
+        run: str,
+    ):
+        self.failed = True
+        self._printAnnotation(f"[❌] Test failed: {name}", test_name=name)
+        print(f"command: [{run}]")
+        print(
+            f"Memory Leaked",
+            sep="\n",
+            end="\n\n",
+        )
+    
+    def _runTest(self, shell: str, test_name: str, run: list[str]) -> tuple[str, str]:
+        try:
+            proc = sp.Popen(["/usr/bin/valgrind", "--leak-check=full", "--track-origins=yes", "--show-leak-kinds=all", shell], stdin=sp.PIPE,
+                            stdout=sp.PIPE, stderr=sp.PIPE)
+
+            if proc.stdin == None:
+                self._printAnnotation(
+                    "Can't start test process", test_name=test_name, file=sys.stderr
+                )
+                sys.exit(1)
+
+            for command in run:
+                proc.stdin.write(command.encode())
+                proc.stdin.write(b"\n")
+            proc.stdin.close()
+            if proc.stdout != None and proc.stderr != None:
+                return (proc.stderr.read().decode())
+
+            self._printAnnotation(
+                "Can't read from test process", test_name=test_name, file=sys.stderr
+            )
+            sys.exit(1)
+        except FileNotFoundError:
+            self._printAnnotation(
+                f"[{shell}] not found", test_name=test_name, file=sys.stderr
+            )
+            sys.exit(1)
+
+    def run(self):
+        failed_count = 0
+
+        for test in self.tests:
+            try:
+                name = test["name"]
+                run = test["run"]
+
+                candidate = self._runTest(MYSH, name, run)
+
+                if not candidate.__contains__("ERROR SUMMARY: 0 errors from 0 contexts"):
+                    failed_count += 1
+                    self._printTestFailed(name, run)
+                else:
+                    self._printTestSuccess(name, run)
+
+            except KeyError:
+                print("Test file syntax error", file=sys.stderr)
+                sys.exit(1)
+
+        print(f"\n{failed_count} tests failed out of {len(self.tests)}")
+        if self.failed:
+            sys.exit(1)
+
+
 def main():
     args = Parser().parse_args()
-    tests = Tests(args)
-    tests.run()
+    if (args["leaks"] == False):
+        tests = Tests(args)
+        tests.run()
+    else:
+        tests = Leaks(args)
+        tests.run()
 
 
 if __name__ == "__main__":

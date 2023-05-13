@@ -14,6 +14,7 @@
 
 #include "my_btree.h"
 #include "my_map.h"
+#include "my_str.h"
 #include "my_utils.h"
 #include "my_vec.h"
 

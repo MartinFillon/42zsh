@@ -28,6 +28,7 @@ static int is_in_path(str_t *s, shell_t *state)
             err |= 1;
         }
     }
+    vec_free(paths);
     return err;
 }
 

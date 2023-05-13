@@ -21,7 +21,10 @@
 #include "mysh/read.h"
 #include "mysh/termios.h"
 
-static const char PROMPT[] = "\033[1;32mforeach?\033[0m ";
+int script_foreach(
+    shell_t *state, str_t *var, vec_str_t *list, long int offset
+);
+int piped_foreach(shell_t *state, str_t *var, vec_str_t *list);
 
 static str_t *get_var_name(str_t *line)
 {
@@ -50,27 +53,6 @@ static vec_str_t *get_arg_list(str_t *line)
     return list;
 }
 
-static int exec_commands(shell_t *state)
-{
-    btree_t *tree = NULL;
-    char *prompt = strdup(PROMPT);
-    str_t *tmp = get_user_input(state, prompt);
-
-    while (tmp && str_eq(tmp, STR("end")) == false) {
-        tree = gen_exec_tree(tmp->data, state);
-        exec_tree(state, tree->root);
-        btree_free(tree);
-        free(tmp);
-        tmp = get_user_input(state, prompt);
-    }
-    if (tmp == NULL) {
-        dprintf(2, "foreach: end not found.\n");
-        return 1;
-    }
-    my_vfree(2, prompt, tmp);
-    return 0;
-}
-
 int builtin_foreach(vec_str_t *av, shell_t *state)
 {
     long int offset = ftell(stdin);
@@ -82,15 +64,7 @@ int builtin_foreach(vec_str_t *av, shell_t *state)
         free(var);
         return 1;
     }
-    for (size_t i = 0; i < list->size; i++) {
-        setbuf(stdin, NULL);
-        fseek(stdin, offset, SEEK_SET);
-        if (map_get(state->vars, var) != NULL)
-            free(map_get(state->vars, var));
-        map_set(state->vars, var, list->data[i]);
-        if (exec_commands(state))
-            return 1;
-    }
-    my_vfree(2, var, list);
-    return 0;
+    if (offset == (long int)(-1))
+        return piped_foreach(state, var, list);
+    return script_foreach(state, var, list, offset);
 }
