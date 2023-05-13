@@ -6,11 +6,13 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "mysh/exec.h"
 #include "mysh/mysh.h"
 #include "my_str.h"
 
-static char *get_command(vec_str_t *av)
+static str_t *get_command(vec_str_t *av)
 {
     str_t *tmp = NULL;
 
@@ -19,12 +21,12 @@ static char *get_command(vec_str_t *av)
         str_cadd(&tmp, ' ');
         str_sadd(&tmp, av->data[i]);
     }
-    return tmp->data;
+    return tmp;
 }
 
 int builtin_repeat(vec_str_t *av, shell_t *state)
 {
-    char *command = NULL;
+    str_t *command = NULL;
 
     if (av->size < 3) {
         dprintf(2, "repeat: Too few arguments.\n");
@@ -36,6 +38,7 @@ int builtin_repeat(vec_str_t *av, shell_t *state)
     }
     command = get_command(av);
     for (int i = 0; i < str_toint(av->data[1]); i++)
-        exec_wrapper(state, command);
+        exec_wrapper(state, command->data);
+    free(command);
     return state->return_code;
 }

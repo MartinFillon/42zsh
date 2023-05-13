@@ -26,7 +26,7 @@ compile_commands.json
 *.log
 /.42zsh_history
 /.42zshrc
-/test_script
+/test.sh
 
 # project bin
 /42sh

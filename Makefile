@@ -37,7 +37,8 @@ SRC	=	./src/main.c								\
 		./src/builtins/alias.c						\
 		./src/builtins/unalias.c					\
 		./src/builtins/scripting/if.c 				\
-		./src/builtins/scripting/foreach.c 			\
+		./src/builtins/scripting/foreach/foreach.c 	\
+		./src/builtins/scripting/foreach/executor.c \
 		./src/builtins/scripting/repeat.c 			\
 		./src/builtins/where.c 						\
 		./src/builtins/which.c 						\

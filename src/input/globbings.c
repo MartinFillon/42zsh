@@ -14,6 +14,7 @@
 
 #include "my_str.h"
 #include "my_vec.h"
+#include "my_utils.h"
 
 #include "mysh/read.h"
 
@@ -72,7 +73,7 @@ vec_str_t *get_globbings(vec_str_t *args)
             tmp = get_matches(args->data[i]);
             vec_merge(&new_args, tmp);
             has_matched |= (tmp->size > 0);
-            free(tmp);
+            my_vfree((tmp->size == 0) ? 2 : 1, tmp ,args->data[i]);
         } else
             vec_pushback(&new_args, &args->data[i]);
     }

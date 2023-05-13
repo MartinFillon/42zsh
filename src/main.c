@@ -14,6 +14,7 @@
 
 #include "my_btree.h"
 #include "my_map.h"
+#include "my_str.h"
 #include "my_utils.h"
 #include "my_vec.h"
 
@@ -78,32 +79,24 @@ static void init_shell(shell_t *state, char const *const *envp)
     }
 }
 
-int handle_shebang(int ac, char **av)
+static FILE *handle_shebang(int ac, char **av)
 {
-    int fd = 0;
-    char *line = NULL;
-    size_t len = 0;
-
     if (ac != 2)
-        return - 1;
-    if ((fd = open(av[1], O_RDONLY)) >= 0) {
-        dup2(fd, 0);
-        getline(&line, &len, stdin);
-        free(line);
-        return fd;
-    }
-    return -1;
+        return NULL;
+    return freopen(av[1], "r", stdin);
 }
 
 int main(int ac, char **av, char const *const *envp)
 {
     shell_t state = {0};
+    FILE *fd = NULL;
 
-    int fd = handle_shebang(ac, av);
+    setbuf(stdin, NULL);
+    fd = handle_shebang(ac, av);
     init_shell(&state, envp);
     shell_loop(&state);
     state_free(&state);
-    if (fd != -1)
-        close(fd);
+    if (fd != NULL)
+        fclose(fd);
     return state.return_code;
 }

@@ -7,6 +7,7 @@
 
 #include <errno.h>
 #include <signal.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +56,7 @@ static void try_exec_or_exit(
     char **argv = arg_to_tabl(av);
     char **envp = env_to_tabl(state->env);
     vec_str_t *path = path_to_vec(state->env);
+#include <stddef.h>
 
     if (builtin != NULL) {
         builtin(av, state);
