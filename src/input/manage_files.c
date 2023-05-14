@@ -17,6 +17,14 @@
 #include "mysh/mysh.h"
 #include "mysh/history.h"
 
+void clear_history(history_t *history)
+{
+    for (size_t i = 0; i < history->entries->size; i++) {
+        free(history->entries->data[i].command);
+    }
+    vec_clear(history->entries);
+}
+
 static char *open_file(char const *file_name)
 {
     char *buffer = NULL;
