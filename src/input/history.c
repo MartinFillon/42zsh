@@ -53,13 +53,14 @@ static void load_history(FILE *hist, history_t *history)
         input[l_size - 1] = '\0';
 
         if (input[0] == '#' && strlen(input) > 2) {
-            tmp.timestamp = atoi(input + 2);
+            tmp.timestamp = atof(input + 2);
         } else {
             tmp.command = str_create(input);
             vec_pushback(&history->entries, &tmp);
             memset(&tmp, 0, sizeof(history_entry_t));
         }
     }
+    free(tmp.command);
     free(input);
 }
 
