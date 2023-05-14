@@ -6,9 +6,11 @@
 */
 
 #include <ctype.h>
+#include <glob.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #include "my_str.h"
 
@@ -68,6 +70,7 @@ bool manage_input(char const *prompt, char c, shell_input_t *in, shell_t *state)
         return false;
 
     switch (c) {
+        case TAB: tab_show_possibilities(in, state); break;
         case KILL:
             free(in->input);
             in->input = NULL;
