@@ -26,6 +26,7 @@ SRC	=	./src/main.c								\
 		./src/line_editing/read_termios.c 			\
 		./src/line_editing/manage_input.c 			\
 		./src/line_editing/arrow.c					\
+		./src/line_editing/handle_tab.c				\
 		./src/builtins/builtins.c					\
 		./src/builtins/jobs.c						\
 		./src/builtins/chdir.c						\

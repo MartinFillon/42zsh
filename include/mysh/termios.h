@@ -30,6 +30,8 @@
     #define RIGHT  ('C')
     #define LEFT   ('D')
 
+    #define TAB    ('\t')
+
 typedef struct {
     str_t *input;
     size_t pos;
@@ -43,5 +45,6 @@ bool handle_arrows(char c, shell_input_t *input, shell_t *state);
 bool manage_input(
     char const *prompt, char c, shell_input_t *input, shell_t *state
 );
+void tab_show_possibilities(shell_input_t *in, shell_t *state);
 
 #endif /* !TERMIOS_H_ */

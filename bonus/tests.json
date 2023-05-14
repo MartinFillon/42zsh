@@ -476,6 +476,14 @@
     {
       "name": "foreach",
       "run": ["foreach i (1 2 3 4 5)","echo $i", "end"]
+    },
+    {
+      "name": "if and foreach",
+      "run": ["if (1) foreach i (1 2 3 4 5)","echo $i", "end"]
+    },
+    {
+      "name": "foreach and if",
+      "run": ["foreach i (1 2 3 4 5)","if ($i == 2) echo $i", "end"]
     }
   ]
 }
