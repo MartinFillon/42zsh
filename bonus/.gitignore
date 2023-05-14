@@ -1,0 +1,32 @@
+# coverage
+*.gcno
+*.gcda
+
+# compiled
+*.o
+*.a
+
+# junk
+coding-style-reports.log
+42sh
+/main.c
+/a.out
+/libmy.a
+.bash_history
+.DS_Store
+.cache
+.vscode
+/TODO.md
+.idea
+.clang-format
+.clangd
+.clang-tidy
+/src/parser/utils.txt
+compile_commands.json
+*.log
+/.42zsh_history
+/.42zshrc
+/test.sh
+
+# project bin
+/42sh
