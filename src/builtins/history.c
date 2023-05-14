@@ -23,18 +23,23 @@ static const char *TOO_MANY = "history: Too many arguments.\n";
 static const char *BAD_FORM = "history: Badly formed number.\n";
 static const char *USAGE = "Usage: history [-chrSLMT] [# number of events].\n";
 
-void print_reverse_history(history_t *history, size_t start)
+static void edited_history(history_t *history, char flag, size_t start)
 {
     struct tm *time;
 
-    for (size_t i = start; i > 0; i--){
-        time = localtime(&history->entries->data[i].timestamp);
-        if (time == NULL)
-            return;
-        printf(
-            "%5ld  %01d:%02d   %s\n", i + 1, time->tm_hour, time->tm_min,
-            history->entries->data[i].command->data
-        );
+    if (flag == 'h'){
+        for (size_t i = start; i < history->entries->size; i++) {
+            printf("%s\n", history->entries->data[i].command->data);
+        }
+    }
+    if (flag == 'r'){
+        for (size_t i = history->entries->size - 1; i > start; i--) {
+            time = localtime(&history->entries->data[i].timestamp);
+            printf(
+                "%5ld  %01d:%02d   %s\n", i + 1, time->tm_hour, time->tm_min,
+                history->entries->data[i].command->data
+            );
+        }
     }
 }
 
@@ -62,17 +67,16 @@ static int setup_flags(vec_str_t *av, shell_t *state)
     for (size_t i = 1;i < av->data[1]->length; i++){
         switch (av->data[1]->data[i]) {
             case 'c': vec_clear(&state->history.entries); break;
+            case 'h': edited_history(&state->history, 'h', (size < 100) ? 0 :
+                (size - 100)); break;
+            case 'r': edited_history(&state->history, 'r', (size < 100) ? 0 :
+                (size - 100)); break;
             case 'S': save_history(&state->history, av->data[2]->data); break;
-            case 'L': load_diff_history(&state->history, av->data[2]->data);
-                break;
-            case 'M': load_diff_history(&state->history, av->data[2]->data);
-                break;
-            case 'T':
-                print_history(&state->history, (size < 100) ? 0 : (size - 100));
-                break;
-            default:
-                dprintf(2, "%s", USAGE);
-                return 1;
+            case 'L': load_diff_hist(&state->history, av->data[2]->data); break;
+            case 'M': load_diff_hist(&state->history, av->data[2]->data); break;
+            case 'T': print_history(&state->history, (size < 100) ? 0 :
+                (size - 100)); break;
+            default: dprintf(2, "%s", USAGE); return 1;
         }
     }
     return 0;
