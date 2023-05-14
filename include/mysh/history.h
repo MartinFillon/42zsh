@@ -27,7 +27,7 @@ history_t history_create(void);
 void history_free(history_t *history);
 void history_append(char *input, history_t *history);
 void save_history(history_t *history, char const *filename);
-void load_diff_history(history_t *history, char const *filename);
+void load_diff_hist(history_t *history, char const *filename);
 
 // EXCLAMATION POINTS
 typedef struct shell_s shell_t;
