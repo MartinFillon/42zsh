@@ -16,7 +16,8 @@
 static void read_for_args(shell_input_t *in)
 {
     long index = str_findlast(in->input, STR(" "));
-    str_t *path = str_substr(in->input, index + 1, in->input->length - index - 1);
+    str_t *path =
+        str_substr(in->input, index + 1, in->input->length - index - 1);
     str_sadd(&path, STR("*"));
     glob_t globbuf;
     globbuf.gl_offs = 0;
@@ -47,7 +48,9 @@ static void read_each_path(shell_input_t *in, str_t *path)
         return;
     }
     for (size_t i = 0; i < globbuf.gl_pathc; i++) {
-        printf("%s\n", (globbuf.gl_pathv[i] + (tmp->length - in->input->length)));
+        printf(
+            "%s\n", (globbuf.gl_pathv[i] + (tmp->length - in->input->length))
+        );
     }
     globfree(&globbuf);
     free(tmp);
