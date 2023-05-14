@@ -17,6 +17,7 @@
 #include "my_vec.h"
 
 #include "mysh/mysh.h"
+#include "mysh/history.h"
 
 static const char *TOO_MANY = "history: Too many arguments.\n";
 static const char *BAD_FORM = "history: Badly formed number.\n";
@@ -54,6 +55,29 @@ static void print_history(history_t *history, size_t start)
     }
 }
 
+static int setup_flags(vec_str_t *av, shell_t *state)
+{
+    size_t size = state->history.entries->size;
+
+    for (size_t i = 1;i < av->data[1]->length; i++){
+        switch (av->data[1]->data[i]) {
+            case 'c': vec_clear(&state->history.entries); break;
+            case 'S': save_history(&state->history, av->data[2]->data); break;
+            case 'L': load_diff_history(&state->history, av->data[2]->data);
+                break;
+            case 'M': load_diff_history(&state->history, av->data[2]->data);
+                break;
+            case 'T':
+                print_history(&state->history, (size < 100) ? 0 : (size - 100));
+                break;
+            default:
+                dprintf(2, "%s", USAGE);
+                return 1;
+        }
+    }
+    return 0;
+}
+
 static int check_hist_cases(vec_str_t *av, shell_t *state)
 {
     size_t size = state->history.entries->size;
@@ -71,8 +95,7 @@ static int check_hist_cases(vec_str_t *av, shell_t *state)
     }
     if (str_startswith(av->data[1], STR("-")) &&
         !str_eq(av->data[1], STR("-"))) {
-        dprintf(2, "%s", USAGE);
-        return 1;
+        return setup_flags(av, state);
     }
     dprintf(2, "%s", BAD_FORM);
     return 1;

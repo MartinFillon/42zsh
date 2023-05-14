@@ -71,7 +71,7 @@ static void parse_history_file(
     }
 }
 
-void load_history(history_t *history, char const *filename)
+void load_diff_history(history_t *history, char const *filename)
 {
     history_entry_t entry;
     char *buffer = open_file(filename);
