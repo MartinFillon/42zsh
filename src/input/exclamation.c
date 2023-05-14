@@ -104,6 +104,7 @@ bool get_exclamation(str_t **line, shell_t *state)
         str_insert_str(line, ind, tmp);
         str_slice(line, 0, ind + tmp->length);
         printf("%s\n", (*line)->data);
+        free(designator);
         return false;
     }
     free(designator);
