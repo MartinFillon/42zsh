@@ -69,7 +69,7 @@ static int setup_flags(vec_str_t *av, shell_t *state)
 
     for (size_t i = 1;i < av->data[1]->length; i++){
         switch (av->data[1]->data[i]) {
-            case 'c': vec_clear(state->history.entries); break;
+            case 'c': clear_history(&state->history); break;
             case 'h': edited_history(&state->history, (size < 100) ? 0 :
                 (size - 100), state->history.entries->size); break;
             case 'r': edited_history(&state->history,

@@ -34,11 +34,13 @@ static str_t *exclamation_conditions(history_t *history, str_t *input)
 {
     size_t size = history->entries->size;
 
-    if (str_eq(input, STR("!")) == 1){
-        printf("yur\n");
+    if (str_eq(input, STR("!")) == 1)
         return NULL;
-    }
     str_erase_at_idx(&input, 0);
+    if (str_startswith(input, STR("#"))){
+        str_erase_at_idx(&input, 0);
+        return input;
+    }
     if (size == 0)
         return NULL;
     if (str_isnum(input) == 1) {
