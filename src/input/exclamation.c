@@ -30,26 +30,26 @@ static str_t *get_history_str(vec_history_entry_t *ent, char *input)
     return NULL;
 }
 
-static str_t *exclamation_conditions(history_t *history, str_t *input)
+static str_t *exclamation_conditions(history_t *history, str_t *cond)
 {
     size_t size = history->entries->size;
 
-    if (str_eq(input, STR("!")) == 1)
+    if (str_eq(cond, STR("!")) == 1)
         return NULL;
-    str_erase_at_idx(&input, 0);
-    if (str_startswith(input, STR("#"))){
-        str_erase_at_idx(&input, 0);
-        return input;
+    str_erase_at_idx(&cond, 0);
+    if (str_startswith(cond, STR("#"))){
+        str_erase_at_idx(&cond, 0);
+        return (str_startswith(cond, STR(" "))) ? *str_ltrim(&cond, ' ') : cond;
     }
     if (size == 0)
         return NULL;
-    if (str_isnum(input) == 1) {
-        return history->entries->data[atoi(input->data) - 1].command;
+    if (str_isnum(cond) == 1) {
+        return history->entries->data[atoi(cond->data) - 1].command;
     } else {
-        if (str_ncompare(input, STR("-"), 1) == 0) {
-            return history->entries->data[size + atoi(input->data)].command;
+        if (str_ncompare(cond, STR("-"), 1) == 0) {
+            return history->entries->data[size + atoi(cond->data)].command;
         }
-        return get_history_str(history->entries, input->data);
+        return get_history_str(history->entries, cond->data);
     }
     return NULL;
 }
